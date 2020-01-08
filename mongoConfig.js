@@ -12,6 +12,7 @@ module.exports = {
             console.log("Connected to battle_ship database");
             return callback(err);
         }
+        
      });
     }
     ,
