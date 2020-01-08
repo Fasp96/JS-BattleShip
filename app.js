@@ -54,6 +54,10 @@ app.get('/menu', (req, res) => {
    res.render('menu');
 });
 
+app.get('/form', (req, res) => {
+   res.render('form');
+});
+
 app.get('/board', (req, res) => {
    res.render('board');
 });

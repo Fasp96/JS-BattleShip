@@ -16,7 +16,7 @@
          <div class="col-md-4"></div>
          <div class="col-md-6">
             <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_login()">Login</a></button><br><br>
-            <button type="button" class="btn btn-primary btn-lg btn-block">Register</button> <br><br>
+            <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_register()">Register</button> <br><br>
 
             <div id="chatArea">
             </div>
@@ -40,6 +40,10 @@
       function relocate_menu_login()
          {
             location.href = "/menu";
+         } 
+         function relocate_menu_register()
+         {
+            location.href = "/form";
          } 
 
       jQuery(document).ready(function() {
