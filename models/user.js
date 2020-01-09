@@ -17,7 +17,7 @@ function insertUser(c,t,callback){
     //console.log(line);
     db.collection("users").insertOne(line, function(err, res) {
         if(err)
-            callback("Error inserting note")
+            callback("Error inserting user")
         else
             callback("user inserted");
     });
