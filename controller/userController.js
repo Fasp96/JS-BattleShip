@@ -5,8 +5,8 @@ function getUsers(callback){
     User.getUsers(callback);
 }
 
-function insertUser(user,callback){
-    note.insertUsers(user.email, user.password,callback);
+function insertUser(email, password, callback){
+    User.insertUser(email, password, callback);
 }
 
 module.exports = {
