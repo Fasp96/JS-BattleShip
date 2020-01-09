@@ -6,6 +6,8 @@ var urlParser  = bodyParser.urlencoded({extended:false});
 const mongo    =  require('mongodb');
 var mongoUtil = require('./mongoConfig');
 var ejs = require('ejs');
+
+const userController = require('./controller/userController');
 //import express from 'express';
 //import path from 'path';
 //import bodyParser from 'body-parser';
