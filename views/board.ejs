@@ -6,10 +6,66 @@
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>BatlerShip Game</title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+   <style>
+
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+   </style>
+
 </head>
+
 <body>
-   <div>
-        Algo
+   <div id="board">
+
+   <div class="container">
+      <h1 class="jumbotron">
+         BattleShip Game
+      </h1>
+      <table>
+         <tr><td>A0</td>   
+         <td>A1</td>
+         <td>A2</td>
+         <td>A3</td>
+         <td>A4</td>
+         <td>A5</td>
+         <td>A6</td>
+         <td>A7</td>
+         <td>A8</td>
+         <td>A9</td>
+      </tr>
+
+         <tr><td>1</td>   
+         <td>2</td>
+         <td>3</td>
+         <td>4</td>
+         <td>5</td>
+         <td>6</td>
+         <td>7</td>
+         <td>8</td>
+         <td>9</td>
+         <td>10</td>
+      </tr>
+
+
+      </table>
+
+
+      <div id="chatArea">
+      </div>
+      <form id="myForm">
+         <div class="form-group">
+            <textarea rows="5" id="txt" cols="5" class="form-control"></textarea>
+         </div>
+         <div class="form-group">
+            <button type="submit" class="btn btn-success">Send</button>
+         </div>
+      </form>
+
+      </div>
    </div>
 
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
