@@ -55,9 +55,20 @@ app.get('/menu', (req, res) => {
 });
 
 app.get('/form', (req, res) => {
-   res.render('form');
+   res.render('register_form');
 });
 
 app.get('/board', (req, res) => {
    res.render('board');
+});
+
+app.get('/login', (req, res) => {
+   res.render('login_form');
+});
+
+app.post('/form', function(req,res){
+   userController.insertUser(req.body.user_email,req.body.user_password,function(result){
+       console.log(result);
+       res.render("menu");
+   });
 });
