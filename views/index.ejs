@@ -15,7 +15,7 @@
       <div class="row" style="margin-top: 70px;">
          <div class="col-md-4"></div>
          <div class="col-md-6">
-            <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_login()">Login</a></button><br><br>
+            <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_login()">Login</button><br><br>
             <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_register()">Register</button> <br><br>
 
             <div id="chatArea">
@@ -37,10 +37,11 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
    <script>
-      function relocate_menu_login()
+         function relocate_menu_login()
          {
-            location.href = "/menu";
-         } 
+            location.href = "/login";
+         }
+          
          function relocate_menu_register()
          {
             location.href = "/form";

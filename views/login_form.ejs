@@ -4,7 +4,7 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <title>Node.js Socket.io Chat Application</title>
+   <title>BattleShip Game</title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
 
     <div class="container">
         <h1 class="jumbotron">
-            BattleShip Game - Register
+            BattleShip Game - Login
          </h1>
     <form>
         <div class="form-group">
@@ -22,16 +22,13 @@
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
           <small id="emailHelp" class="form-text text-muted">Put your email.</small>
         </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">name</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        </div>
+        
         <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
             <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
           </div>
         
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick=" login()">Login</button>
       </form>
 
     </div>
@@ -56,6 +53,12 @@ var app6 = new Vue({
     name: 'Put Your Name Here!'
   }
 })
+
+      function login()
+         {
+            location.href = "/menu";
+         }     
+
       jQuery(document).ready(function() {
          var socket = io.connect();
          var form = jQuery('#myForm');

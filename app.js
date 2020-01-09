@@ -55,9 +55,13 @@ app.get('/menu', (req, res) => {
 });
 
 app.get('/form', (req, res) => {
-   res.render('form');
+   res.render('register_form');
 });
 
 app.get('/board', (req, res) => {
    res.render('board');
+});
+
+app.get('/login', (req, res) => {
+   res.render('login_form');
 });
