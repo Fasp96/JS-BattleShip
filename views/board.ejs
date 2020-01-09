@@ -5,7 +5,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>BatlerShip Game</title>
-   <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
    <style>
@@ -27,30 +27,29 @@
          overflow: hidden;
       }
       .table {
-         display:table; 
+         display:table-cell; 
          border-left: 1px solid #000000;
          border-top: 1px solid #000000;
-   
       }
 
-      table, th, td {
-         border: 1px solid black;
-         border-collapse: collapse; 
-      }
    </style>
 
 </head>
 
+
 <body>
+   
    <div id="board">
 
    <div class="container">
       <h1 class="jumbotron">
          BattleShip Game
       </h1>
-      
-      <div class="table"></div>
 
+      <div class="tables">
+      <div style="float: left; width: 50%;" class="table" id ="userTable"></div>
+      <div style="float: left; width: 50%;" class="table" id ="opponentTable"></div>
+      </div>
 
       <div id="chatArea">
       </div>
