@@ -5,16 +5,68 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>BatlerShip Game</title>
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-</head>
-<body>
-   <div>
-        Algo
-   </div>
-
+   <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+   <style>
+      .cell {
+         display:table-cell; 
+         border-right: 1px solid #000000; 
+         border-bottom: 1px solid #000000; 
+         width: 30px; height: 30px;
+         vertical-align: middle;
+         text-align: center;
+         background-color: green;
+      }
+      .cell.outside{
+         background-color: orange;
+      }
+      .row {
+         display:table-row; 
+         clear: both; 
+         overflow: hidden;
+      }
+      .table {
+         display:table; 
+         border-left: 1px solid #000000;
+         border-top: 1px solid #000000;
+   
+      }
+      </style>
+</head>
+<body>
+   <div class="table"></div>
+
    <script>
+      var createGrid=function(x,y){
+    	   var arrY = new Array(),
+    		   arrX,
+            container = $(".table");
+    	   for(var iy= 0; iy<=y; iy++){
+            arrX = new Array();
+            var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
+    		   for(var ix= 0; ix<=x; ix++){
+                
+               if(ix == 0){
+                  arrX[ix]='<div class="cell outside">'+ letter[iy] +'</div>';
+               }
+               else if(ix != 0 && iy == 0){
+                  arrX[ix]='<div class="cell outside">'+ (ix) +'</div>';
+               }
+               else{
+                  arrX[ix]='<div class="cell" id=' + letter[(iy)] + (ix) + '>&nbsp;</div>';
+               }
+    			   
+    		   }
+    		   arrY[iy]='<div class="row">'+arrX.join("\r\n")+'</div>';
+    	   }
+    	   container.append(arrY.join("\r\n"));
+      };
+   // call function
+    createGrid(10,10);
+   </script>
+
+   <!--<script>
       jQuery(document).ready(function() {
          var socket = io.connect();
          var form = jQuery('#myForm');
@@ -31,6 +83,7 @@
             chatArea.append('<div class="well">'+data.message+'</div>');
          });
       });
-   </script>
+   </script>-->
+   
 </body>
 </html>

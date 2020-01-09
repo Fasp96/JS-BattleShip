@@ -59,5 +59,6 @@ app.get('/form', (req, res) => {
 });
 
 app.get('/board', (req, res) => {
+   console.log('inside');
    res.render('board');
 });
