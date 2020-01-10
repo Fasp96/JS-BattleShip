@@ -69,9 +69,26 @@ app.get('/login', (req, res) => {
    res.render('login_form');
 });
 
+app.post('/login', function(req, res){
+   //userController.getUsers(req.body.user_email,req.body.user_password,function(result){
+   //console.log(result);
+   res.render('menu');
+  // });
+});
+
 app.post('/form', function(req,res){
    userController.insertUser(req.body.user_email,req.body.user_password,function(result){
        console.log(result);
        res.render("menu");
+       
    });
 });
+
+/*
+app.use(session({
+   secret: 'work hard',
+   resave: true,
+   saveUninitialized: false
+ }));
+
+ */
