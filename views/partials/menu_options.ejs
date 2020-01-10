@@ -1,0 +1,19 @@
+<div class="text-center">
+    <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_Logout()">Logout</button><br><br>
+    <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_Board1()">OnePlayer</button><br><br>
+    <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_Board2()">TwoPlayer</button> <br><br>
+    <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" relocate_menu_Options()">Options</button><br><br>
+    
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+   <script>
+       function relocate_menu_Board1()
+         {
+            location.href = "/board";
+         } 
+       function relocate_menu_Logout(){
+            location.href = "/"
+       }
+</script>
