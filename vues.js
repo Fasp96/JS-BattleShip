@@ -1,12 +1,18 @@
 data = {
-    ships_p1:"",
-    ships_p2:"",
-    hits_p1:"",
-    hits_p2:"",
+    p1:{
+        ships: [],
+        shots:[]
+    },
+    p2:{
+        ships:[],
+        shots:[]
+    },
+    newCoordinates:'',
+    newType:''
 };
 
 new Vue({
-    el:"tables",
+    el:".tables",
     data: data,
 
     methods:{
@@ -30,25 +36,25 @@ new Vue({
                             arrX[ix]='<div class="cell outside number">'+ ix +'</div>';
                         }
                         else{
-                            arrX[ix]='<div class="cell inside" id=' + letter[(iy)] + (ix) + '>&nbsp;</div>';
+                            arrX[ix]='<div class="cell inside" id=' + letter[(iy)] + (ix) + ' v-on:click="addHit(' + letter[(iy)] + (ix)  +')">&nbsp;</div>';
                         }   
                     }
                     arrY[iy]='<div class="row">'+arrX.join("\r\n")+'</div>';
                 }
                 container.append(arrY.join("\r\n"));
             };
-        // call function
-        createGrid(10,10);
+            // call function
+            createGrid(10,10);
         },
 
-        addHit(){
-
+        addHit(coordinates){
+            console.log(coordinates);
         },
         addShip(){
 
         }
     },
-    mounted(){
+    created(){
         this.addBoard()
      },
 
