@@ -13,13 +13,19 @@ function insertUser(c,t,callback){
 }
 
 
-function getUsers(callback){
-    mongoUtil.getDriver().collection('users').find().toArray(function(err, result){
-        if(err) throw err;
-        console.log(result);
-        callback(result);
-    })
+function getUsers(c,t,callback){
+    var db = mongoConfig.getDB();
+    var line = {email: { $exists: true }, password: { $exists: true }};
+    var cursor = db.collection('users').findOne(line,function(err,res){
+
+        if(err)
+        callback("Error to login");
+        else{
+        callback("user login");
+        }
+    });
 }
+
 
 module.exports = {
     getUsers,
