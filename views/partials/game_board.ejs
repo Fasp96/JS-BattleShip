@@ -1,0 +1,77 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+    .tables {
+       display: flex;
+       justify-content: space-evenly;
+       margin-bottom: 3%;
+    }
+    .table {
+       display:table-cell; 
+       border: solid 4px #000000;
+    }
+    .tables h1{
+       text-align: center;
+    }
+    .row {
+       display:table-row; 
+       clear: both; 
+       overflow: hidden;
+    }
+    .cell{
+       display:table-cell; 
+       border-right: 3px solid #000000; 
+       border-bottom: 3px solid #000000; 
+       width: 50px; height: 50px;
+       vertical-align: middle;
+       text-align: center;
+    }
+    .cell.inside{
+       background-color: rgb(202, 202, 202);      
+    }
+    .cell.outside{
+       background-color: rgb(0, 151, 0);
+       font-weight: bold;
+       font-size: xx-large;
+       color: black;
+    }
+    .number{
+       border-top: 4px solid #000000;
+       border-bottom: 4px solid #000000;
+    }
+    .letter{
+       border-left: 4px solid #000000;
+       border-right: 4px solid #000000;
+    } 
+    #opponentTable .inside:hover{
+       background-color: grey;
+    }
+    #userTable .cell{
+       width: 40px;
+       height: 40px;
+       font-size:x-large;
+    }
+    .hit{
+       background-image: url('/miss.png');
+       background-size: contain;
+    }
+    .btn-primary{
+       width: 300px; 
+       margin-right:auto; 
+       margin-left: auto;
+    }
+ </style>
+
+<div class="tables">
+    <div id ="opponentTable">
+       <h1>Opponent Board</h1>
+       <div class="table">
+       </div>
+    </div>
+    <div id ="userTable">
+       <h1>Your Board</h1>
+       <div class="table"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script src="/vues.js"></script>

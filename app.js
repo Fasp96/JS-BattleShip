@@ -71,6 +71,13 @@ app.get('/miss.png', (req,res) =>{
       res.send(data);   
    })
 });
+
+app.get('/vues.js', (req,res) =>{
+   fs.readFile('vues.js',function (e, data) {
+      res.send(data);   
+   })
+});
+
 app.get('/login', (req, res) => {
    res.render('login_form');
 });
