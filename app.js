@@ -6,6 +6,7 @@ var urlParser  = bodyParser.urlencoded({extended:false});
 const mongo    =  require('mongodb');
 var mongoUtil = require('./mongoConfig');
 var ejs = require('ejs');
+var fs = require('fs');
 
 const userController = require('./controller/userController');
 //import express from 'express';
@@ -63,6 +64,18 @@ app.get('/form', (req, res) => {
 app.get('/board', (req, res) => {
    console.log('inside');
    res.render('board');
+});
+
+app.get('/miss.png', (req,res) =>{
+   fs.readFile('miss.png',function (e, data) {
+      res.send(data);   
+   })
+});
+
+app.get('/vues.js', (req,res) =>{
+   fs.readFile('vues.js',function (e, data) {
+      res.send(data);   
+   })
 });
 
 app.get('/login', (req, res) => {

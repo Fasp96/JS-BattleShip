@@ -1,0 +1,35 @@
+<div id="chatArea">
+</div>
+<form id="myForm">
+   <div class="form-group">
+      <textarea rows="5" id="txt" cols="5" class="form-control"></textarea>
+   </div>
+   <div class="form-group">
+      <button type="submit" class="btn btn-success">Send</button>
+   </div>
+</form>
+</div>
+
+<script>
+
+    function returnToMain(){
+      location.href = "/";
+    }
+
+    jQuery(document).ready(function() {
+         var socket = io.connect();
+         var form = jQuery('#myForm');
+         var txt = jQuery('#txt');
+         var chatArea = jQuery('#chatArea');
+
+         form.submit(function(e) {
+            e.preventDefault();
+            socket.emit('sending message', txt.val());
+            txt.val('');
+         });
+
+         socket.on('new message', function(data){
+            chatArea.append('<div class="well">'+data.message+'</div>');
+         });
+      });
+   </script>

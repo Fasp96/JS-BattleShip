@@ -1,4 +1,4 @@
-var User = require("../models/User");
+var User = require("../models/user");
 
 function getUsers(email, password,callback){
     //tratar dados, filtrar, mais queries,...
