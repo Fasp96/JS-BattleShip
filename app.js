@@ -92,16 +92,10 @@ app.post('/login', function(req, res){
 app.post('/form', function(req,res){
    userController.insertUser(req.body.user_email,req.body.user_password,function(result){
        console.log(result);
-       res.render("menu");
+      res.render("menu");
        
    });
 });
 
-/*
-app.use(session({
-   secret: 'work hard',
-   resave: true,
-   saveUninitialized: false
- }));
 
- */
+
