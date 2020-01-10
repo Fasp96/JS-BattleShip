@@ -6,6 +6,7 @@ var urlParser  = bodyParser.urlencoded({extended:false});
 const mongo    =  require('mongodb');
 var mongoUtil = require('./mongoConfig');
 var ejs = require('ejs');
+var fs = require('fs');
 
 const userController = require('./controller/userController');
 //import express from 'express';
@@ -65,6 +66,11 @@ app.get('/board', (req, res) => {
    res.render('board');
 });
 
+app.get('/miss.png', (req,res) =>{
+   fs.readFile('miss.png',function (e, data) {
+      res.send(data);   
+   })
+});
 app.get('/login', (req, res) => {
    res.render('login_form');
 });

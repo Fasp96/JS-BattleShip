@@ -9,33 +9,71 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
    <style>
-      .cell {
-         display:table-cell; 
-         border-right: 1px solid #000000; 
-         border-bottom: 1px solid #000000; 
-         width: 30px; height: 30px;
-         vertical-align: middle;
-         text-align: center;
-         background-color: green;
+      .tables {
+         display: flex;
+         justify-content: space-evenly;
+         margin-bottom: 3%;
       }
-      .cell.outside{
-         background-color: orange;
+      .table {
+         display:table-cell; 
+         border: solid 4px #000000;
+      }
+      .tables h1{
+         text-align: center;
       }
       .row {
          display:table-row; 
          clear: both; 
          overflow: hidden;
       }
-      .table {
+      .cell{
          display:table-cell; 
-         border-left: 1px solid #000000;
-         border-top: 1px solid #000000;
+         border-right: 3px solid #000000; 
+         border-bottom: 3px solid #000000; 
+         width: 50px; height: 50px;
+         vertical-align: middle;
+         text-align: center;
       }
-
+      .cell.inside{
+         background-color: rgb(202, 202, 202);      
+      }
+      .cell.outside{
+         background-color: rgb(0, 151, 0);
+         font-weight: bold;
+         font-size: xx-large;
+         color: black;
+      }
+      .number{
+         border-top: 4px solid #000000;
+         border-bottom: 4px solid #000000;
+      }
+      .letter{
+         border-left: 4px solid #000000;
+         border-right: 4px solid #000000;
+      } 
+      #opponentTable .inside:hover{
+         background-color: grey;
+      }
+      #userTable .cell{
+         width: 40px;
+         height: 40px;
+         font-size:x-large;
+      }
+      .hit{
+         background-image: url('/miss.png');
+         background-size: contain;
+      }
+      .btn-primary{
+         width: 300px; 
+         margin-right:auto; 
+         margin-left: auto;
+      }
+      .hit{
+         background-color: red;
+      }
    </style>
 
 </head>
-
 
 <body>
    
@@ -46,11 +84,13 @@
          BattleShip Game
       </h1>
 
-      <div class="tables" style="padding-bottom: 35%;">
-         <div style="float: left; width: 50%;" id ="userTable">
+      <div class="tables">
+         <div id ="opponentTable">
+            <h1>Opponent Board</h1>
             <div class="table"></div>
          </div>
-         <div style="float: right; " id ="opponentTable">
+         <div id ="userTable">
+            <h1>Your Board</h1>
             <div class="table"></div>
          </div>
       </div>
@@ -65,9 +105,9 @@
             <button type="submit" class="btn btn-success">Send</button>
          </div>
       </form>
-
       </div>
-      <button type="button" class="btn btn-primary btn-lg btn-block" onclick=" returnToMain()">return to main page</button>
+
+         <button type="button" class="btn btn-primary btn-block" onclick=" returnToMain()">return to main page</button>
    </div>
 
    <script>
@@ -80,14 +120,17 @@
             var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
     		   for(var ix= 0; ix<=x; ix++){
                 
-               if(ix == 0){
-                  arrX[ix]='<div class="cell outside">'+ letter[iy] +'</div>';
+               if(ix == 0 && iy == 0){
+                  arrX[ix]='<div class="cell outside number letter">'+ letter[iy] +'</div>';
                }
-               else if(ix != 0 && iy == 0){
-                  arrX[ix]='<div class="cell outside">'+ (ix) +'</div>';
+               else if(ix == 0){
+                  arrX[ix]='<div class="cell outside letter">'+ letter[iy] +'</div>';
+               }
+               else if(iy == 0){
+                  arrX[ix]='<div class="cell outside number">'+ ix +'</div>';
                }
                else{
-                  arrX[ix]='<div class="cell" id=' + letter[(iy)] + (ix) + '>&nbsp;</div>';
+                  arrX[ix]='<div class="cell inside" id=' + letter[(iy)] + (ix) + '>&nbsp;</div>';
                }
     			   
     		   }
