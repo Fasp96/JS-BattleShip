@@ -1,20 +1,38 @@
-<div id="chatArea">
-</div>
-<form id="myForm">
-   <div class="form-group">
-      <textarea rows="5" id="txt" cols="5" class="form-control"></textarea>
+<style>
+   #chatArea{
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-top: 70px;
+      margin-bottom: 10px;
+      height: 450px;
+      overflow-y: auto;
+   }
+</style>
+
+<div>
+   <div id="chatArea"></div>
+   <form id="myForm">
+      <div class="form-group">
+         <textarea rows="5" id="txt" cols="5" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+         <button type="submit" class="btn btn-success">Send</button>
+      </div>
+   </form>
    </div>
-   <div class="form-group">
-      <button type="submit" class="btn btn-success">Send</button>
-   </div>
-</form>
 </div>
 
 <script>
 
-    function returnToMain(){
+   function returnToMain(){
       location.href = "/";
-    }
+   }
+
+   const messages = document.getElementById('chatArea');
+
+   function scrollToBottom() {
+      messages.scrollTop = messages.scrollHeight;
+   }
 
     jQuery(document).ready(function() {
          var socket = io.connect();
@@ -30,6 +48,7 @@
 
          socket.on('new message', function(data){
             chatArea.append('<div class="well">'+data.message+'</div>');
+            scrollToBottom();
          });
       });
    </script>
