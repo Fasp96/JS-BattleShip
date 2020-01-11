@@ -85,8 +85,10 @@ app.get('/menu', (req, res) => {
 });
 
 app.get('/board', (req, res) => {
-   console.log('inside');
    res.render('board');
+});
+app.get('/game=:game_ID&&user=:user_id', (req, res) => {
+   res.render('board', req.params);
 });
 
 app.get('/login', (req, res) => {
@@ -106,20 +108,24 @@ app.post('/login', function(req, res){
 
          
          res.redirect('menu');
+         res.render('menu', { user: result });
       }else{
          res.render('index')
       }
-      
    });
 });
 
-app.get('/form', (req, res) => {
+app.get('/register', (req, res) => {
    res.render('register_form');
 });
-app.post('/form', function(req,res){
+app.post('/register', function(req,res){
    userController.insertUser(req.body.user_email,req.body.user_password,function(result){
-      console.log(result);
-      res.render("menu");
+      console.log("result: "+result);
+      if(result!="Error getting user"){
+         res.render('menu', { user: result });
+      }else{
+         res.render('index')
+      }
    });
 });
 
