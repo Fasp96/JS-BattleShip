@@ -132,6 +132,14 @@ app.get('/logout',(req,res) => {
 });
 
 
+app.get('/gameOptions', (req, res) => {
+   if(sess) {
+      res.render('gameOptions', {sess: sess})
+   }else{
+      res.render('index');
+   }
+});
+
 //Images Routes
 app.get('/miss.png', (req,res) =>{
    fs.readFile('miss.png',function (e, data) {
