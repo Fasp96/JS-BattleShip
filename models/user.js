@@ -29,7 +29,24 @@ function getUsers(c,t,callback){
     });
 }
 
+function verifyEmail(c,callback){
+    var db = mongoConfig.getDB();
+    //var line = {email: { $exists: true }, password: { $exists: true }};
+    const query = {email: c}
+    console.log("query: "+query);
+    console.log("query: "+JSON.stringify(query));
+    const user = db.collection("users").findOne(query, function(err, result) {
+        if (err) throw err;
+        if(result){
+            callback(result);
+        }else{
+            callback("Error getting user");
+        }
+    });
+}
+
 module.exports = {
     getUsers,
-    insertUser
+    insertUser,
+    verifyEmail
 };
