@@ -49,10 +49,14 @@
    #userTable{
       margin-left: 10px;
    }
-   #userTable .cell{
+   #userTable .cell{ 
       width: 40px;
       height: 40px;
       font-size:x-large;
+   }
+   .boat{
+      background-image: url('/boat.png');
+      background-size: contain;
    }
    .miss{
       background-image: url('/miss.png');
@@ -62,8 +66,6 @@
       background-image: url('/hit.png');
       background-size: contain;
    }
-
-
    .btn-primary{
       width: 300px; 
       margin-right:auto; 
@@ -72,11 +74,40 @@
 </style>
 
 <div class="tables" v-on:load="showShots();">
-    <div id ="opponent">
-       <div id = 'opponentTable' class="table">
-       </div>
-    </div>
-    <div id ="user">
-       <div id='userTable' class="table"></div>
-    </div>
+   <div>
+      <ul>
+         <li>
+            <label> Carrier (size: 5)</label>
+            <input type="text" v-model = "newShips.Carrier" @change="addShips()">
+         </li>
+         <br>
+         <li>   
+            <label> Battleship (size: 4)</label>
+            <input  type="text" v-model = "newShips.Battleship" @change="addShips()">
+         </li>
+         <br>
+         <li>
+            <label> Cruiser (size: 3)</label>
+            <input type="text" v-model = "newShips.Cruiser" @change="addShips()">
+         </li>
+         <br>
+         <li>
+            <label> Submarine (size: 3)</label>
+            <input type="text" v-model = "newShips.Submarine" @change="addShips()">    
+         </li>
+         <br>
+         <li>
+            <label> Destroyer(size: 2)</label>
+            <input type="text" v-model = "newShips.Destroyer" @change="addShips()">
+         </li>
+      </ul>
+            
+   </div>
+   <div id ="opponent">
+      <div id = 'opponentTable'>
+      </div>
+   </div>
+   <div id ="user">
+      <div id='userTable'></div>
+   </div>
 </div>
