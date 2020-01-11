@@ -103,7 +103,7 @@ app.post('/login', function(req, res){
          console.log("sess2: "+JSON.stringify(sess));
          res.redirect('/');
       }else{
-         res.redirect('/');
+         res.redirect('/login');
       }
    });
 });
@@ -124,7 +124,7 @@ app.post('/register', function(req,res){
          sess.user = result;
          res.redirect('/');
       }else{
-         res.redirect('/');
+         res.redirect('/register');
       }
    });
 });
