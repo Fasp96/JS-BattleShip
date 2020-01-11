@@ -7,7 +7,8 @@ function insertUser(email,password,callback){
         if(err)
             callback("Error inserting user");
         else{
-            callback("user inserted");
+            console.log("res_op: "+JSON.stringify(res.ops[0]));
+            callback(res.ops[0]);
         }
     });
 }

@@ -79,13 +79,17 @@ app.post('/login', function(req, res){
    });
 });
 
-app.get('/form', (req, res) => {
+app.get('/register', (req, res) => {
    res.render('register_form');
 });
-app.post('/form', function(req,res){
+app.post('/register', function(req,res){
    userController.insertUser(req.body.user_email,req.body.user_password,function(result){
-      console.log(result);
-      res.render("menu");
+      console.log("result: "+result);
+      if(result!="Error getting user"){
+         res.render('menu', { user: result });
+      }else{
+         res.render('index')
+      }
    });
 });
 
