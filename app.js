@@ -41,6 +41,13 @@ io.sockets.on('connection',(socket) => {
 
       io.sockets.emit('new message', {message: message});
    });
+   socket.on('client sending message', function(data) {
+      console.log('Message is received :', data.message);
+      console.log('Message is from :', data.user_id);
+      
+      io.sockets.emit('new game message', 
+         {message: data.message, game_id: data.game_id, user_id: data.user_id });
+   });
 });
 
 //MongoDB
@@ -63,7 +70,12 @@ app.get('/board', (req, res) => {
    res.render('board');
 });
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
-   res.render('board', req.params);
+   if(sess.user._id == req.params.user_id){
+      res.render('board', req.params);
+   }else{
+      res.redirect('/');
+   }
+   //res.render('board', req.params);
 });
 
 app.get('/login', (req, res) => {
