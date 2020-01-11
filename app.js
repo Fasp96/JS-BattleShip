@@ -72,6 +72,12 @@ app.get('/miss.png', (req,res) =>{
    })
 });
 
+app.get('/hit.png', (req,res) =>{
+   fs.readFile('hit.png',function (e, data) {
+      res.send(data);   
+   })
+});
+
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {
       res.send(data);   
