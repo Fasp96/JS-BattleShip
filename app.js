@@ -49,6 +49,7 @@ mongoUtil.connectToServer(function(err){
    });
 })
 
+//Views Routes
 app.get('/', function(req,res){
    res.render("index");
 });
@@ -57,44 +58,50 @@ app.get('/menu', (req, res) => {
    res.render('menu');
 });
 
-app.get('/form', (req, res) => {
-   res.render('register_form');
-});
-
 app.get('/board', (req, res) => {
    console.log('inside');
    res.render('board');
 });
 
+app.get('/login', (req, res) => {
+   res.render('login_form');
+});
+app.post('/login', function(req, res){
+   userController.getUsers(req.body.user_email,req.body.user_password,function(result){
+      console.log("result: "+result);
+      if(result!="Error getting user"){
+         res.render('menu');
+      }else{
+         res.render('index')
+      }
+      
+   });
+});
+
+app.get('/form', (req, res) => {
+   res.render('register_form');
+});
+app.post('/form', function(req,res){
+   userController.insertUser(req.body.user_email,req.body.user_password,function(result){
+      console.log(result);
+      res.render("menu");
+   });
+});
+
+
+//Images Routes
 app.get('/miss.png', (req,res) =>{
    fs.readFile('miss.png',function (e, data) {
       res.send(data);   
    })
 });
 
+
+//JS Routes
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {
       res.send(data);   
    })
-});
-
-app.get('/login', (req, res) => {
-   res.render('login_form');
-});
-
-app.post('/login', function(req, res){
-   //userController.getUsers(req.body.user_email,req.body.user_password,function(result){
-   //console.log(result);
-   res.render('menu');
-  // });
-});
-
-app.post('/form', function(req,res){
-   userController.insertUser(req.body.user_email,req.body.user_password,function(result){
-       console.log(result);
-      res.render("menu");
-       
-   });
 });
 
 
