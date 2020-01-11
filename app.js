@@ -17,14 +17,14 @@ app.use(urlParser);
 app.set('view engine','ejs');
 app.set("views", __dirname + '/views');
 
-
-
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 const PORT = 3000;
 server.listen(PORT);
 console.log('Server is running');
 
+
+//Sockets
 const users = [];
 const connections = [];
 
@@ -43,6 +43,7 @@ io.sockets.on('connection',(socket) => {
    });
 });
 
+//MongoDB
 mongoUtil.connectToServer(function(err){
    app.listen(8888,function(){
        console.log("listening on 8888");
@@ -61,7 +62,7 @@ app.get('/menu', (req, res) => {
 app.get('/board', (req, res) => {
    res.render('board');
 });
-app.get('/game=:game_ID&&user=:user_id', (req, res) => {
+app.get('/game=:game_id&&user=:user_id', (req, res) => {
    res.render('board', req.params);
 });
 
@@ -70,7 +71,7 @@ app.get('/login', (req, res) => {
 });
 app.post('/login', function(req, res){
    userController.getUsers(req.body.user_email,req.body.user_password,function(result){
-      console.log("result: "+result);
+      console.log("result: "+JSON.stringify(result));
       if(result!="Error getting user"){
          res.render('menu', { user: result });
       }else{
