@@ -116,15 +116,26 @@ app.get('/register', (req, res) => {
       res.render('register_form');
    }
 });
+
 app.post('/register', function(req,res){
-   userController.insertUser(req.body.user_email,req.body.user_password,function(result){
-      console.log("result: "+result);
+   userController.verifyEmail(req.body.user_email,function(result){
       if(result!="Error getting user"){
-         sess = req.session;
-         sess.user = result;
-         res.redirect('/');
-      }else{
+         console.log(' There is already an account with this email');
+            
          res.redirect('/register');
+         
+
+      }else{
+         userController.insertUser(req.body.user_email,req.body.user_password,function(result){
+            console.log("result: "+result);
+            if(result!="Error getting user"){
+               sess = req.session;
+               sess.user = result;
+               res.redirect('/');
+            }else{
+               res.redirect('/register');
+            }
+         });
       }
    });
 });
