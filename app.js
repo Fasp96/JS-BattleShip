@@ -68,9 +68,10 @@ var sess;
 
 app.get('/', function(req,res){
    if(sess) {
-      res.render('menu');
+      res.render('menu', {sess: sess});
+   }else{
+      res.render('index');
    }
-   res.render('index');
 });
 
 app.get('/board', (req, res) => {
@@ -84,8 +85,9 @@ app.get('/game=:game_ID&&user=:user_id', (req, res) => {
 app.get('/login', (req, res) => {
    if(sess) {
       res.redirect('/');
+   }else{
+      res.render('login_form');
    }
-   res.render('login_form');
 });
 app.post('/login', function(req, res){
    userController.getUsers(req.body.user_email,req.body.user_password,function(result){
@@ -94,18 +96,19 @@ app.post('/login', function(req, res){
          sess = req.session;
          sess.user = result;
          console.log("sess2: "+JSON.stringify(sess));
-         res.render('menu', { sess: sess });
+         res.redirect('/');
       }else{
-         res.redirect('/')
+         res.redirect('/');
       }
    });
 });
 
 app.get('/register', (req, res) => {
    if(sess) {
-      res.render('register');
+      res.redirect('/');
+   }else{
+      res.render('register_form');
    }
-   res.redirect('/');
 });
 app.post('/register', function(req,res){
    userController.insertUser(req.body.user_email,req.body.user_password,function(result){
@@ -113,9 +116,9 @@ app.post('/register', function(req,res){
       if(result!="Error getting user"){
          sess = req.session;
          sess.user = result;
-         res.render('menu', { sess: sess });
+         res.redirect('/');
       }else{
-         res.redirect('/')
+         res.redirect('/');
       }
    });
 });
