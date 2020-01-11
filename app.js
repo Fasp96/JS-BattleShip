@@ -63,9 +63,11 @@ mongoUtil.connectToServer(function(err){
    });
 })
 
-//Views Routes
+//-----------------------Views Routes-----------------------------------------
 var sess;
 
+
+//Initial Route
 app.get('/', function(req,res){
    if(sess) {
       res.render('menu', {sess: sess});
@@ -74,6 +76,8 @@ app.get('/', function(req,res){
    }
 });
 
+
+//GameBoard Routes
 app.get('/board', (req, res) => {
    res.render('board');
 });
@@ -82,6 +86,7 @@ app.get('/game=:game_ID&&user=:user_id', (req, res) => {
    res.render('board', req.params);
 });
 
+//Login Routes
 app.get('/login', (req, res) => {
    if(sess) {
       res.redirect('/');
@@ -103,6 +108,7 @@ app.post('/login', function(req, res){
    });
 });
 
+//Register Routes
 app.get('/register', (req, res) => {
    if(sess) {
       res.redirect('/');
@@ -123,6 +129,7 @@ app.post('/register', function(req,res){
    });
 });
 
+//Logout Route
 app.get('/logout',(req,res) => {
    req.session.destroy((err) => {
       if(err) throw err;
@@ -131,7 +138,7 @@ app.get('/logout',(req,res) => {
    });
 });
 
-
+//Game Options Routes
 app.get('/gameOptions1', (req, res) => {
    if(sess) {
       res.render('gameOptions1', {sess: sess})
@@ -148,7 +155,9 @@ app.get('/gameOptions2', (req, res) => {
    }
 });
 
-//Images Routes
+
+
+//----------------Images Routes---------------------------------------
 app.get('/miss.png', (req,res) =>{
    fs.readFile('miss.png',function (e, data) {
       res.send(data);   
@@ -156,7 +165,7 @@ app.get('/miss.png', (req,res) =>{
 });
 
 
-//JS Routes
+//------------------JS Routes-----------------------------------------
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {
       res.send(data);   
