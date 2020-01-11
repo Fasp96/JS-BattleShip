@@ -1,7 +1,11 @@
 var express = require('express');
 const app = express();
+
+const session = require('express-session');
+var passport = require('passport');
 var path = require('path');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
+const router = express.Router();
 var urlParser  = bodyParser.urlencoded({extended:false});
 const mongo    =  require('mongodb');
 var mongoUtil = require('./mongoConfig');
@@ -17,6 +21,16 @@ app.use(urlParser);
 app.set('view engine','ejs');
 app.set("views", __dirname + '/views');
 
+
+//app.use(require('serve-static')(__dirname + '/../../public'));
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+app.use(bodyParser.json()); 
+
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 const server = require('http').createServer(app);
@@ -50,46 +64,70 @@ mongoUtil.connectToServer(function(err){
 })
 
 //Views Routes
-app.get('/', function(req,res){
-   res.render("index");
-});
+var sess;
 
-app.get('/menu', (req, res) => {
-   res.render('menu');
+app.get('/', function(req,res){
+   if(sess) {
+      res.render('menu', {sess: sess});
+   }else{
+      res.render('index');
+   }
 });
 
 app.get('/board', (req, res) => {
    res.render('board');
 });
+
 app.get('/game=:game_ID&&user=:user_id', (req, res) => {
    res.render('board', req.params);
 });
 
 app.get('/login', (req, res) => {
-   res.render('login_form');
+   if(sess) {
+      res.redirect('/');
+   }else{
+      res.render('login_form');
+   }
 });
 app.post('/login', function(req, res){
    userController.getUsers(req.body.user_email,req.body.user_password,function(result){
-      console.log("result: "+result);
+      console.log("result: "+JSON.stringify(result));
       if(result!="Error getting user"){
-         res.render('menu', { user: result });
+         sess = req.session;
+         sess.user = result;
+         console.log("sess2: "+JSON.stringify(sess));
+         res.redirect('/');
       }else{
-         res.render('index')
+         res.redirect('/');
       }
    });
 });
 
 app.get('/register', (req, res) => {
-   res.render('register_form');
+   if(sess) {
+      res.redirect('/');
+   }else{
+      res.render('register_form');
+   }
 });
 app.post('/register', function(req,res){
    userController.insertUser(req.body.user_email,req.body.user_password,function(result){
       console.log("result: "+result);
       if(result!="Error getting user"){
-         res.render('menu', { user: result });
+         sess = req.session;
+         sess.user = result;
+         res.redirect('/');
       }else{
-         res.render('index')
+         res.redirect('/');
       }
+   });
+});
+
+app.get('/logout',(req,res) => {
+   req.session.destroy((err) => {
+      if(err) throw err;
+      sess = null;
+      res.redirect('/');
    });
 });
 
