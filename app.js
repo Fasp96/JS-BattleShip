@@ -132,9 +132,17 @@ app.get('/logout',(req,res) => {
 });
 
 
-app.get('/gameOptions', (req, res) => {
+app.get('/gameOptions1', (req, res) => {
    if(sess) {
-      res.render('gameOptions', {sess: sess})
+      res.render('gameOptions1', {sess: sess})
+   }else{
+      res.render('index');
+   }
+});
+
+app.get('/gameOptions2', (req, res) => {
+   if(sess) {
+      res.render('gameOptions2', {sess: sess})
    }else{
       res.render('index');
    }
