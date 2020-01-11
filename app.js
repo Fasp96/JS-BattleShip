@@ -59,8 +59,10 @@ app.get('/menu', (req, res) => {
 });
 
 app.get('/board', (req, res) => {
-   console.log('inside');
    res.render('board');
+});
+app.get('/game=:game_ID&&user=:user_id', (req, res) => {
+   res.render('board', req.params);
 });
 
 app.get('/login', (req, res) => {
@@ -70,11 +72,10 @@ app.post('/login', function(req, res){
    userController.getUsers(req.body.user_email,req.body.user_password,function(result){
       console.log("result: "+result);
       if(result!="Error getting user"){
-         res.render('menu');
+         res.render('menu', { user: result });
       }else{
          res.render('index')
       }
-      
    });
 });
 
