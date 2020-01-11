@@ -1,7 +1,11 @@
 var express = require('express');
 const app = express();
+
+const session = require('express-session');
+var passport = require('passport');
 var path = require('path');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
+const router = express.Router();
 var urlParser  = bodyParser.urlencoded({extended:false});
 const mongo    =  require('mongodb');
 var mongoUtil = require('./mongoConfig');
@@ -17,6 +21,16 @@ app.use(urlParser);
 app.set('view engine','ejs');
 app.set("views", __dirname + '/views');
 
+
+//app.use(require('serve-static')(__dirname + '/../../public'));
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+app.use(bodyParser.json()); 
+
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 const server = require('http').createServer(app);
@@ -50,12 +64,24 @@ mongoUtil.connectToServer(function(err){
 })
 
 //Views Routes
+
 app.get('/', function(req,res){
-   res.render("index");
+   sess = req.session;
+   if(sess.email) {
+       return res.redirect('/menu');
+       
+   }
+   res.render('index');
 });
 
 app.get('/menu', (req, res) => {
-   res.render('menu');
+
+   sess = req.session;
+   if(sess.email) {
+       return res.render('menu');
+       
+   }
+   res.render('index');
 });
 
 app.get('/board', (req, res) => {
@@ -66,11 +92,20 @@ app.get('/board', (req, res) => {
 app.get('/login', (req, res) => {
    res.render('login_form');
 });
+
+
+
 app.post('/login', function(req, res){
    userController.getUsers(req.body.user_email,req.body.user_password,function(result){
       console.log("result: "+result);
       if(result!="Error getting user"){
-         res.render('menu');
+         
+            sess = req.session;
+            sess.email = req.body.user_email;
+            //res.end('done');
+
+         
+         res.redirect('menu');
       }else{
          res.render('index')
       }
@@ -104,5 +139,15 @@ app.get('/vues.js', (req,res) =>{
    })
 });
 
+
+app.get('/logout',(req,res) => {
+   req.session.destroy((err) => {
+       if(err) {
+           return console.log(err);
+       }
+       res.render('index');
+   });
+
+});
 
 
