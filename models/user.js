@@ -2,7 +2,7 @@ var mongoConfig = require('../mongoConfig');
 
 function insertUser(email,password,callback){
     var db = mongoConfig.getDB();
-    var line = {email:email, password:password};
+    var line = {email:email, password:password, num_games:0, num_victories:0};
     db.collection("users").insertOne(line,function(err, res){
         if(err)
             callback("Error inserting user");
