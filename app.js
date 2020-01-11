@@ -64,22 +64,11 @@ mongoUtil.connectToServer(function(err){
 })
 
 //Views Routes
+var sess;
 
 app.get('/', function(req,res){
-   sess = req.session;
-   if(sess.email) {
-       return res.redirect('/menu');
-       
-   }
-   res.render('index');
-});
-
-app.get('/menu', (req, res) => {
-
-   sess = req.session;
-   if(sess.email) {
-       return res.render('menu');
-       
+   if(sess) {
+      res.render('menu');
    }
    res.render('index');
 });
@@ -87,45 +76,55 @@ app.get('/menu', (req, res) => {
 app.get('/board', (req, res) => {
    res.render('board');
 });
+
 app.get('/game=:game_ID&&user=:user_id', (req, res) => {
    res.render('board', req.params);
 });
 
 app.get('/login', (req, res) => {
+   if(sess) {
+      res.redirect('/');
+   }
    res.render('login_form');
 });
-
-
-
 app.post('/login', function(req, res){
    userController.getUsers(req.body.user_email,req.body.user_password,function(result){
-      console.log("result: "+result);
+      console.log("result: "+JSON.stringify(result));
       if(result!="Error getting user"){
-         
-            sess = req.session;
-            sess.email = req.body.user_email;
-            //res.end('done');
-
-         
-         res.redirect('menu');
-         res.render('menu', { user: result });
+         sess = req.session;
+         sess.user = result;
+         console.log("sess2: "+JSON.stringify(sess));
+         res.render('menu', { sess: sess });
       }else{
-         res.render('index')
+         res.redirect('/')
       }
    });
 });
 
 app.get('/register', (req, res) => {
-   res.render('register_form');
+   if(sess) {
+      res.render('register');
+   }
+   res.redirect('/');
 });
 app.post('/register', function(req,res){
    userController.insertUser(req.body.user_email,req.body.user_password,function(result){
       console.log("result: "+result);
       if(result!="Error getting user"){
-         res.render('menu', { user: result });
+         sess = req.session;
+         sess.user = result;
+         res.render('menu', { sess: sess });
       }else{
-         res.render('index')
+         res.redirect('/')
       }
+   });
+});
+
+app.get('/logout',(req,res) => {
+   req.session.destroy((err) => {
+      if(err) throw err;
+      sess = null;
+      res.redirect('/');
    });
 });
 
@@ -145,15 +144,5 @@ app.get('/vues.js', (req,res) =>{
    })
 });
 
-
-app.get('/logout',(req,res) => {
-   req.session.destroy((err) => {
-       if(err) {
-           return console.log(err);
-       }
-       res.render('index');
-   });
-
-});
 
 
