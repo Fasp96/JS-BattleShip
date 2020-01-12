@@ -73,8 +73,8 @@
    }
 </style>
 
-<div class="tables" v-on:load="showShots();">
-   <div>
+<div class="tables">
+   <div id="addShips" style="visibility: hidden;">
       <ul>
          <li>
             <label> Carrier (size: 5)</label>
@@ -101,6 +101,9 @@
             <input type="text" v-model = "newShips.Destroyer" @change="addShips()">
          </li>
       </ul>
+      <br>
+      <br>
+      <button v-on:click="startGame()">StartGame</button>
             
    </div>
    <div id ="opponent">
