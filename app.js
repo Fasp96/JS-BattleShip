@@ -14,6 +14,7 @@ var fs = require('fs');
 
 const gamesController = require('./controller/gamesController');
 const userController = require('./controller/userController');
+const userGamesController = require('./controller/userGamesController');
 //import express from 'express';
 //import path from 'path';
 //import bodyParser from 'body-parser';
@@ -122,6 +123,38 @@ app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //}
 });
 
+app.get("/game=:item_id", (req, res) => {
+      if(sess) {
+         //Deveria procurar o jogo com o id do url
+         var game_id = "ObjectId('"+req.params.item_id+"')";
+         var game_i1 = req.params.item_id;
+         console.log(game_id);
+
+         gamesController.getGameId(game_id,function(result){
+            if(result!="Error getting game"){
+            console.log(result.length);
+            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
+
+            }else{
+            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
+            //fazer o update
+            //res.render('board', req.params);
+            
+            }
+        }); 
+   
+         
+         } else{
+            res.render('index');
+         }
+      });
+      //res.redirect('/game=:game_id&&user=:user_id');
+   //}else{
+   //  res.redirect('/');
+   //}
+
+
+
 //Login Routes
 app.get('/login', (req, res) => {
    if(sess) {
@@ -221,16 +254,24 @@ app.get('/newGame', (req, res) => {
       gamesController.insertGame(sess.user._id,function(result){
          console.log("result: "+result);
          if(result!="Error inserting game"){
-            sess.game = result;
+            userGamesController.insertUsersGames(sess.user._id, result._id,function(result2){
 
-            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+               console.log("result: "+result2);
+               if(result!="Error inserting game_users"){
+                  sess.game = result;
 
+                  res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+               
+               }else{
+
+                  location.href = "/gameOptions1";
+                  }
+            })
             //res.render('gameOptions1', {sess: sess})
-
          }else{
 
-         location.href = "/gameOptions1";
-         }
+            location.href = "/gameOptions1";
+            }
       });
       } else{
          res.render('index');
@@ -262,32 +303,17 @@ app.get('/newGame', (req, res) => {
 
 app.get('/continueGame', (req, res) => {
    if(sess) {
-      gamesController.getAllGames(sess.user._id,function(result){
+      userGamesController. getAllUsersGames(sess.user._id,function(result){
          console.log(result.length);
          res.render('gameContinue1',{games:result ,sess: sess});
      }); 
 
       
-
-      /*gamesController.getGame(sess.user._id,function(result){
-         console.log("result: "+result);
-         if(result!="Error inserting game"){
-            sess.game = result;
-
-            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
-
-            //res.render('gameOptions1', {sess: sess})
-        
-         }else{
-
-         location.href = "/gameOptions1";
-         }
-      });*/
-      
       } else{
          res.render('index');
       }
    });
+
 
 
    app.get('/continueGame2', (req, res) => {
@@ -301,6 +327,19 @@ app.get('/continueGame', (req, res) => {
          res.render('index');
       }
    });
+//Join Route
+   app.get('/join', (req, res) => {
+      if(sess) {
+         gamesController.getAllGames(sess.user._id,function(result){
+            console.log(result.length);
+            res.render('gameJoin1',{games:result ,sess: sess});
+        }); 
+   
+         
+         } else{
+            res.render('index');
+         }
+      });
 
 
 //----------------Images Routes---------------------------------------
