@@ -1,78 +1,119 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style>
-    .tables {
-       display: flex;
-       justify-content: space-evenly;
-       margin-bottom: 3%;
-       flex-grow: 2;
-    }
-    .table {
-       display:table-cell; 
-       border: solid 4px #000000;
-    }
-    .tables h1{
-       text-align: center;
-    }
-    .row {
-       display:table-row; 
-       clear: both; 
-       overflow: hidden;
-    }
-    .cell{
-       display:table-cell; 
-       border-right: 3px solid #000000; 
-       border-bottom: 3px solid #000000; 
-       width: 50px; height: 50px;
-       vertical-align: middle;
-       text-align: center;
-    }
-    .cell.inside{
-       background-color: rgb(202, 202, 202);      
-    }
-    .cell.outside{
-       background-color: rgb(0, 151, 0);
-       font-weight: bold;
-       font-size: xx-large;
-       color: black;
-    }
-    .number{
-       border-top: 4px solid #000000;
-       border-bottom: 4px solid #000000;
-    }
-    .letter{
-       border-left: 4px solid #000000;
-       border-right: 4px solid #000000;
-    } 
-    #opponentTable .inside:hover{
-       background-color: grey;
-    }
-    #userTable{
-       margin-left: 10px;
-    }
-    #userTable .cell{
-       width: 40px;
-       height: 40px;
-       font-size:x-large;
-    }
-    .hit{
-       background-image: url('/miss.png');
-       background-size: contain;
-    }
-    .btn-primary{
-       width: 300px; 
-       margin-right:auto; 
-       margin-left: auto;
-    }
- </style>
+   .tables {
+      display: flex;
+      justify-content: space-evenly;
+      margin-bottom: 3%;
+      flex-grow: 2;
+   }
+   .table {
+      display:table-cell; 
+      border: solid 4px #000000;
+   }
+   .tables h1{
+      text-align: center;
+   }
+   .row {
+      display:table-row; 
+      clear: both; 
+   overflow: hidden;
+   }
+   .cell{
+      display:table-cell; 
+      border-right: 3px solid #000000; 
+      border-bottom: 3px solid #000000; 
+      width: 50px; height: 50px;
+      vertical-align: middle;
+      text-align: center;
+   }
+   .cell.inside{
+      background-color: rgb(202, 202, 202);    
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;  
+   }
+   .cell.outside{
+      background-color: rgb(0, 151, 0);
+      font-weight: bold;
+      font-size: xx-large;
+      color: black;
+   }
+   .number{
+      border-top: 4px solid #000000;
+      border-bottom: 4px solid #000000;
+   }
+   .letter{
+      border-left: 4px solid #000000;
+      border-right: 4px solid #000000;
+   } 
+   #opponentTable .inside:hover{
+      background-color: grey;
+   }
+   #user{
+      margin-left: 5px;
+   }
+   #userTable .cell{ 
+      width: 40px;
+      height: 40px;
+      font-size:x-large;
+   }
+   .boat{
+      background-image: url('/boat.png');
+      background-size: contain;
+   }
+   .miss{
+      background-image: url('/miss.png');
+      background-size: contain;
+   }
+   .hit{
+      background-image: url('/hit.png');
+      background-size: contain;
+   }
+   .btn-primary{
+      width: 300px; 
+      margin-right:auto; 
+      margin-left: auto;
+   }
+</style>
 
 <div class="tables">
-    <div id ="opponentTable">
-       <h1>Opponent Board</h1>
-       <div class="table">
-       </div>
-    </div>
-    <div id ="userTable">
-       <h1>Your Board</h1>
-       <div class="table"></div>
-    </div>
+   <div id="addShips" style="visibility: hidden;">
+      <ul>
+         <li>
+            <label> Carrier (size: 5)</label>
+            <input type="text" v-model = "newShips.Carrier" @change="addShips()">
+         </li>
+         <br>
+         <li>   
+            <label> Battleship (size: 4)</label>
+            <input  type="text" v-model = "newShips.Battleship" @change="addShips()">
+         </li>
+         <br>
+         <li>
+            <label> Cruiser (size: 3)</label>
+            <input type="text" v-model = "newShips.Cruiser" @change="addShips()">
+         </li>
+         <br>
+         <li>
+            <label> Submarine (size: 3)</label>
+            <input type="text" v-model = "newShips.Submarine" @change="addShips()">    
+         </li>
+         <br>
+         <li>
+            <label> Destroyer(size: 2)</label>
+            <input type="text" v-model = "newShips.Destroyer" @change="addShips()">
+         </li>
+      </ul>
+      <br>
+      <br>
+      <button v-on:click="startGame()">StartGame</button>
+            
+   </div>
+   <div id ="opponent">
+      <div id = 'opponentTable'>
+      </div>
+   </div>
+   <div id ="user">
+      <div id='userTable'></div>
+   </div>
 </div>

@@ -12,58 +12,81 @@
    }
    .message{
       overflow-wrap: break-word;
+      border-radius: 9px;
+      border: 1px solid black;
+   }
+   .my_message{
+      background-color: #238be6b3;
+      margin-left: 30px;
+   }
+   .opponent_message{
+      background-color: #d92828a8;
+      margin-right: 30px;
    }
 </style>
 
 <div class="chat_container">
+   <!-- Area where the messages will apear -->
    <div id="chatArea"></div>
    <form id="myForm">
+      <!-- Text Area to write message -->
       <div class="form-group">
          <textarea rows="2" id="txt" cols="5" class="form-control"></textarea>
       </div>
+      <!-- Button to sumbit message -->
       <div class="form-group">
          <button type="submit" class="btn btn-success">Send</button>
       </div>
    </form>
-   </div>
 </div>
 
 <script>
-
-   function returnToMain(){
-      location.href = "/";
-   }
-
-   const messages = document.getElementById('chatArea');
-
-   function scrollToBottom() {
-      messages.scrollTop = messages.scrollHeight;
-   }
-
    jQuery(document).ready(function() {
+      //Elements and variables to use
       var socket = io.connect();
       var form = jQuery('#myForm');
       var txt = jQuery('#txt');
       var chatArea = jQuery('#chatArea');
-
       var game_id = "<%=game_id%>";
       var user_id = "<%=user_id%>";
+      const messages = document.getElementById('chatArea');
 
+      //Scroll the chat down, to show the most recent messages
+      function scrollToBottom() {
+         messages.scrollTop = messages.scrollHeight;
+      }
+
+      //When user clicks on the button to send message
       form.submit(function(e) {
          e.preventDefault();
+         //Send message to server with the necessary information
          socket.emit('sending message',
             {message:txt.val(), game_id:game_id, user_id:user_id});
+         //Clean message text area
          txt.val('');
       });
-
+      /*
       socket.on('new message', function(data){
          chatArea.append('<div class="well message">'+data.message+'</div>');
          scrollToBottom();
       });
+      */
+      //Retrive message from server
       socket.on('new game message', function(data){
+         //Verify that the message is from this game
          if(game_id==data.game_id){
-            chatArea.append('<div class="well message">'+
-                  data.user_id+":\n"+data.message+'</div>');
+            //Start building the chat message
+            var message = '<div class="well message ';
+            //If this the user's message
+            if(user_id==data.user_id){
+               message+='my_message"';
+            //Otherwise is opponent's message
+            }else{
+               message+='opponent_message"';
+            }
+            //Finish building the chat message
+            message+=">"+data.user_id+":\n"+data.message+'</div>';
+            chatArea.append(message);
             scrollToBottom();
          }
       });

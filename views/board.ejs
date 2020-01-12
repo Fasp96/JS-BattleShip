@@ -24,22 +24,24 @@
 </style>
 
 <body>
-   
    <div id="board">
-
-   <div class="page_container">
-      <h1 class="jumbotron page_title">
-         BattleShip Game - <%= game_id %>
-      </h1>
-
-      <div class="tables_and_chat">
-         <%- include('partials/game_board') %>
-         <%- include('partials/chat_area') %>
-      </div>
-
+      <div class="page_container">
+         <h1 class="jumbotron page_title">
+            BattleShip Game - <%= game_id %>
+         </h1>
+         <div class="tables_and_chat">
+            <%- include('partials/game_board') %>
+            <%- include('partials/chat_area') %>
+         </div>
          <button type="button" class="btn btn-primary btn-block" onclick=" returnToMain()">return to main page</button>
+      </div>
    </div>
 </body>
+<script>
+   function returnToMain(){
+      location.href = "/";
+   }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script src="/vues.js"></script>
 </html>

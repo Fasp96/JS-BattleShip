@@ -25,7 +25,7 @@ app.set("views", __dirname + '/views');
 //####################################################################################################################
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
@@ -66,8 +66,8 @@ io.sockets.on('connection',(socket) => {
       console.log('Message received :', data.message);
       console.log('Message from game :', data.game_id);
       console.log('Message is from :', data.user_id);
-      
-      io.sockets.emit('new game message', 
+
+      io.sockets.emit('new game message',
          {message: data.message, game_id: data.game_id, user_id: data.user_id });
    });
 });
@@ -145,9 +145,9 @@ app.post('/register', function(req,res){
    userController.verifyEmail(req.body.user_email,function(result){
       if(result!="Error getting user"){
          console.log(' There is already an account with this email');
-            
+
          res.redirect('/register');
-         
+
 
       }else{
          userController.insertUser(req.body.user_email,req.body.user_password,function(result){
@@ -177,7 +177,7 @@ app.get('/logout',(req,res) => {
 app.get('/gameOptions1', (req, res) => {
    if(sess) {
 
-         res.render('gameOptions1', {sess: sess}) 
+         res.render('gameOptions1', {sess: sess})
 
       } else{
          res.render('index');
@@ -206,7 +206,7 @@ app.get('/newGame', (req, res) => {
             res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
 
             //res.render('gameOptions1', {sess: sess})
-        
+
          }else{
 
          location.href = "/gameOptions1";
@@ -252,17 +252,25 @@ app.get('/continueGame', (req, res) => {
 //----------------Images Routes---------------------------------------
 app.get('/miss.png', (req,res) =>{
    fs.readFile('miss.png',function (e, data) {
-      res.send(data);   
+      res.send(data);
    })
 });
 
+app.get('/hit.png', (req,res) =>{
+   fs.readFile('hit.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/boat.png', (req,res) =>{
+   fs.readFile('boat.png',function (e, data) {
+      res.send(data);
+   })
+});
 
 //------------------JS Routes-----------------------------------------
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {
-      res.send(data);   
+      res.send(data);
    })
 });
-
-
-
