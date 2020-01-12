@@ -32,7 +32,13 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
   <script>
-      console.log("inicio");
+      var alert_message = "<%=alert%>";
+      console.log("alert: "+JSON.stringify(alert_message));
+      if(alert_message!=""){
+        alert(alert_message);
+      }
+
+
       function validate_input(clicked = true){
         console.log("validate_input");
         var contents = [];

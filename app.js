@@ -76,6 +76,7 @@ mongoUtil.connectToServer(function(err){
 
 //-----------------------Views Routes-----------------------------------------
 var sess;
+var alert;
 
 
 //Initial Route
@@ -130,27 +131,32 @@ app.get('/register', (req, res) => {
    if(sess) {
       res.redirect('/');
    }else{
-      res.render('register_form');
+      res.render('register_form', {alert: alert});
+      alert = "";
    }
 });
 app.post('/register', function(req,res){
    userController.verifyName(req.body.user_name,function(result){
       if(result=="Error name exists"){
          console.log('There is already an account with this name');
+         alert = "There is already an account with this name";
          res.redirect('/register');
       }else{
          userController.verifyEmail(req.body.user_email,function(result){
             if(result=="Error email exists"){
                console.log('There is already an account with this email');
+               alert = "There is already an account with this email";
                res.redirect('/register');
             }else{
                userController.insertUser(req.body.user_name, req.body.user_email,req.body.user_password,function(result){
                   console.log("result: "+result);
-                  if(result=="Error getting user"){
+                  if(result=="Error inserting user"){
+                     alert = "Error inserting user";
                      res.redirect('/register');
                   }else{
                      sess = req.session;
                      sess.user = result;
+                     alert = "";
                      res.redirect('/');
                   }
                });
