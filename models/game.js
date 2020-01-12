@@ -17,7 +17,8 @@ function insertGame(user_id,callback){
 function getAllGames(user_id,callback){
     var db = mongoConfig.getDB();
     //console.log(db);
-    query = {users: [user_id], vencedor_id: 0};
+    
+    query = {"users.0": {"$ne": user_id},"users.1":0};
     var cursor = db.collection('games').find(query).toArray(function(err,result){
         if(!err)
             callback(result);
@@ -41,8 +42,25 @@ function getGame(c,callback){
     });
 }
 
+function getGameId(game_id,callback){
+    var db = mongoConfig.getDB();
+    //var line = {email: { $exists: true }, password: { $exists: true }};
+    const query = {_id:game_id}
+    console.log("query: "+query);
+    console.log("query: "+JSON.stringify(query));
+    const user = db.collection("games").findOne(query, function(err, result) {
+        if (err) throw err;
+        if(result){
+            callback(result);
+        }else{
+            callback("Error getting user");
+        }
+    });
+}
+
 module.exports = {
     getGame,
     insertGame,
-    getAllGames
+    getAllGames,
+    getGameId
 };

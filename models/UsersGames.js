@@ -13,7 +13,18 @@ function insertUsersGames(user_id,game_id,callback){
     });
 }
 
+function getAllUsersGames(user_id,callback){
+    var db = mongoConfig.getDB();
+    //console.log(db);
+    query = {users_id: user_id};
+    var cursor = db.collection('users_games').find(query).toArray(function(err,result){
+        if(!err)
+            callback(result);
+    });
+}
+
 module.exports = {
 
-    insertUsersGames
+    insertUsersGames,
+    getAllUsersGames
 };
