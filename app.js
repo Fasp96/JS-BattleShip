@@ -78,9 +78,11 @@ mongoUtil.connectToServer(function(err){
    });
 })
 
-//Views Routes
+//-----------------------Views Routes-----------------------------------------
 var sess;
 
+
+//Initial Route
 app.get('/', function(req,res){
    if(sess) {
       res.render('menu', {sess: sess});
@@ -89,6 +91,8 @@ app.get('/', function(req,res){
    }
 });
 
+
+//GameBoard Routes
 app.get('/board', (req, res) => {
    res.render('board');
 });
@@ -101,6 +105,7 @@ app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //}
 });
 
+//Login Routes
 app.get('/login', (req, res) => {
    if(sess) {
       res.redirect('/');
@@ -117,11 +122,12 @@ app.post('/login', function(req, res){
          console.log("sess2: "+JSON.stringify(sess));
          res.redirect('/');
       }else{
-         res.redirect('/');
+         res.redirect('/login');
       }
    });
 });
 
+//Register Routes
 app.get('/register', (req, res) => {
    if(sess) {
       res.redirect('/');
@@ -129,19 +135,31 @@ app.get('/register', (req, res) => {
       res.render('register_form');
    }
 });
+
 app.post('/register', function(req,res){
-   userController.insertUser(req.body.user_email,req.body.user_password,function(result){
-      console.log("result: "+result);
+   userController.verifyEmail(req.body.user_email,function(result){
       if(result!="Error getting user"){
-         sess = req.session;
-         sess.user = result;
-         res.redirect('/');
+         console.log(' There is already an account with this email');
+            
+         res.redirect('/register');
+         
+
       }else{
-         res.redirect('/');
+         userController.insertUser(req.body.user_email,req.body.user_password,function(result){
+            console.log("result: "+result);
+            if(result!="Error getting user"){
+               sess = req.session;
+               sess.user = result;
+               res.redirect('/');
+            }else{
+               res.redirect('/register');
+            }
+         });
       }
    });
 });
 
+//Logout Route
 app.get('/logout',(req,res) => {
    req.session.destroy((err) => {
       if(err) throw err;
@@ -150,16 +168,26 @@ app.get('/logout',(req,res) => {
    });
 });
 
-
-app.get('/gameOptions', (req, res) => {
+//Game Options Routes
+app.get('/gameOptions1', (req, res) => {
    if(sess) {
-      res.render('gameOptions', {sess: sess})
+      res.render('gameOptions1', {sess: sess})
    }else{
       res.render('index');
    }
 });
 
-//Images Routes
+app.get('/gameOptions2', (req, res) => {
+   if(sess) {
+      res.render('gameOptions2', {sess: sess})
+   }else{
+      res.render('index');
+   }
+});
+
+
+
+//----------------Images Routes---------------------------------------
 app.get('/miss.png', (req,res) =>{
    fs.readFile('miss.png',function (e, data) {
       res.send(data);   
@@ -167,7 +195,7 @@ app.get('/miss.png', (req,res) =>{
 });
 
 
-//JS Routes
+//------------------JS Routes-----------------------------------------
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {
       res.send(data);   
