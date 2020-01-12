@@ -70,7 +70,7 @@ new Vue({
                         }
                         else{
                             if(id == "#opponent"){
-                                arrX[ix]='<div class="cell inside" id= p2' + letter[(iy)] + (ix-1) + ' v-on:click="addShot('+ iy +',' +  (ix-1)  +')">&nbsp;</div>';
+                                arrX[ix]='<div class="cell inside" id= p2' + letter[(iy)] + (ix-1) + ' v-on:click="addShotP1('+ iy +',' +  (ix-1)  +')">&nbsp;</div>';
                             }
                             else{
                                 arrX[ix]='<div class="cell inside" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
@@ -301,7 +301,7 @@ new Vue({
         addShotP1(iy, ix){
             var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
             this.p1.shots.push({'y': letter[iy], 'x': ix});
-            this.showShots(letter[iy], ix);
+            this.showShotsP1(letter[iy], ix);
         },
 
         //function to show the new shots from user in the board
