@@ -287,6 +287,8 @@ new Vue({
         startGame(){
             //sets the visibilty add ship hidden
             document.getElementById("addShips").style.visibility = "hidden";
+            var element = document.getElementById("addShips");
+            element.parentNode.removeChild(element);
             //sets the visibility of opponent board unset 
             document.getElementById("opponent").style.visibility = "unset";
             //loads the ships for the user
