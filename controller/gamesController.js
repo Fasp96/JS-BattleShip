@@ -9,9 +9,13 @@ function getGame(user_id, callback){
     Game.getGame(user_id, callback);
 }
 
+function getAllGames(user_id,callback){
+    Game.getAllGames(user_id,callback);
+}
 
 
 module.exports = {
     getGame,
-    insertGame
+    insertGame,
+    getAllGames
 };

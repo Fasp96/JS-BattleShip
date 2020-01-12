@@ -27,16 +27,17 @@ data = {
             {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},
         ],
         shots:[
+            /*
             {x:"1", y:"A"}, 
             {x:"1", y:"B"}, 
-            {x:"1", y:"C"},
+            {x:"1", y:"C"},*/
         ]
     },
     newCoordinates:'',
     newShips:[
         {Carrier: "", Battleship:"" , Cruiser:"" , Submarine:"", Destroyer:"" },
     ],
-    newType:''
+    usedSpaces:[]
 };
 
 new Vue({
@@ -199,35 +200,35 @@ new Vue({
         addShips(){
             if(typeof(this.newShips.Carrier) != "undefined" && this.newShips.Carrier !== null){
                 this.p1.ships.forEach(ship =>{
-                    if(ship.type == "Carrier"){
+                    if(ship.type == "Carrier" && this.newShips.Carrier != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Carrier[1], this.newShips.Carrier[0], this.newShips.Carrier[2]);
                     }
                 });
             }
             if(typeof(this.newShips.Battleship) != "undefined" && this.newShips.Battleship !== null){
                 this.p1.ships.forEach(ship =>{
-                    if(ship.type == "Battleship"){
+                    if(ship.type == "Battleship" && this.newShips.Battleship != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Battleship[1], this.newShips.Battleship[0], this.newShips.Battleship[2]);
                     }
                 });
             }
             if(typeof(this.newShips.Cruiser) != "undefined" && this.newShips.Cruiser !== null){
                 this.p1.ships.forEach(ship =>{
-                    if(ship.type == "Cruiser"){
+                    if(ship.type == "Cruiser" && this.newShips.Cruiser != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Cruiser[1], this.newShips.Cruiser[0], this.newShips.Cruiser[2]);
                     }
                 });
             }
             if(typeof(this.newShips.Submarine) != "undefined" && this.newShips.Submarine !== null){
                 this.p1.ships.forEach(ship =>{
-                    if(ship.type == "Submarine"){
+                    if(ship.type == "Submarine" && this.newShips.Submarine != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Submarine[1], this.newShips.Submarine[0], this.newShips.Submarine[2]);
                     }
                 });
             }
             if(typeof(this.newShips.Destroyer) != "undefined" && this.newShips.Destroyer !== null){
                 this.p1.ships.forEach(ship =>{
-                    if(ship.type == "Destroyer"){
+                    if(ship.type == "Destroyer" && this.newShips.Destroyer != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Destroyer[1], this.newShips.Destroyer[0], this.newShips.Destroyer[2]);
                     }
                 });
@@ -236,67 +237,145 @@ new Vue({
 
         //function to add the ship to the board
         addShip(ship, shipX, shipY, orientation){
+            $('#addError').text("");
             var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
-            //saves the original values of the ship
-            var shipOriginalx = ship.x;
-            var shipOriginaly = ship.y;
-            var shipOriginalOrientation = ship.orientation;
+            var colision = false;
             
-            //saves the new values in ship in data
-            ship.x = shipX;
-            ship.y = shipY;
-            ship.orientation = orientation;
-
-            //deletes the original boat position
-
-            if(shipOriginalOrientation == 'H'){
-                for(var i = 0; i < ship.size; i++){
-                    $("#p1" + shipOriginaly + shipOriginalx).removeClass("boat");
-                    shipOriginalx++;
-                }
-            }
-
-            if(shipOriginalOrientation == 'V'){
-                var iy = letter.indexOf(shipOriginaly);
-                for(var i = 0; i < ship.size; i++){
-                    shipOriginaly = letter[iy];
-                    $("#p1" + shipOriginaly + shipOriginalx).removeClass("boat");
-                    iy++;
-                }
-            }
-
-            //adds the boat in the new position
-
+            //verify colision and spaces
+            var colisionX = shipX;
+            var colisionY = shipY;
+            
             if(orientation == 'H'){
                 for(var i = 0; i < ship.size; i++){
-                    $("#p1" + shipY + shipX ).addClass("boat");
-                    shipX++;    
+                    
+                    if(colisionX > 9){
+                        $('#addError').text("***Can't insert "+ ship.type +" is out of the board");
+                        colision = true;
+                    }
+                    
+                    this.usedSpaces.forEach(space =>{
+                        console.log(space.x + " " + colisionX +" and " + space.y+ " " + colisionY);
+                        if(space.x == colisionX && space.y == colisionY){
+                            $('#addError').text("***Can't insert "+ ship.type +" it hits another ship");
+                            colision = true;
+                        }
+                    });
+                    colisionX++;
                 }
             }
 
             if(orientation == 'V'){
-                var iy = letter.indexOf(shipY);
+                var iy = letter.indexOf(colisionY);
                 for(var i = 0; i < ship.size; i++){
-                    shipY = letter[iy];
-                    $("#p1" + shipY + shipX).addClass("boat");
+                    colisionY = letter[iy];
+                    
+                    if(iy > 9){
+                        $('#addError').text("***Can't insert "+ ship.type +" is out of the board");
+                        colision = true;
+                    }
+
+                    this.usedSpaces.forEach(space =>{
+                        console.log(space.x == colisionX +" " + space.y == colisionY);
+                        if(space.x == colisionX && space.y == colisionY){
+                            $('#addError').text("***Can't insert "+ ship.type +" it hits another ship");
+                            colision = true;
+                        }
+                        
+                    });
                     iy++;
+                }
+            }
+
+            if(colision == false){
+
+                //saves the original values of the ship
+                var shipOriginalx = ship.x;
+                var shipOriginaly = ship.y;
+                var shipOriginalOrientation = ship.orientation;
+                //saves the new values in ship in data
+                ship.x = shipX;
+                ship.y = shipY;
+                ship.orientation = orientation;
+
+                //deletes the original ship position
+
+                if(shipOriginalOrientation == 'H'){
+                    for(var i = 0; i < ship.size; i++){
+                        $("#p1" + shipOriginaly + shipOriginalx).removeClass("boat");
+                        this.usedSpaces.pop({'y': shipOriginaly, 'x': shipOriginalx});
+                        shipOriginalx++;
+                    }
+                }
+
+                if(shipOriginalOrientation == 'V'){
+                    var iy = letter.indexOf(shipOriginaly);
+                    for(var i = 0; i < ship.size; i++){
+                        shipOriginaly = letter[iy];
+                        $("#p1" + shipOriginaly + shipOriginalx).removeClass("boat");
+                        this.usedSpaces.pop({'y': shipOriginaly, 'x': shipOriginalx});
+                        iy++;
+                    }
+                }
+
+                //adds ship to the new position
+                if(orientation == 'H'){
+                    for(var i = 0; i < ship.size; i++){
+                        $("#p1" + shipY + shipX ).addClass("boat");
+                        this.usedSpaces.push({'y': shipY, 'x': shipX});
+                        shipX++;    
+                    }
+                }
+
+                if(orientation == 'V'){
+                    var iy = letter.indexOf(shipY);
+                    for(var i = 0; i < ship.size; i++){
+                        shipY = letter[iy];
+                        $("#p1" + shipY + shipX).addClass("boat");
+                        this.usedSpaces.push({'y': shipY, 'x': shipX});
+                        iy++;
+                    }
                 }
             }
         },
 
+
+        verifyShips(){
+            $('#addError').text("");
+            var isOk = true;
+            
+            this.p1.ships.forEach(ship =>{
+                if(ship.x == '' | ship.y ==''){
+                    isOk = false;
+                }
+            });
+            if(isOk){
+                this.startGame();
+            }
+            else{
+                $('#addError').text("***Error in inputs***");
+            }
+        },
+
         startGame(){
-            //sets the visibilty add ship hidden
-            document.getElementById("addShips").style.visibility = "hidden";
+            var opponentIsConnected = true;
             var element = document.getElementById("addShips");
-            element.parentNode.removeChild(element);
-            //sets the visibility of opponent board unset 
-            document.getElementById("opponent").style.visibility = "unset";
-            //loads the ships for the user
-            this.loadShips();
-            //loads the shots of user
-            this.loadShotsP1();
-            //load the shots of opponent
-            this.loadShotsP2();
+            //waits for apponent do connect
+            if(opponentIsConnected == false){
+                //sets the visibilty add ship hidden
+                element.innerHTML = "<h1>Waiting for apponent...</h1>";
+            }
+            else{
+                //removes add ships
+                element.parentNode.removeChild(element);
+                //sets the visibility of opponent board unset 
+                document.getElementById("opponent").style.visibility = "unset";
+                //loads the ships for the user
+                this.loadShips();
+                //loads the shots of user
+                this.loadShotsP1();
+                //load the shots of opponent
+                this.loadShotsP2();
+            }
         },
 
         //function to add the new shots from user
@@ -345,13 +424,13 @@ new Vue({
             this.checkShips("user");
         },
 
-
+        /*
         //function to add the new shots from opponent
         addShotP2(iy, ix){
             var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
             this.p2.shots.push({'y': letter[iy], 'x': ix});
             this.showShotsP2(letter[iy], ix);
-        },
+        },*/
 
         //function to show the new shots from opponent in the board
         showShotsP2(y, x){

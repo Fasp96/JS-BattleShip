@@ -14,6 +14,15 @@ function insertGame(user_id,callback){
     });
 }
 
+function getAllGames(user_id,callback){
+    var db = mongoConfig.getDB();
+    //console.log(db);
+    query = {users: [user_id], vencedor_id: 0};
+    var cursor = db.collection('games').find(query).toArray(function(err,result){
+        if(!err)
+            callback(result);
+    });
+}
 
 
 function getGame(c,callback){
@@ -34,5 +43,6 @@ function getGame(c,callback){
 
 module.exports = {
     getGame,
-    insertGame
+    insertGame,
+    getAllGames
 };

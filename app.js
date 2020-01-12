@@ -214,6 +214,71 @@ app.get('/newGame', (req, res) => {
    });
 
 
+   app.get('/newGame2', (req, res) => {
+      if(sess) {
+         gamesController.insertGame(sess.user._id,function(result){
+            console.log("result: "+result);
+            if(result!="Error inserting game"){
+               sess.game = result;
+   
+               res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+   
+               //res.render('gameOptions1', {sess: sess})
+   
+            }else{
+   
+            location.href = "/gameOptions2";
+            }
+         });
+         } else{
+            res.render('index');
+         }
+      });
+//continue Game Route
+
+app.get('/continueGame', (req, res) => {
+   if(sess) {
+      gamesController.getAllGames(sess.user._id,function(result){
+         console.log(result.length);
+         res.render('gameContinue1',{games:result ,sess: sess});
+     }); 
+
+      
+
+      /*gamesController.getGame(sess.user._id,function(result){
+         console.log("result: "+result);
+         if(result!="Error inserting game"){
+            sess.game = result;
+
+            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+
+            //res.render('gameOptions1', {sess: sess})
+        
+         }else{
+
+         location.href = "/gameOptions1";
+         }
+      });*/
+      
+      } else{
+         res.render('index');
+      }
+   });
+
+
+   app.get('/continueGame2', (req, res) => {
+      if(sess) {
+         gamesController.getAllGames(sess.user._id,function(result){
+            console.log(result.length);
+            res.render('gameContinue2',{games:result ,sess: sess});
+        });
+
+      } else{
+         res.render('index');
+      }
+   });
+
+
 //----------------Images Routes---------------------------------------
 app.get('/miss.png', (req,res) =>{
    fs.readFile('miss.png',function (e, data) {

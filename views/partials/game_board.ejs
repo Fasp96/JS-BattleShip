@@ -78,35 +78,36 @@
 
 <div class="tables">
    <div id="addShips" style="visibility: hidden;">
+      <p style="color:red" id="addError"></p>
       <ul>
          <li>
             <label> Carrier (size: 5)</label>
-            <input type="text" v-model = "newShips.Carrier" @change="addShips()">
+            <input type="text" v-model = "newShips.Carrier" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
          <br>
          <li>   
             <label> Battleship (size: 4)</label>
-            <input  type="text" v-model = "newShips.Battleship" @change="addShips()">
+            <input type="text" v-model = "newShips.Battleship" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
          <br>
          <li>
             <label> Cruiser (size: 3)</label>
-            <input type="text" v-model = "newShips.Cruiser" @change="addShips()">
+            <input type="text" v-model = "newShips.Cruiser" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
          <br>
          <li>
             <label> Submarine (size: 3)</label>
-            <input type="text" v-model = "newShips.Submarine" @change="addShips()">    
+            <input type="text" v-model = "newShips.Submarine" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">    
          </li>
          <br>
          <li>
             <label> Destroyer(size: 2)</label>
-            <input type="text" v-model = "newShips.Destroyer" @change="addShips()">
+            <input type="text" v-model = "newShips.Destroyer" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
       </ul>
       <br>
       <br>
-      <button v-on:click="startGame()">StartGame</button>
+      <button v-on:click="verifyShips()">StartGame</button>
             
    </div>
    <div id ="opponent">
