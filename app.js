@@ -225,6 +225,17 @@ app.get('/miss.png', (req,res) =>{
    })
 });
 
+app.get('/hit.png', (req,res) =>{
+   fs.readFile('hit.png',function (e, data) {
+      res.send(data);   
+   })
+});
+
+app.get('/boat.png', (req,res) =>{
+   fs.readFile('boat.png',function (e, data) {
+      res.send(data);   
+   })
+});
 
 //------------------JS Routes-----------------------------------------
 app.get('/vues.js', (req,res) =>{
