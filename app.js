@@ -61,9 +61,26 @@ io.sockets.on('connection',(socket) => {
       io.sockets.emit('new message', {message: message});
    });
    */
+   //Messages received from chat
    socket.on('sending message', function(data) {
       io.sockets.emit('new game message',
          {message: data.message, game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot message
+   socket.on('shoot player', function(data) {
+      io.sockets.emit('recieve shot',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot response
+   socket.on('shot hitted', function(data) {
+      io.sockets.emit('hit',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
+   });
+   socket.on('shot missed', function(data) {
+      io.sockets.emit('miss',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
 
@@ -76,6 +93,7 @@ mongoUtil.connectToServer(function(err){
 
 //-----------------------Views Routes-----------------------------------------
 var sess;
+var alert;
 
 
 //Initial Route
@@ -96,7 +114,8 @@ app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
    //if(sess.user._id == req.params.user_id){
       var data = req.params;
-      //data.sess=sess.user;
+      data.sess=sess.user;
+      console.log("data: "+JSON.stringify(data));
       res.render('board', data);
    //}else{
    //  res.redirect('/');
@@ -130,27 +149,32 @@ app.get('/register', (req, res) => {
    if(sess) {
       res.redirect('/');
    }else{
-      res.render('register_form');
+      res.render('register_form', {alert: alert});
+      alert = "";
    }
 });
 app.post('/register', function(req,res){
    userController.verifyName(req.body.user_name,function(result){
       if(result=="Error name exists"){
          console.log('There is already an account with this name');
+         alert = "There is already an account with this name";
          res.redirect('/register');
       }else{
          userController.verifyEmail(req.body.user_email,function(result){
             if(result=="Error email exists"){
                console.log('There is already an account with this email');
+               alert = "There is already an account with this email";
                res.redirect('/register');
             }else{
                userController.insertUser(req.body.user_name, req.body.user_email,req.body.user_password,function(result){
                   console.log("result: "+result);
-                  if(result=="Error getting user"){
+                  if(result=="Error inserting user"){
+                     alert = "Error inserting user";
                      res.redirect('/register');
                   }else{
                      sess = req.session;
                      sess.user = result;
+                     alert = "";
                      res.redirect('/');
                   }
                });
