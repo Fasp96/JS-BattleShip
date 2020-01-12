@@ -197,7 +197,7 @@ new Vue({
 
         //function to add ships in the begging of a game (if is a new game)
         addShips(){
-            if(typeof(this.newShips.Carrier) != "undefined" && this.newShips.Carrier !== null){
+            if(typeof(this.newShips.Carrier) != "undefined" && this.newShips.Carrier !== null && this.newShips.Carrier.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Carrier"){
                         this.addShip(ship, this.newShips.Carrier[1], this.newShips.Carrier[0], this.newShips.Carrier[2]);
@@ -284,19 +284,43 @@ new Vue({
             }
         },
 
+        verifyShips(){
+            $('#addError').text("***Error in inputs");
+            var isOk = true;
+            
+            this.p1.ships.forEach(ship =>{
+                if(ship.x == '' | ship.y ==''){
+                    isOk = false;
+                }
+            });
+            if(isOk){
+                this.startGame();
+            }
+            else{
+                $('#addError').text("***Error in inputs***");
+            }
+        },
+
         startGame(){
-            //sets the visibilty add ship hidden
-            document.getElementById("addShips").style.visibility = "hidden";
+            var opponentIsConnected = true;
             var element = document.getElementById("addShips");
-            element.parentNode.removeChild(element);
-            //sets the visibility of opponent board unset 
-            document.getElementById("opponent").style.visibility = "unset";
-            //loads the ships for the user
-            this.loadShips();
-            //loads the shots of user
-            this.loadShotsP1();
-            //load the shots of opponent
-            this.loadShotsP2();
+            //waits for apponent do connect
+            if(opponentIsConnected == false){
+                //sets the visibilty add ship hidden
+                element.innerHTML = "<h1>Waiting for apponent...</h1>";
+            }
+            else{
+                //removes add ships
+                element.parentNode.removeChild(element);
+                //sets the visibility of opponent board unset 
+                document.getElementById("opponent").style.visibility = "unset";
+                //loads the ships for the user
+                this.loadShips();
+                //loads the shots of user
+                this.loadShotsP1();
+                //load the shots of opponent
+                this.loadShotsP2();
+            }
         },
 
         //function to add the new shots from user
@@ -345,13 +369,13 @@ new Vue({
             this.checkShips("user");
         },
 
-
+        /*
         //function to add the new shots from opponent
         addShotP2(iy, ix){
             var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
             this.p2.shots.push({'y': letter[iy], 'x': ix});
             this.showShotsP2(letter[iy], ix);
-        },
+        },*/
 
         //function to show the new shots from opponent in the board
         showShotsP2(y, x){
