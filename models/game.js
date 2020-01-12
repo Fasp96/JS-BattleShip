@@ -3,7 +3,7 @@ var mongoConfig = require('../mongoConfig');
 
 function insertGame(user_id,callback){
     var db = mongoConfig.getDB();
-    var line = {users:[user_id], ships:[5,5], shoots:[0,0], vencedor_id:0};
+    var line = {users:[user_id,0], ships:[5,5], shoots:[0,0], vencedor_id:0};
     db.collection("games").insertOne(line,function(err, res){
         if(err)
             callback("Error inserting game");

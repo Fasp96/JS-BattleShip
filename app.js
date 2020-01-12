@@ -14,6 +14,7 @@ var fs = require('fs');
 
 const gamesController = require('./controller/gamesController');
 const userController = require('./controller/userController');
+const userGamesController = require('./controller/userGamesController');
 //import express from 'express';
 //import path from 'path';
 //import bodyParser from 'body-parser';
@@ -202,16 +203,24 @@ app.get('/newGame', (req, res) => {
       gamesController.insertGame(sess.user._id,function(result){
          console.log("result: "+result);
          if(result!="Error inserting game"){
-            sess.game = result;
+            userGamesController.insertUsersGames(sess.user._id, result._id,function(result2){
 
-            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+               console.log("result: "+result2);
+               if(result!="Error inserting game_users"){
+                  sess.game = result;
 
+                  res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+               
+               }else{
+
+                  location.href = "/gameOptions1";
+                  }
+            })
             //res.render('gameOptions1', {sess: sess})
-
          }else{
 
-         location.href = "/gameOptions1";
-         }
+            location.href = "/gameOptions1";
+            }
       });
       } else{
          res.render('index');
