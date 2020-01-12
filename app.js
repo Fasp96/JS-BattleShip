@@ -221,7 +221,7 @@ app.get('/newGame', (req, res) => {
 
 app.get('/continueGame', (req, res) => {
    if(sess) {
-      gamesController.getAllGames(function(result){
+      gamesController.getAllGames(sess.user._id,function(result){
          console.log(result.length);
          res.render('gameContinue1',{games:result ,sess: sess});
      }); 

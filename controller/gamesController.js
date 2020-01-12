@@ -9,8 +9,8 @@ function getGame(user_id, callback){
     Game.getGame(user_id, callback);
 }
 
-function getAllGames(callback){
-    Game.getAllGames(callback);
+function getAllGames(user_id,callback){
+    Game.getAllGames(user_id,callback);
 }
 
 

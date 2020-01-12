@@ -14,10 +14,11 @@ function insertGame(user_id,callback){
     });
 }
 
-function getAllGames(callback){
+function getAllGames(user_id,callback){
     var db = mongoConfig.getDB();
     //console.log(db);
-    var cursor = db.collection('games').find().toArray(function(err,result){
+    query = {users: [user_id]};
+    var cursor = db.collection('games').find(query).toArray(function(err,result){
         if(!err)
             callback(result);
     });
