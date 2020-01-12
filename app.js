@@ -217,6 +217,29 @@ app.get('/newGame', (req, res) => {
       }
    });
 
+//continue Game Route
+
+app.get('/continueGame', (req, res) => {
+   if(sess) {
+      gamesController.getGame(sess.user._id,function(result){
+         console.log("result: "+result);
+         if(result!="Error inserting game"){
+            sess.game = result;
+
+            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+
+            //res.render('gameOptions1', {sess: sess})
+        
+         }else{
+
+         location.href = "/gameOptions1";
+         }
+      });
+      } else{
+         res.render('index');
+      }
+   });
+
 
 //----------------Images Routes---------------------------------------
 app.get('/miss.png', (req,res) =>{
