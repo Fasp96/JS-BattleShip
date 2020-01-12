@@ -104,6 +104,7 @@ app.get('/board', (req, res) => {
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
    //if(sess.user._id == req.params.user_id){
+
       res.render('board', req.params);
    //}else{
    //  res.redirect('/');
@@ -217,6 +218,27 @@ app.get('/newGame', (req, res) => {
       }
    });
 
+
+   app.get('/newGame2', (req, res) => {
+      if(sess) {
+         gamesController.insertGame(sess.user._id,function(result){
+            console.log("result: "+result);
+            if(result!="Error inserting game"){
+               sess.game = result;
+   
+               res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+   
+               //res.render('gameOptions1', {sess: sess})
+   
+            }else{
+   
+            location.href = "/gameOptions2";
+            }
+         });
+         } else{
+            res.render('index');
+         }
+      });
 //continue Game Route
 
 app.get('/continueGame', (req, res) => {
@@ -243,6 +265,19 @@ app.get('/continueGame', (req, res) => {
          }
       });*/
       
+      } else{
+         res.render('index');
+      }
+   });
+
+
+   app.get('/continueGame2', (req, res) => {
+      if(sess) {
+         gamesController.getAllGames(sess.user._id,function(result){
+            console.log(result.length);
+            res.render('gameContinue2',{games:result ,sess: sess});
+        });
+
       } else{
          res.render('index');
       }
