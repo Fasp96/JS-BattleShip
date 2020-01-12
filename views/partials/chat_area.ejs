@@ -1,6 +1,5 @@
 <style>
    #chatArea{
-      margin-top: 70px;
       margin-bottom: 10px;
       height: 450px;
       overflow-y: auto;
@@ -49,6 +48,9 @@
       var chatArea = jQuery('#chatArea');
       var game_id = "<%=game_id%>";
       var user_id = "<%=user_id%>";
+      //var user_name = <=sess.name%>; -> Nao apagar!! 
+      var user_name = "blaaaa";
+
       const messages = document.getElementById('chatArea');
 
       //Scroll the chat down, to show the most recent messages
@@ -61,7 +63,7 @@
          e.preventDefault();
          //Send message to server with the necessary information
          socket.emit('sending message',
-            {message:txt.val(), game_id:game_id, user_id:user_id});
+            {message:txt.val(), game_id:game_id, user_id:user_id, user_name:user_name});
          //Clean message text area
          txt.val('');
       });

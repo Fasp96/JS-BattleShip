@@ -1,8 +1,8 @@
 var mongoConfig = require('../mongoConfig');
 
-function insertUser(email,password,callback){
+function insertUser(name, email,password,callback){
     var db = mongoConfig.getDB();
-    var line = {email:email, password:password, num_games:0, num_victories:0};
+    var line = {name:name, email:email, password:password, num_games:0, num_victories:0};
     db.collection("users").insertOne(line,function(err, res){
         if(err)
             callback("Error inserting user");
@@ -13,13 +13,10 @@ function insertUser(email,password,callback){
     });
 }
 
-function getUsers(c,t,callback){
+function getUsers(email,password,callback){
     var db = mongoConfig.getDB();
-    //var line = {email: { $exists: true }, password: { $exists: true }};
-    const query = {email: c, password: t}
-    console.log("query: "+query);
-    console.log("query: "+JSON.stringify(query));
-    const user = db.collection("users").findOne(query, function(err, result) {
+    const query = {email: email, password: password}
+    db.collection("users").findOne(query, function(err, result) {
         if (err) throw err;
         if(result){
             callback(result);
@@ -29,18 +26,29 @@ function getUsers(c,t,callback){
     });
 }
 
-function verifyEmail(c,callback){
+function verifyName(name,callback){
     var db = mongoConfig.getDB();
-    //var line = {email: { $exists: true }, password: { $exists: true }};
-    const query = {email: c}
-    console.log("query: "+query);
+    const query = {name: name}
     console.log("query: "+JSON.stringify(query));
-    const user = db.collection("users").findOne(query, function(err, result) {
+    db.collection("users").findOne(query, function(err, result) {
         if (err) throw err;
         if(result){
-            callback(result);
+            callback("Error name exists");
         }else{
-            callback("Error getting user");
+            callback("No user with the same name");
+        }
+    });
+}
+
+function verifyEmail(email,callback){
+    var db = mongoConfig.getDB();
+    const query = {email: email}
+    db.collection("users").findOne(query, function(err, result) {
+        if (err) throw err;
+        if(result){
+            callback("Error email exists");
+        }else{
+            callback("No user with the same email");
         }
     });
 }
@@ -48,5 +56,6 @@ function verifyEmail(c,callback){
 module.exports = {
     getUsers,
     insertUser,
+    verifyName,
     verifyEmail
 };

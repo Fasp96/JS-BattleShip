@@ -14,6 +14,7 @@ var fs = require('fs');
 
 const gamesController = require('./controller/gamesController');
 const userController = require('./controller/userController');
+const userGamesController = require('./controller/userGamesController');
 //import express from 'express';
 //import path from 'path';
 //import bodyParser from 'body-parser';
@@ -61,14 +62,26 @@ io.sockets.on('connection',(socket) => {
       io.sockets.emit('new message', {message: message});
    });
    */
+   //Messages received from chat
    socket.on('sending message', function(data) {
-      console.log('data:', JSON.stringify(data));
-      console.log('Message received :', data.message);
-      console.log('Message from game :', data.game_id);
-      console.log('Message is from :', data.user_id);
-
       io.sockets.emit('new game message',
-         {message: data.message, game_id: data.game_id, user_id: data.user_id });
+         {message: data.message, game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot message
+   socket.on('shoot player', function(data) {
+      io.sockets.emit('recieve shot',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot response
+   socket.on('shot hitted', function(data) {
+      io.sockets.emit('hit',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
+   });
+   socket.on('shot missed', function(data) {
+      io.sockets.emit('miss',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
 
@@ -81,6 +94,7 @@ mongoUtil.connectToServer(function(err){
 
 //-----------------------Views Routes-----------------------------------------
 var sess;
+var alert;
 
 
 //Initial Route
@@ -95,21 +109,51 @@ app.get('/', function(req,res){
 
 //GameBoard Routes
 app.get('/board', (req, res) => {
-
-
    res.render('board');
-
-
 });
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
    //if(sess.user._id == req.params.user_id){
-
-      res.render('board', req.params);
+      var data = req.params;
+      data.sess=sess.user;
+      console.log("data: "+JSON.stringify(data));
+      res.render('board', data);
    //}else{
    //  res.redirect('/');
    //}
 });
+
+app.get("/game=:item_id", (req, res) => {
+      if(sess) {
+         //Deveria procurar o jogo com o id do url
+         var game_id = "ObjectId('"+req.params.item_id+"')";
+         var game_i1 = req.params.item_id;
+         console.log(game_id);
+
+         gamesController.getGameId(game_id,function(result){
+            if(result!="Error getting game"){
+            console.log(result.length);
+            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
+
+            }else{
+            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
+            //fazer o update
+            //res.render('board', req.params);
+            
+            }
+        }); 
+   
+         
+         } else{
+            res.render('index');
+         }
+      });
+      //res.redirect('/game=:game_id&&user=:user_id');
+   //}else{
+   //  res.redirect('/');
+   //}
+
+
 
 //Login Routes
 app.get('/login', (req, res) => {
@@ -138,27 +182,35 @@ app.get('/register', (req, res) => {
    if(sess) {
       res.redirect('/');
    }else{
-      res.render('register_form');
+      res.render('register_form', {alert: alert});
+      alert = "";
    }
 });
-
 app.post('/register', function(req,res){
-   userController.verifyEmail(req.body.user_email,function(result){
-      if(result!="Error getting user"){
-         console.log(' There is already an account with this email');
-
+   userController.verifyName(req.body.user_name,function(result){
+      if(result=="Error name exists"){
+         console.log('There is already an account with this name');
+         alert = "There is already an account with this name";
          res.redirect('/register');
-
-
       }else{
-         userController.insertUser(req.body.user_email,req.body.user_password,function(result){
-            console.log("result: "+result);
-            if(result!="Error getting user"){
-               sess = req.session;
-               sess.user = result;
-               res.redirect('/');
-            }else{
+         userController.verifyEmail(req.body.user_email,function(result){
+            if(result=="Error email exists"){
+               console.log('There is already an account with this email');
+               alert = "There is already an account with this email";
                res.redirect('/register');
+            }else{
+               userController.insertUser(req.body.user_name, req.body.user_email,req.body.user_password,function(result){
+                  console.log("result: "+result);
+                  if(result=="Error inserting user"){
+                     alert = "Error inserting user";
+                     res.redirect('/register');
+                  }else{
+                     sess = req.session;
+                     sess.user = result;
+                     alert = "";
+                     res.redirect('/');
+                  }
+               });
             }
          });
       }
@@ -202,16 +254,24 @@ app.get('/newGame', (req, res) => {
       gamesController.insertGame(sess.user._id,function(result){
          console.log("result: "+result);
          if(result!="Error inserting game"){
-            sess.game = result;
+            userGamesController.insertUsersGames(sess.user._id, result._id,function(result2){
 
-            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+               console.log("result: "+result2);
+               if(result!="Error inserting game_users"){
+                  sess.game = result;
 
+                  res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+               
+               }else{
+
+                  location.href = "/gameOptions1";
+                  }
+            })
             //res.render('gameOptions1', {sess: sess})
-
          }else{
 
-         location.href = "/gameOptions1";
-         }
+            location.href = "/gameOptions1";
+            }
       });
       } else{
          res.render('index');
@@ -243,32 +303,17 @@ app.get('/newGame', (req, res) => {
 
 app.get('/continueGame', (req, res) => {
    if(sess) {
-      gamesController.getAllGames(sess.user._id,function(result){
+      userGamesController. getAllUsersGames(sess.user._id,function(result){
          console.log(result.length);
          res.render('gameContinue1',{games:result ,sess: sess});
      }); 
 
       
-
-      /*gamesController.getGame(sess.user._id,function(result){
-         console.log("result: "+result);
-         if(result!="Error inserting game"){
-            sess.game = result;
-
-            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
-
-            //res.render('gameOptions1', {sess: sess})
-        
-         }else{
-
-         location.href = "/gameOptions1";
-         }
-      });*/
-      
       } else{
          res.render('index');
       }
    });
+
 
 
    app.get('/continueGame2', (req, res) => {
@@ -282,6 +327,19 @@ app.get('/continueGame', (req, res) => {
          res.render('index');
       }
    });
+//Join Route
+   app.get('/join', (req, res) => {
+      if(sess) {
+         gamesController.getAllGames(sess.user._id,function(result){
+            console.log(result.length);
+            res.render('gameJoin1',{games:result ,sess: sess});
+        }); 
+   
+         
+         } else{
+            res.render('index');
+         }
+      });
 
 
 //----------------Images Routes---------------------------------------
