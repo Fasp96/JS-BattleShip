@@ -61,9 +61,26 @@ io.sockets.on('connection',(socket) => {
       io.sockets.emit('new message', {message: message});
    });
    */
+   //Messages received from chat
    socket.on('sending message', function(data) {
       io.sockets.emit('new game message',
          {message: data.message, game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot message
+   socket.on('shoot player', function(data) {
+      io.sockets.emit('recieve shot',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot response
+   socket.on('shot hitted', function(data) {
+      io.sockets.emit('hit',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
+   });
+   socket.on('shot missed', function(data) {
+      io.sockets.emit('miss',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
 
