@@ -29,7 +29,7 @@ function getAllGames(user_id,callback){
 function getGame(c,callback){
     var db = mongoConfig.getDB();
     //var line = {email: { $exists: true }, password: { $exists: true }};
-    const query = {users: [c]}
+    const query = {users: [c]};
     console.log("query: "+query);
     console.log("query: "+JSON.stringify(query));
     const user = db.collection("games").findOne(query, function(err, result) {
@@ -37,7 +37,7 @@ function getGame(c,callback){
         if(result){
             callback(result);
         }else{
-            callback("Error getting user");
+            callback("Error getting game");
         }
     });
 }
@@ -45,16 +45,12 @@ function getGame(c,callback){
 function getGameId(game_id,callback){
     var db = mongoConfig.getDB();
     //var line = {email: { $exists: true }, password: { $exists: true }};
-    const query = {_id:game_id}
+    const query = {id: game_id};
     console.log("query: "+query);
     console.log("query: "+JSON.stringify(query));
-    const user = db.collection("games").findOne(query, function(err, result) {
-        if (err) throw err;
-        if(result){
+    var cursor = db.collection('games').find(query).toArray(function(err,result){
+        if(!err)
             callback(result);
-        }else{
-            callback("Error getting user");
-        }
     });
 }
 

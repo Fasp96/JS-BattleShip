@@ -112,31 +112,36 @@ app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //}
 });
 
-app.get('/game=:item_id', (req, res) => {
-   //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
-   //if(sess.user._id == req.params.user_id){
+app.get("/game=:item_id", (req, res) => {
       if(sess) {
          //Deveria procurar o jogo com o id do url
          var game_id = "ObjectId('"+req.params.item_id+"')";
+         var game_i1 = req.params.item_id;
          console.log(game_id);
+
          gamesController.getGameId(game_id,function(result){
+            if(result!="Error getting game"){
             console.log(result.length);
-   
+            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
+
+            }else{
+            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
             //fazer o update
             //res.render('board', req.params);
-            res.redirect('/game='+result._id+'&&user='+sess.user._id);
+            
+            }
         }); 
    
          
          } else{
             res.render('index');
          }
-      var game_id=":item_id"; 
+      });
       //res.redirect('/game=:game_id&&user=:user_id');
    //}else{
    //  res.redirect('/');
    //}
-});
+
 
 
 //Login Routes
