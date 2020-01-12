@@ -1,21 +1,21 @@
 data = {
     p1:{
         ships: [
-            /*{x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"}, 
+            {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"}, 
             {x:"", y:"", orientation:"", type:"Battleship", size:"4", hits:"0"}, 
             {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"0"},
-            {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"},*/
-            {x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"}, 
+            {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"},
+            /*{x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"}, 
             {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"}, 
             {x:"5", y:"G", orientation:"V", type:"Cruiser", size:"3", hits:"0"},
             {x:"5", y:"E", orientation:"H", type:"Submarine", size:"3", hits:"0"},
-            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},
+            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},*/
         ],
         shots:[
-            {x:"1", y:"A"}, 
+            /*{x:"1", y:"A"}, 
             {x:"1", y:"B"}, 
-            {x:"1", y:"C"},
+            {x:"1", y:"C"},*/
         ]
     },
     p2:{
