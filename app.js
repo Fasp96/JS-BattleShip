@@ -303,6 +303,185 @@ app.get('/boat.png', (req,res) =>{
    })
 });
 
+app.get('/battleship1H.png', (req,res) =>{
+   fs.readFile('ships/battleship(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship2H.png', (req,res) =>{
+   fs.readFile('ships/battleship(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship3H.png', (req,res) =>{
+   fs.readFile('ships/battleship(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship4H.png', (req,res) =>{
+   fs.readFile('ships/battleship(4)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/carrier1H.png', (req,res) =>{
+   fs.readFile('ships/carrier(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier2H.png', (req,res) =>{
+   fs.readFile('ships/carrier(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier3H.png', (req,res) =>{
+   fs.readFile('ships/carrier(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier4H.png', (req,res) =>{
+   fs.readFile('ships/carrier(4)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier5H.png', (req,res) =>{
+   fs.readFile('ships/carrier(5)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/cruiser1H.png', (req,res) =>{
+   fs.readFile('ships/cruiser(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser2H.png', (req,res) =>{
+   fs.readFile('ships/cruiser(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser3H.png', (req,res) =>{
+   fs.readFile('ships/cruiser(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/destroyer1H.png', (req,res) =>{
+   fs.readFile('ships/destroyer(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/destroyer2H.png', (req,res) =>{
+   fs.readFile('ships/destroyer(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/submarine1H.png', (req,res) =>{
+   fs.readFile('ships/submarine(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine2H.png', (req,res) =>{
+   fs.readFile('ships/submarine(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine3H.png', (req,res) =>{
+   fs.readFile('ships/submarine(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/battleship1V.png', (req,res) =>{
+   fs.readFile('ships/battleship(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship2V.png', (req,res) =>{
+   fs.readFile('ships/battleship(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship3V.png', (req,res) =>{
+   fs.readFile('ships/battleship(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship4V.png', (req,res) =>{
+   fs.readFile('ships/battleship(4)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/carrier1V.png', (req,res) =>{
+   fs.readFile('ships/carrier(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier2V.png', (req,res) =>{
+   fs.readFile('ships/carrier(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier3V.png', (req,res) =>{
+   fs.readFile('ships/carrier(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier4V.png', (req,res) =>{
+   fs.readFile('ships/carrier(4)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier5V.png', (req,res) =>{
+   fs.readFile('ships/carrier(5)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/cruiser1V.png', (req,res) =>{
+   fs.readFile('ships/cruiser(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser2V.png', (req,res) =>{
+   fs.readFile('ships/cruiser(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser3V.png', (req,res) =>{
+   fs.readFile('ships/cruiser(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/destroyer1V.png', (req,res) =>{
+   fs.readFile('ships/destroyer(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/destroyer2V.png', (req,res) =>{
+   fs.readFile('ships/destroyer(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/submarine1V.png', (req,res) =>{
+   fs.readFile('ships/submarine(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine2V.png', (req,res) =>{
+   fs.readFile('ships/submarine(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine3v.png', (req,res) =>{
+   fs.readFile('ships/submarine(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
 //------------------JS Routes-----------------------------------------
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {
