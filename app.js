@@ -114,12 +114,13 @@ app.get('/game=:game_id&&user=:user_id', (req, res) => {
 
 app.get("/game=:item_id", (req, res) => {
       if(sess) {
-         //Deveria procurar o jogo com o id do url
+         //Deve procurar o jogo com o id do url
          var game_id = "ObjectId('"+req.params.item_id+"')";
          var game_i1 = req.params.item_id;
+         //var game_i
          console.log(game_id);
 
-         gamesController.getGameId(game_id,function(result){
+         gamesController.updateGame(game_id,sess.user._id,function(result){
             if(result!="Error getting game"){
             console.log(result.length);
             res.redirect('/game='+game_i1+'&&user='+sess.user._id);
@@ -137,10 +138,6 @@ app.get("/game=:item_id", (req, res) => {
             res.render('index');
          }
       });
-      //res.redirect('/game=:game_id&&user=:user_id');
-   //}else{
-   //  res.redirect('/');
-   //}
 
 
 
