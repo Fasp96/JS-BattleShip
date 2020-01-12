@@ -176,18 +176,9 @@ app.get('/logout',(req,res) => {
 //Game Options Routes
 app.get('/gameOptions1', (req, res) => {
    if(sess) {
-      gamesController.insertGame(sess.user._id,function(result){
-         console.log("result: "+result);
-         if(result!="Error inserting game"){
-            sess.game = result;
 
-            res.render('gameOptions1', {sess: sess})
-        
-         }else{
+         res.render('gameOptions1', {sess: sess}) 
 
-         location.href = "/gameOptions1";
-         }
-      });
       } else{
          res.render('index');
       }
@@ -201,6 +192,30 @@ app.get('/gameOptions2', (req, res) => {
    }
 });
 
+
+
+//new Game Route
+
+app.get('/newGame', (req, res) => {
+   if(sess) {
+      gamesController.insertGame(sess.user._id,function(result){
+         console.log("result: "+result);
+         if(result!="Error inserting game"){
+            sess.game = result;
+
+            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+
+            //res.render('gameOptions1', {sess: sess})
+        
+         }else{
+
+         location.href = "/gameOptions1";
+         }
+      });
+      } else{
+         res.render('index');
+      }
+   });
 
 
 //----------------Images Routes---------------------------------------
