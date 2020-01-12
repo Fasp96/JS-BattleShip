@@ -5,11 +5,17 @@ function getUsers(email, password,callback){
     User.getUsers(email, password,callback);
 }
 
+function verifyEmail(email,callback){
+    //tratar dados, filtrar, mais queries,...
+    User.verifyEmail(email,callback);
+}
+
 function insertUser(email, password, callback){
     User.insertUser(email, password, callback);
 }
 
 module.exports = {
     getUsers,
-    insertUser
+    insertUser,
+    verifyEmail
 };
