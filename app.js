@@ -221,7 +221,14 @@ app.get('/newGame', (req, res) => {
 
 app.get('/continueGame', (req, res) => {
    if(sess) {
-      gamesController.getGame(sess.user._id,function(result){
+      gamesController.getAllGames(function(result){
+         console.log(result.length);
+         res.render('gameContinue1',{games:result ,sess: sess});
+     }); 
+
+      
+
+      /*gamesController.getGame(sess.user._id,function(result){
          console.log("result: "+result);
          if(result!="Error inserting game"){
             sess.game = result;
@@ -234,7 +241,8 @@ app.get('/continueGame', (req, res) => {
 
          location.href = "/gameOptions1";
          }
-      });
+      });*/
+      
       } else{
          res.render('index');
       }

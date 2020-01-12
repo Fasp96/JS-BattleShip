@@ -14,6 +14,14 @@ function insertGame(user_id,callback){
     });
 }
 
+function getAllGames(callback){
+    var db = mongoConfig.getDB();
+    //console.log(db);
+    var cursor = db.collection('games').find().toArray(function(err,result){
+        if(!err)
+            callback(result);
+    });
+}
 
 
 function getGame(c,callback){
@@ -34,5 +42,6 @@ function getGame(c,callback){
 
 module.exports = {
     getGame,
-    insertGame
+    insertGame,
+    getAllGames
 };
