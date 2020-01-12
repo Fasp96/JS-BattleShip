@@ -40,30 +40,35 @@
       messages.scrollTop = messages.scrollHeight;
    }
 
-    jQuery(document).ready(function() {
-         var socket = io.connect();
-         var form = jQuery('#myForm');
-         var txt = jQuery('#txt');
-         var chatArea = jQuery('#chatArea');
+   jQuery(document).ready(function() {
+      var socket = io.connect();
+      var form = jQuery('#myForm');
+      var txt = jQuery('#txt');
+      var chatArea = jQuery('#chatArea');
 
-         form.submit(function(e) {
-            e.preventDefault();
-            socket.emit('sending message', txt.val());
-            socket.emit('client sending message', 
-               {message: txt.val(), game_id: game_id, user_id: user_id });
-            txt.val('');
-         });
+      var game_id = "<%=game_id%>";
+      var user_id = "<%=user_id%>";
 
-         socket.on('new message', function(data){
-            chatArea.append('<div class="well message">'+data.message+'</div>');
-            scrollToBottom();
-         });
-         socket.on('new game message', function(data){
-            if(game_id==data.game_id){
-               chatArea.append('<div class="well message">'+
-                     data.user_id+": "+data.message+'</div>');
-               scrollToBottom();
-            }
-         });
+      form.submit(function(e) {
+         e.preventDefault();
+         //socket.emit('sending message', txt.val());
+         console.log("Reached here: "+game_id);
+         socket.emit('sending message',
+            {message:txt.val(), game_id:game_id, user_id:user_id});
+         txt.val('');
       });
+
+      socket.on('new message', function(data){
+         chatArea.append('<div class="well message">'+data.message+'</div>');
+         scrollToBottom();
+      });
+      socket.on('new game message', function(data){
+
+         if(game_id==data.game_id){
+            chatArea.append('<div class="well message">'+
+                  data.user_id+":\n"+data.message+'</div>');
+            scrollToBottom();
+         }
+      });
+   });
    </script>

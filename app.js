@@ -21,7 +21,7 @@ app.use(urlParser);
 app.set('view engine','ejs');
 app.set("views", __dirname + '/views');
 
-
+//####################################################################################################################
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 app.use(bodyParser.json()); 
@@ -31,6 +31,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+//####################################################################################################################
 
 
 const server = require('http').createServer(app);
@@ -52,13 +53,17 @@ io.sockets.on('connection',(socket) => {
       connections.splice(connections.indexOf(socket), 1);
    });
 
+   /*
    socket.on('sending message', (message) => {
       console.log('Message is received :', message);
 
       io.sockets.emit('new message', {message: message});
    });
-   socket.on('client sending message', function(data) {
-      console.log('Message is received :', data.message);
+   */
+   socket.on('sending message', function(data) {
+      console.log('data:', JSON.stringify(data));
+      console.log('Message received :', data.message);
+      console.log('Message from game :', data.game_id);
       console.log('Message is from :', data.user_id);
       
       io.sockets.emit('new game message', 
@@ -88,12 +93,12 @@ app.get('/board', (req, res) => {
    res.render('board');
 });
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
-   if(sess.user._id == req.params.user_id){
+   //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
+   //if(sess.user._id == req.params.user_id){
       res.render('board', req.params);
-   }else{
-      res.redirect('/');
-   }
-   //res.render('board', req.params);
+   //}else{
+   //  res.redirect('/');
+   //}
 });
 
 app.get('/login', (req, res) => {
