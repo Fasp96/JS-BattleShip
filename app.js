@@ -114,7 +114,8 @@ app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
    //if(sess.user._id == req.params.user_id){
       var data = req.params;
-      //data.sess=sess.user;
+      data.sess=sess.user;
+      console.log("data: "+JSON.stringify(data));
       res.render('board', data);
    //}else{
    //  res.redirect('/');

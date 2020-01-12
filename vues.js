@@ -38,8 +38,14 @@ data = {
         {Carrier: "", Battleship:"" , Cruiser:"" , Submarine:"", Destroyer:"" },
     ],
     usedSpaces:[],
-    turn_to_shoot = true,
+    turn_to_shoot: true,
 };
+
+var sess = JSON.parse(document.currentScript.getAttribute('sess')); //Buscar a variavel sess???
+var game_id = document.currentScript.getAttribute('game_id');
+var user_id = document.currentScript.getAttribute('user_id');
+console.log("sess: "+JSON.stringify(sess));
+var socket = io.connect();
 
 //Recieve P2 shot
 socket.on('recieve shot', function(data){
@@ -71,7 +77,6 @@ socket.on('miss', function(data){
 new Vue({
     el:".tables",
     data: data,
-
     methods:{
         //function to create the board
         addBoard(id, h1){
@@ -413,7 +418,7 @@ new Vue({
                 this.showShotsP1(letter[iy], ix);
                 //Send shot message with the information to the server
                 socket.emit('shoot player',
-                    {shot_y: iy, shot_x: ix, game_id:game_id, user_id:user_id , user_name:user_name});
+                    {shot_y: iy, shot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.user_name});
                 //End turn to shoot
                 this.turn_to_shoot = false;
             }
@@ -544,30 +549,28 @@ new Vue({
                 console.log("--------------------");
             }
         },
+    },
 
-        created(){
-            //creates the user board
-            this.addBoard("#user", "Your Board");   
-            //creates the opponent board
-            this.addBoard("#opponent", "Opponent Board");
-            
-            //if aleady has ships postions
-            if(this.p1.ships[0].x == ""){
-                //shows the menu to add ships
-                document.getElementById("addShips").style.visibility = "unset";
-                //hiddes the opponent board
-                document.getElementById("opponent").style.visibility = "hidden";
-            }
-            //else start the game to continue
-            else{
-                this.startGame();
-            }
-        },
+    created(){
+        //creates the user board
+        this.addBoard("#user", "Your Board");   
+        //creates the opponent board
+        this.addBoard("#opponent", "Opponent Board");
+        
+        //if aleady has ships postions
+        if(this.p1.ships[0].x == ""){
+            //shows the menu to add ships
+            document.getElementById("addShips").style.visibility = "unset";
+            //hiddes the opponent board
+            document.getElementById("opponent").style.visibility = "hidden";
+        }
+        //else start the game to continue
+        else{
+            this.startGame();
+        }
     },
 
     computed:{
 
     }
-        
-
 })
