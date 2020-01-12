@@ -127,7 +127,7 @@ new Vue({
 
                 if(ship.orientation == 'H'){
                     for(var i = 0; i < ship.size; i++){
-                        $("#p1" + shipY + shipX ).addClass("boat");
+                        $("#p1" + shipY + shipX ).addClass(ship.type + (i+1) + "H");
                         shipX++;
                     }
                 }
@@ -136,7 +136,7 @@ new Vue({
                     var iy = letter.indexOf(shipY);
                     for(var i = 0; i < ship.size; i++){
                         shipY = letter[iy];
-                        $("#p1" + shipY + shipX).addClass("boat");
+                        $("#p1" + shipY + shipX).addClass(ship.type + (i+1) + "V");
                         iy++;
                     }
                 }
@@ -273,10 +273,36 @@ new Vue({
             var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
             var colision = false;
             
+            //saves the original values of the ship
+            var shipOriginalx = ship.x;
+            var shipOriginaly = ship.y;
+            var shipOriginalOrientation = ship.orientation;
+            var originalCoordinates=[];
+
+            if(shipOriginalOrientation == 'H'){
+                for(var i = 0; i < ship.size; i++){
+                    originalCoordinates.push({'y': shipOriginaly, 'x': shipOriginalx});
+                    shipOriginalx++;
+                }
+            }
+            if(shipOriginalOrientation == 'V'){
+                var iy = letter.indexOf(shipOriginaly);
+                for(var i = 0; i < ship.size; i++){
+                    shipOriginaly = letter[iy];
+                    originalCoordinates.push({'y': shipOriginaly, 'x': shipOriginalx});
+                    iy++;
+                }
+            }
+            
             //verify colision and spaces
             var colisionX = shipX;
             var colisionY = shipY;
-            
+            var spaces = this.usedSpaces;
+
+            originalCoordinates.forEach(space =>{
+                spaces.pop({'y': space.y, 'x': space.x});
+            });
+
             if(orientation == 'H'){
                 for(var i = 0; i < ship.size; i++){
                     
@@ -285,9 +311,9 @@ new Vue({
                         colision = true;
                     }
                     
-                    this.usedSpaces.forEach(space =>{
+                    spaces.forEach(space =>{
                         console.log(space.x + " " + colisionX +" and " + space.y+ " " + colisionY);
-                        if(space.x == colisionX && space.y == colisionY){
+                        if(space.x == colisionX && space.y == colisionY ){
                             $('#addError').text("***Can't insert "+ ship.type +" it hits another ship");
                             colision = true;
                         }
@@ -306,7 +332,7 @@ new Vue({
                         colision = true;
                     }
 
-                    this.usedSpaces.forEach(space =>{
+                    spaces.forEach(space =>{
                         console.log(space.x == colisionX +" " + space.y == colisionY);
                         if(space.x == colisionX && space.y == colisionY){
                             $('#addError').text("***Can't insert "+ ship.type +" it hits another ship");
@@ -320,20 +346,20 @@ new Vue({
 
             if(colision == false){
 
-                //saves the original values of the ship
-                var shipOriginalx = ship.x;
-                var shipOriginaly = ship.y;
-                var shipOriginalOrientation = ship.orientation;
+                shipOriginalx = ship.x;
+                shipOriginaly = ship.y;
+
                 //saves the new values in ship in data
                 ship.x = shipX;
                 ship.y = shipY;
                 ship.orientation = orientation;
+                
 
                 //deletes the original ship position
 
                 if(shipOriginalOrientation == 'H'){
                     for(var i = 0; i < ship.size; i++){
-                        $("#p1" + shipOriginaly + shipOriginalx).removeClass("boat");
+                        $("#p1" + shipOriginaly + shipOriginalx).removeClass(ship.type + (i+1) + "H");
                         this.usedSpaces.pop({'y': shipOriginaly, 'x': shipOriginalx});
                         shipOriginalx++;
                     }
@@ -343,7 +369,7 @@ new Vue({
                     var iy = letter.indexOf(shipOriginaly);
                     for(var i = 0; i < ship.size; i++){
                         shipOriginaly = letter[iy];
-                        $("#p1" + shipOriginaly + shipOriginalx).removeClass("boat");
+                        $("#p1" + shipOriginaly + shipOriginalx).removeClass(ship.type + (i+1) + "V");
                         this.usedSpaces.pop({'y': shipOriginaly, 'x': shipOriginalx});
                         iy++;
                     }
@@ -352,7 +378,7 @@ new Vue({
                 //adds ship to the new position
                 if(orientation == 'H'){
                     for(var i = 0; i < ship.size; i++){
-                        $("#p1" + shipY + shipX ).addClass("boat");
+                        $("#p1" + shipY + shipX ).addClass(ship.type + (i+1) + "H");
                         this.usedSpaces.push({'y': shipY, 'x': shipX});
                         shipX++;    
                     }
@@ -362,7 +388,7 @@ new Vue({
                     var iy = letter.indexOf(shipY);
                     for(var i = 0; i < ship.size; i++){
                         shipY = letter[iy];
-                        $("#p1" + shipY + shipX).addClass("boat");
+                        $("#p1" + shipY + shipX).addClass(ship.type + (i+1) + "V");
                         this.usedSpaces.push({'y': shipY, 'x': shipX});
                         iy++;
                     }
