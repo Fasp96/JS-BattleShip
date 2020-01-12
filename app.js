@@ -12,6 +12,7 @@ var mongoUtil = require('./mongoConfig');
 var ejs = require('ejs');
 var fs = require('fs');
 
+const gamesController = require('./controller/gamesController');
 const userController = require('./controller/userController');
 //import express from 'express';
 //import path from 'path';
@@ -94,7 +95,11 @@ app.get('/', function(req,res){
 
 //GameBoard Routes
 app.get('/board', (req, res) => {
+
+
    res.render('board');
+
+
 });
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
@@ -171,11 +176,22 @@ app.get('/logout',(req,res) => {
 //Game Options Routes
 app.get('/gameOptions1', (req, res) => {
    if(sess) {
-      res.render('gameOptions1', {sess: sess})
-   }else{
-      res.render('index');
-   }
-});
+      gamesController.insertGame(sess.user._id,function(result){
+         console.log("result: "+result);
+         if(result!="Error inserting game"){
+            sess.game = result;
+
+            res.render('gameOptions1', {sess: sess})
+        
+         }else{
+
+         location.href = "/gameOptions1";
+         }
+      });
+      } else{
+         res.render('index');
+      }
+   });
 
 app.get('/gameOptions2', (req, res) => {
    if(sess) {
