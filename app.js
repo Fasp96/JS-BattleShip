@@ -21,7 +21,7 @@ app.use(urlParser);
 app.set('view engine','ejs');
 app.set("views", __dirname + '/views');
 
-
+//####################################################################################################################
 //app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 app.use(bodyParser.json()); 
@@ -31,6 +31,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+//####################################################################################################################
 
 
 const server = require('http').createServer(app);
@@ -39,6 +40,8 @@ const PORT = 3000;
 server.listen(PORT);
 console.log('Server is running');
 
+
+//Sockets
 const users = [];
 const connections = [];
 
@@ -50,13 +53,25 @@ io.sockets.on('connection',(socket) => {
       connections.splice(connections.indexOf(socket), 1);
    });
 
+   /*
    socket.on('sending message', (message) => {
       console.log('Message is received :', message);
 
       io.sockets.emit('new message', {message: message});
    });
+   */
+   socket.on('sending message', function(data) {
+      console.log('data:', JSON.stringify(data));
+      console.log('Message received :', data.message);
+      console.log('Message from game :', data.game_id);
+      console.log('Message is from :', data.user_id);
+      
+      io.sockets.emit('new game message', 
+         {message: data.message, game_id: data.game_id, user_id: data.user_id });
+   });
 });
 
+//MongoDB
 mongoUtil.connectToServer(function(err){
    app.listen(8888,function(){
        console.log("listening on 8888");
@@ -81,9 +96,13 @@ app.get('/', function(req,res){
 app.get('/board', (req, res) => {
    res.render('board');
 });
-
-app.get('/game=:game_ID&&user=:user_id', (req, res) => {
-   res.render('board', req.params);
+app.get('/game=:game_id&&user=:user_id', (req, res) => {
+   //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
+   //if(sess.user._id == req.params.user_id){
+      res.render('board', req.params);
+   //}else{
+   //  res.redirect('/');
+   //}
 });
 
 //Login Routes
