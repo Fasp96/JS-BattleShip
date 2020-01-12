@@ -62,14 +62,26 @@ io.sockets.on('connection',(socket) => {
       io.sockets.emit('new message', {message: message});
    });
    */
+   //Messages received from chat
    socket.on('sending message', function(data) {
-      console.log('data:', JSON.stringify(data));
-      console.log('Message received :', data.message);
-      console.log('Message from game :', data.game_id);
-      console.log('Message is from :', data.user_id);
-
       io.sockets.emit('new game message',
-         {message: data.message, game_id: data.game_id, user_id: data.user_id });
+         {message: data.message, game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot message
+   socket.on('shoot player', function(data) {
+      io.sockets.emit('recieve shot',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   });
+
+   //Shot response
+   socket.on('shot hitted', function(data) {
+      io.sockets.emit('hit',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
+   });
+   socket.on('shot missed', function(data) {
+      io.sockets.emit('miss',
+         {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
 
@@ -82,6 +94,7 @@ mongoUtil.connectToServer(function(err){
 
 //-----------------------Views Routes-----------------------------------------
 var sess;
+var alert;
 
 
 //Initial Route
@@ -96,17 +109,15 @@ app.get('/', function(req,res){
 
 //GameBoard Routes
 app.get('/board', (req, res) => {
-
-
    res.render('board');
-
-
 });
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
    //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
    //if(sess.user._id == req.params.user_id){
-
-      res.render('board', req.params);
+      var data = req.params;
+      data.sess=sess.user;
+      console.log("data: "+JSON.stringify(data));
+      res.render('board', data);
    //}else{
    //  res.redirect('/');
    //}
@@ -168,27 +179,35 @@ app.get('/register', (req, res) => {
    if(sess) {
       res.redirect('/');
    }else{
-      res.render('register_form');
+      res.render('register_form', {alert: alert});
+      alert = "";
    }
 });
-
 app.post('/register', function(req,res){
-   userController.verifyEmail(req.body.user_email,function(result){
-      if(result!="Error getting user"){
-         console.log(' There is already an account with this email');
-
+   userController.verifyName(req.body.user_name,function(result){
+      if(result=="Error name exists"){
+         console.log('There is already an account with this name');
+         alert = "There is already an account with this name";
          res.redirect('/register');
-
-
       }else{
-         userController.insertUser(req.body.user_email,req.body.user_password,function(result){
-            console.log("result: "+result);
-            if(result!="Error getting user"){
-               sess = req.session;
-               sess.user = result;
-               res.redirect('/');
-            }else{
+         userController.verifyEmail(req.body.user_email,function(result){
+            if(result=="Error email exists"){
+               console.log('There is already an account with this email');
+               alert = "There is already an account with this email";
                res.redirect('/register');
+            }else{
+               userController.insertUser(req.body.user_name, req.body.user_email,req.body.user_password,function(result){
+                  console.log("result: "+result);
+                  if(result=="Error inserting user"){
+                     alert = "Error inserting user";
+                     res.redirect('/register');
+                  }else{
+                     sess = req.session;
+                     sess.user = result;
+                     alert = "";
+                     res.redirect('/');
+                  }
+               });
             }
          });
       }
@@ -333,12 +352,185 @@ app.get('/hit.png', (req,res) =>{
    })
 });
 
-app.get('/boat.png', (req,res) =>{
-   fs.readFile('boat.png',function (e, data) {
+app.get('/battleship1H.png', (req,res) =>{
+   fs.readFile('ships/battleship(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship2H.png', (req,res) =>{
+   fs.readFile('ships/battleship(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship3H.png', (req,res) =>{
+   fs.readFile('ships/battleship(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship4H.png', (req,res) =>{
+   fs.readFile('ships/battleship(4)H.png',function (e, data) {
       res.send(data);
    })
 });
 
+app.get('/carrier1H.png', (req,res) =>{
+   fs.readFile('ships/carrier(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier2H.png', (req,res) =>{
+   fs.readFile('ships/carrier(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier3H.png', (req,res) =>{
+   fs.readFile('ships/carrier(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier4H.png', (req,res) =>{
+   fs.readFile('ships/carrier(4)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier5H.png', (req,res) =>{
+   fs.readFile('ships/carrier(5)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/cruiser1H.png', (req,res) =>{
+   fs.readFile('ships/cruiser(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser2H.png', (req,res) =>{
+   fs.readFile('ships/cruiser(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser3H.png', (req,res) =>{
+   fs.readFile('ships/cruiser(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/destroyer1H.png', (req,res) =>{
+   fs.readFile('ships/destroyer(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/destroyer2H.png', (req,res) =>{
+   fs.readFile('ships/destroyer(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/submarine1H.png', (req,res) =>{
+   fs.readFile('ships/submarine(1)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine2H.png', (req,res) =>{
+   fs.readFile('ships/submarine(2)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine3H.png', (req,res) =>{
+   fs.readFile('ships/submarine(3)H.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/battleship1V.png', (req,res) =>{
+   fs.readFile('ships/battleship(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship2V.png', (req,res) =>{
+   fs.readFile('ships/battleship(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship3V.png', (req,res) =>{
+   fs.readFile('ships/battleship(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/battleship4V.png', (req,res) =>{
+   fs.readFile('ships/battleship(4)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/carrier1V.png', (req,res) =>{
+   fs.readFile('ships/carrier(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier2V.png', (req,res) =>{
+   fs.readFile('ships/carrier(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier3V.png', (req,res) =>{
+   fs.readFile('ships/carrier(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier4V.png', (req,res) =>{
+   fs.readFile('ships/carrier(4)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/carrier5V.png', (req,res) =>{
+   fs.readFile('ships/carrier(5)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/cruiser1V.png', (req,res) =>{
+   fs.readFile('ships/cruiser(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser2V.png', (req,res) =>{
+   fs.readFile('ships/cruiser(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/cruiser3V.png', (req,res) =>{
+   fs.readFile('ships/cruiser(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/destroyer1V.png', (req,res) =>{
+   fs.readFile('ships/destroyer(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/destroyer2V.png', (req,res) =>{
+   fs.readFile('ships/destroyer(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+
+app.get('/submarine1V.png', (req,res) =>{
+   fs.readFile('ships/submarine(1)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine2V.png', (req,res) =>{
+   fs.readFile('ships/submarine(2)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/submarine3v.png', (req,res) =>{
+   fs.readFile('ships/submarine(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
 //------------------JS Routes-----------------------------------------
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {
