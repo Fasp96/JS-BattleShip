@@ -1,33 +1,52 @@
-var mongoCongig = require('../mongoConfig');
+var mongoConfig = require('../mongoConfig');
 
-function insertUser(c,t,callback){
-    var db = mongoCongig.getDB();
-    var line = {email:c, password:t};
+function insertUser(email,password,callback){
+    var db = mongoConfig.getDB();
+    var line = {email:email, password:password, num_games:0, num_victories:0};
     db.collection("users").insertOne(line,function(err, res){
         if(err)
             callback("Error inserting user");
         else{
-            callback("user inserted");
+            console.log("res_op: "+JSON.stringify(res.ops[0]));
+            callback(res.ops[0]);
         }
     });
 }
-
 
 function getUsers(c,t,callback){
     var db = mongoConfig.getDB();
-    var line = {email: { $exists: true }, password: { $exists: true }};
-    var cursor = db.collection('users').findOne(line,function(err,res){
-
-        if(err)
-        callback("Error to login");
-        else{
-        callback("user login");
+    //var line = {email: { $exists: true }, password: { $exists: true }};
+    const query = {email: c, password: t}
+    console.log("query: "+query);
+    console.log("query: "+JSON.stringify(query));
+    const user = db.collection("users").findOne(query, function(err, result) {
+        if (err) throw err;
+        if(result){
+            callback(result);
+        }else{
+            callback("Error getting user");
         }
     });
 }
 
+function verifyEmail(c,callback){
+    var db = mongoConfig.getDB();
+    //var line = {email: { $exists: true }, password: { $exists: true }};
+    const query = {email: c}
+    console.log("query: "+query);
+    console.log("query: "+JSON.stringify(query));
+    const user = db.collection("users").findOne(query, function(err, result) {
+        if (err) throw err;
+        if(result){
+            callback(result);
+        }else{
+            callback("Error getting user");
+        }
+    });
+}
 
 module.exports = {
     getUsers,
-    insertUser
+    insertUser,
+    verifyEmail
 };

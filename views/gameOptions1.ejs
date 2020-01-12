@@ -9,18 +9,18 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 
-
+   
 </head>
 
 <body>
    <div id="board">
       <div class="container">
          <h1 class="jumbotron">
-            <a href = / >BattleShip Game</a> - Menu 
+            <a href = / >BattleShip Game</a> - One Player
             <p align="right"> <%= sess.user.email %>  </p>
          </h1>
 
-         <%- include('partials/menu_options') %>
+         <%- include('partials/game_options1') %>
       </div>
    </div>
 </body>
