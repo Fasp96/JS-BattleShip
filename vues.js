@@ -100,6 +100,10 @@ socket.on('recieve shot', function(data){
         //P1 can now shoot
         vue_object.turn_to_shoot = true;
         
+        var element = document.getElementById("addShips");
+        if(element){
+            element.parentNode.removeChild(element);
+        }
         document.getElementById("opponent").style.visibility = "unset";
         console.log("recieve_turn_to_shoot: "+ vue_object.turn_to_shoot);
     }
@@ -575,7 +579,7 @@ var vue_object = new Vue({
                             hit = true;
                             //Send hitted message to server
                             socket.emit('shot hitted',
-                                {shot_y: iy, shot_x: ix, game_id:game_id, user_name: user_name});
+                                {shot_y: y, shot_x: x, game_id:game_id, user_name: sess.name});
                         }
                         shipX++;
                     }
