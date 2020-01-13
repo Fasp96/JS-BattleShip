@@ -41,6 +41,7 @@ data = {
     turn_to_shoot: true,
     //variable to check if opponent is ready
     opponentIsConnected: false,
+    shipsPlaced: false,
 };
 
 var opponent_table = document.createElement('div');
@@ -97,7 +98,7 @@ socket.on('opponent is ready', function(data){
     if(game_id==data.game_id && user_id!=data.user_id){
         vue_object.opponentIsConnected = true;
 
-        if(vue_object.turn_to_shoot){
+        if(vue_object.turn_to_shoot && vue_object.shipsPlaced){
             vue_object.startGame();
         }
     }
@@ -491,6 +492,7 @@ var vue_object = new Vue({
                 //sets the visibilty add ship hidden
                 element.innerHTML = "<h1>Waiting for apponent...</h1>";
                 //message to send when ready, all boats are placed and opponenet still isn't ready
+                this.shipsPlaced = true;
                 socket.emit('I am ready',
                     {game_id:game_id, user_id:user_id , user_name:sess.name});
             }
