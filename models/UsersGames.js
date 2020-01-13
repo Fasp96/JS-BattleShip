@@ -20,19 +20,14 @@ function getAllUserGames(user_id,callback){
         if(err)
             callback("Error finding user games");
         else{
-            console.log("usersgames_result: "+JSON.stringify(result));
             var games_left = [];
-            //result.forEach(function(game){
             var itemsProcessed = 1;
             result.forEach(function(game, index, array) {
-                console.log("usersgames_game: "+JSON.stringify(game));
                 query = {_id: game.game_id, type: "1v1",winner_id: ""};
                 db.collection('games').find(query).toArray(function(err,result1){
                     if(!err){
-                        console.log("usersgames_result1: "+JSON.stringify(result1));
                         games_left.push((game));
                         if(itemsProcessed === array.length) {
-                            console.log("usersgames_found: "+JSON.stringify(games_left));
                             callback(games_left);
                         }
                         itemsProcessed++;

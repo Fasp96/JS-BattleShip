@@ -26,8 +26,6 @@ function insertGame(user_id,callback){
 
 function getAllGames(user_id,callback){
     var db = mongoConfig.getDB();
-    //console.log(db);
-    
     query = {"users.0": {"$ne": user_id},"users.1":0};
     db.collection('games').find(query).toArray(function(err,result){
         if(!err)

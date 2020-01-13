@@ -20,15 +20,14 @@
             <p align="right"> <%= sess.email %>  </p>
          </h1>
          
-        <div class="panel panel-default">
-        <div class="panel-heading">Game List</div>
-        <div class="panel-body">
-                <% games.forEach(function(item){ %>
-                    <li><a href="/game=<%= item.game_id %>&&user=<%=sess._id%>"><%= item.game_id %></a></li>
-                <% }); %>
+         <div class="panel panel-default">
+            <div class="panel-heading">Game List</div>
+            <div class="panel-body">
+               <% games.forEach(function(item){ %>
+                  <li><a href="/game=<%= item.game_id %>&&user=<%=sess._id%>"><%= item.game_id %></a></li>
+               <% }); %>
             </div>
-        </div>
-         
+         </div>
       </div>
    </div>
 </body>

@@ -18,25 +18,21 @@
          <h1 class="jumbotron">
             <a href = / >BattleShip Game</a> - One Player - Join
             <p align="right"> <%= sess.user.email %>  </p>
-            
          </h1>
-
          
         <div class="panel panel-default">
-        <div class="panel-heading">Game List</div>
-        <div class="panel-body">
-                <% games.forEach(function(item){ %>
-                    
-                        <li><a href="/game=<%= item._id %>" ><%= item._id %></a></li>
-                    
-                    
-                   <!--  <li><a href="/game=<%= item._id %>&&user=<%=sess.user._id%>"><%= item._id %></a></li> -->
-                    
-                <% }) %>
-            
+            <div class="panel-heading">Game List <%= games %></div>
+            <div class="panel-body">
+
+               <% if(games!={}){ %>
+                  <% for(item in games){ %>
+                     <% if(games[item] <= 1){ %> 
+                        <li><a href="/game=<%= item %>&&user=<%=sess.user._id%>"><%= item %></a></li>
+                     <% } %>
+                  <% } %>
+               <% } %>
             </div>
-        </div>
-         
+         </div>
       </div>
    </div>
 </body>

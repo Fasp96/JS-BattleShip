@@ -342,11 +342,11 @@ app.get('/continueGame2', (req, res) => {
 app.get('/join', (req, res) => {
    sess = req.session;
    if(sess.user) {
-      gamesController.getAllGames(sess.user._id,function(result){
-         console.log(result.length);
-         res.render('gameJoin1',{games:result ,sess: sess});
-      }); 
-   } else{
+      //gamesController.getAllGames(sess.user._id,function(result){
+         console.log("join_games: "+JSON.stringify(onePlayer_games));
+         res.render('gameJoin1',{games: onePlayer_games ,sess: sess});
+      //}); 
+   }else{
       res.redirect('/');
    }
 });
