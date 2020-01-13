@@ -71,6 +71,7 @@ io.sockets.on('connection',(socket) => {
    //When player leaves a 1v1 game
    socket.on('left onePlayer game', function(data) {
       var game_id = data.game_id;
+      console.log(data);
       onePlayer_games[game_id] -= 1;
       if(onePlayer_games[game_id]<=0){
          delete onePlayer_games[game_id];
@@ -115,11 +116,20 @@ io.sockets.on('connection',(socket) => {
 
    //Shot response
    socket.on('shot hitted', function(data) {
+      gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
+      
+      //deverá guardar na base de dados
+      
+
       io.sockets.emit('hit',
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
    socket.on('shot missed', function(data) {
+      gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
+      
+      //deverá guardar na base de dados
       io.sockets.emit('miss',
+      
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
