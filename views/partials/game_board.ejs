@@ -221,32 +221,32 @@
 
 <div class="tables">
    <div id="addShips" style="visibility: hidden;">
-      <p>Insert the values in this order, <b>Letter(Y) Numer(X) Orientation('V'or 'H')</b></p>
+      <p>Insert the values in this order, <b>Letter(Y) Number(X) Orientation('V'or 'H')</b></p>
       <p>Example: <b>A1V</b></p>
       <p style="color:red" id="addError"></p>
       <ul>
          <li>
-            <label> Carrier (size: 5)</label>
+            <label> Carrier (size: 5)</label><br>
             <input type="text" v-model = "newShips.Carrier" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
          <br>
          <li>   
-            <label> Battleship (size: 4)</label>
+            <label> Battleship (size: 4)</label><br>
             <input type="text" v-model = "newShips.Battleship" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
          <br>
          <li>
-            <label> Cruiser (size: 3)</label>
+            <label> Cruiser (size: 3)</label><br>
             <input type="text" v-model = "newShips.Cruiser" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
          <br>
          <li>
-            <label> Submarine (size: 3)</label>
+            <label> Submarine (size: 3)</label><br>
             <input type="text" v-model = "newShips.Submarine" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">    
          </li>
          <br>
          <li>
-            <label> Destroyer(size: 2)</label>
+            <label> Destroyer(size: 2)</label><br>
             <input type="text" v-model = "newShips.Destroyer" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
          </li>
       </ul>
@@ -255,11 +255,16 @@
       <button v-on:click="verifyShips()">StartGame</button>
             
    </div>
+   <!--
    <div id ="opponent">
-      <div id = 'opponentTable'>
+      <h1>Opponent Board</h1>
+      <div id = "opponentTable">
       </div>
    </div>
+   -->
    <div id ="user">
-      <div id='userTable'></div>
+      <h1>User Board</h1>
+      <div id="userTable"></div>
    </div>
+   
 </div>

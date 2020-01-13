@@ -1,11 +1,11 @@
 var mongoConfig = require('../mongoConfig');
 
-function insertUsersGames(user_id,game_id,callback){
+function insertUserGame(user_id,game_id,callback){
     var db = mongoConfig.getDB();
-    var line = {users_id: user_id, game_id: game_id};
+    var line = {user_id: user_id, game_id: game_id};
     db.collection("users_games").insertOne(line,function(err, res){
         if(err)
-            callback("Error inserting users_games");
+            callback("Error inserting user_game");
         else{
             console.log("res_op: "+JSON.stringify(res.ops[0]));
             callback(res.ops[0]);
@@ -13,18 +13,32 @@ function insertUsersGames(user_id,game_id,callback){
     });
 }
 
-function getAllUsersGames(user_id,callback){
+function getAllUserGames(user_id,callback){
     var db = mongoConfig.getDB();
-    //console.log(db);
-    query = {users_id: user_id};
-    var cursor = db.collection('users_games').find(query).toArray(function(err,result){
-        if(!err)
-            callback(result);
+    query = {user_id: user_id};
+    db.collection('users_games').find(query).toArray(function(err,result){
+        if(err)
+            callback("Error finding user games");
+        else{
+            var games_left = [];
+            var itemsProcessed = 1;
+            result.forEach(function(game, index, array) {
+                query = {_id: game.game_id, type: "1v1",winner_id: ""};
+                db.collection('games').find(query).toArray(function(err,result1){
+                    if(!err){
+                        games_left.push((game));
+                        if(itemsProcessed === array.length) {
+                            callback(games_left);
+                        }
+                        itemsProcessed++;
+                    }
+                });
+            });
+        }
     });
 }
 
 module.exports = {
-
-    insertUsersGames,
-    getAllUsersGames
+    insertUserGame,
+    getAllUserGames
 };
