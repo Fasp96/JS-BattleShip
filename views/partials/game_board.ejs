@@ -208,6 +208,17 @@
       background-image: url('/miss.png');
       background-size: contain;
    }
+
+   .explosion{
+      background-image: url('/explosion4.png');
+      animation-name: explosionAnim;
+   }
+   @keyframes explosionAnim {
+      0%   {background-image: '/explosion1.png';}
+      25%  {background-image: '/explosion2.png';}
+      50%  {background-image: '/explosion3.png';}
+      100% {background-image: '/explosion4.png';}
+   }
    .hit{
       background-image: url('/hit.png');
       background-size: contain;
@@ -255,13 +266,13 @@
       <button v-on:click="verifyShips()">StartGame</button>
             
    </div>
-   <!--
+   
    <div id ="opponent">
       <h1>Opponent Board</h1>
       <div id = "opponentTable">
       </div>
    </div>
-   -->
+
    <div id ="user">
       <h1>User Board</h1>
       <div id="userTable"></div>

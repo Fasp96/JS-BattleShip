@@ -374,6 +374,27 @@ app.get('/hit.png', (req,res) =>{
    })
 });
 
+app.get('/explosion1.png', (req,res) =>{
+   fs.readFile('explosion/explosion1.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/explosion2.png', (req,res) =>{
+   fs.readFile('explosion/explosion2.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/explosion3.png', (req,res) =>{
+   fs.readFile('explosion/explosion1.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/explosion4.png', (req,res) =>{
+   fs.readFile('explosion/explosion1.png',function (e, data) {
+      res.send(data);
+   })
+});
+
 app.get('/battleship1H.png', (req,res) =>{
    fs.readFile('ships/battleship(1)H.png',function (e, data) {
       res.send(data);

@@ -145,10 +145,10 @@ var vue_object = new Vue({
                         }
                         else{//adds the rest of the fields
                             if(id == "#opponent"){ // if is the opponent table will have different id and will have the v-on:click function
-                                arrX[ix]='<div class="cell inside" id= p2' + letter[(iy)] + (ix-1) + ' v-on:click="addShotP1('+ iy +',' +  (ix-1)  +')">&nbsp;</div>';
+                                arrX[ix]='<div class="cell inside" id=p2' + letter[(iy)] + (ix-1) + ' v-on:click="addShotP1('+ iy +',' +  (ix-1)  +')">&nbsp;</div>';
                             }
                             else{ // if is the user table will not have the v-on:click
-                                arrX[ix]='<div class="cell inside" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
+                                arrX[ix]='<div class="cell inside explosion" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
                             }
                         }   
                     }
@@ -204,7 +204,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){ //for the length of the ship
                             if(shot.x == shipX && shot.y == shipY){ //if is in the same position
                                 //adds the class hit
-                                $("#p2" + shot.y + shot.x).addClass("hit");
+                                $("#p2" + shot.y + shot.x).addClass("explosion");
                                 ship.hits++;
                                 //change variable to true
                                 hit = true;
@@ -217,7 +217,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){
                             shipY = letter[iy];
                             if(shot.x == shipX && shot.y == shipY){
-                                $("#p2" +shot.y + shot.x).addClass("hit");
+                                $("#p2" +shot.y + shot.x).addClass("explosion");
                                 ship.hits++;
                                 hit = true;
                             }
@@ -249,7 +249,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){ //for the length of the ship
                             if(shot.x == shipX && shot.y == shipY){ //if is in the same position
                                 //adds the class hit
-                                $("#p1" + shot.y + shot.x).addClass("hit");
+                                $("#p1" + shot.y + shot.x).addClass("explosion");
                                 ship.hits++;
                                 //change variable to true
                                 hit = true;
@@ -262,7 +262,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){
                             shipY = letter[iy];
                             if(shot.x == shipX && shot.y == shipY){
-                                $("#p1" +shot.y + shot.x).addClass("hit");
+                                $("#p1" +shot.y + shot.x).addClass("explosion");
                                 ship.hits++;
                                 hit = true;
                             }
@@ -498,12 +498,12 @@ var vue_object = new Vue({
             }
             else{
                 element.parentNode.insertBefore(opponent_table, element.nextSibling);
-                this.addBoard("#opponent", "Opponent Board");
+                //this.addBoard("#opponent", "Opponent Board");
 
                 //removes add ships form
                 element.parentNode.removeChild(element);
                 //sets the visibility of opponent board unset 
-                //document.getElementById("opponent").style.visibility = "unset";
+                document.getElementById("opponent").style.visibility = "unset";
                 //loads the ships for the user
                 this.loadShips();
                 //loads the shots of user
@@ -541,7 +541,7 @@ var vue_object = new Vue({
                     for(var i = 0; i < ship.size; i++){
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p2" + y + x).addClass("hit");
+                            $("#p2" + y + x).addClass("explosion");
                             ship.hits++;
                             //adds to ships hits
                             hit = true;
@@ -555,7 +555,7 @@ var vue_object = new Vue({
                         shipY = letter[iy];
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p2"+ y + x).addClass("hit");
+                            $("#p2"+ y + x).addClass("explosion");
                             //adds to ships hits
                             ship.hits++;
                             hit = true;
@@ -603,7 +603,7 @@ var vue_object = new Vue({
                     for(var i = 0; i < ship.size; i++){ 
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p1" + y + x).addClass("hit");
+                            $("#p1" + y + x).addClass("explosion");
                             //adds to ships hits
                             ship.hits++;
                             hit = true;
@@ -617,7 +617,7 @@ var vue_object = new Vue({
                         shipY = letter[iy];
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p1"+ y + x).addClass("hit");
+                            $("#p1"+ y + x).addClass("explosion");
                             //adds to ships hits
                             ship.hits++;
                             hit = true;
@@ -683,7 +683,7 @@ var vue_object = new Vue({
             //shows the menu to add ships
             document.getElementById("addShips").style.visibility = "unset";
             //hides the opponent board
-            //document.getElementById("opponent").style.visibility = "hidden";
+            document.getElementById("opponent").style.visibility = "hidden";
         }
         //else start the game to continue
         else{
