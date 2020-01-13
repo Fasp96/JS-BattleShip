@@ -16,10 +16,15 @@ function getGameId(game_id,callback){
     Game.getGameId(game_id,callback);
 }
 
+function updateShoots(shoot_positions,game_id,user_id,callback){
+    Game.updateShoots(shoot_positions,game_id,user_id,callback);
+}
+
 
 module.exports = {
     updateGame,
     insertGame,
     getAllGames,
-    getGameId
+    getGameId,
+    updateShoots
 };
