@@ -63,6 +63,8 @@ io.sockets.on('connection',(socket) => {
          onePlayer_games[game_id] += 1;
          console.log("onePlayer_games12: "+JSON.stringify(onePlayer_games));
       }
+      io.sockets.emit('new player message',
+         {game_id: game_id, user_name: data.user_name});
    });
    //When player leaves a 1v1 game
    socket.on('left onePlayer game', function(data) {

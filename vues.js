@@ -492,7 +492,7 @@ new Vue({
                 this.showShotsP1(letter[iy], ix);
                 //Send shot message with the information to the server
                 socket.emit('shoot player',
-                    {shot_y: iy, shot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.user_name});
+                    {shot_y: iy, shot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name});
                 //End turn to shoot
                 this.turn_to_shoot = false;
             }
@@ -643,7 +643,7 @@ new Vue({
         //creates the opponent board
         this.addBoard("#opponent", "Opponent Board");
         //send join message to server
-        socket.emit('entered onePlayer game', {game_id: game_id});
+        socket.emit('entered onePlayer game', {game_id: game_id, user_name: sess.name});
         
         
         //if already has ships positions
