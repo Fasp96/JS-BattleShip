@@ -7,30 +7,30 @@
       flex-grow: 2;
    }
    .table {
-      display:table-cell; 
+      display:table-cell;
       border: solid 4px #000000;
    }
    .tables h1{
       text-align: center;
    }
    .row {
-      display:table-row; 
-      clear: both; 
+      display:table-row;
+      clear: both;
    overflow: hidden;
    }
    .cell{
-      display:table-cell; 
-      border-right: 3px solid #000000; 
-      border-bottom: 3px solid #000000; 
+      display:table-cell;
+      border-right: 3px solid #000000;
+      border-bottom: 3px solid #000000;
       width: 50px; height: 50px;
       vertical-align: middle;
       text-align: center;
    }
    .cell.inside{
-      background-color: rgb(202, 202, 202);    
+      background-color: rgb(202, 202, 202);
       background-repeat: no-repeat;
       background-size: cover;
-      background-position: center;  
+      background-position: center;
    }
    .cell.outside{
       background-color: rgb(0, 151, 0);
@@ -45,14 +45,14 @@
    .letter{
       border-left: 4px solid #000000;
       border-right: 4px solid #000000;
-   } 
+   }
    #opponentTable .inside:hover{
       background-color: grey;
    }
    #user{
       margin-left: 5px;
    }
-   #userTable .cell{ 
+   #userTable .cell{
       width: 40px;
       height: 40px;
       font-size:x-large;
@@ -77,7 +77,7 @@
 
    .Carrier1H{
       background-image: url('/carrier1H.png') ;
-      background-size: contain; 
+      background-size: contain;
    }
    .Carrier2H{
       background-image: url('/carrier2H.png');
@@ -130,7 +130,7 @@
       background-image: url('/submarine3H.png');
       background-size: contain;
    }
-   
+
    .Battleship1V{
       background-image: url('/battleship1V.png');
       background-size: contain;
@@ -150,7 +150,7 @@
 
    .Carrier1V{
       background-image: url('/carrier1V.png') ;
-      background-size: contain; 
+      background-size: contain;
    }
    .Carrier2V{
       background-image: url('/carrier2V.png');
@@ -205,64 +205,83 @@
    }
 
    .miss{
-      background-image: url('/miss.png');
+      background-image: url('/splash4.png');
+      animation-name: splashAnim;
+      animation-duration: 0.6s;
       background-size: contain;
    }
+   @keyframes splashAnim {
+      0%   {background-image: url('/splash1.png');}
+      25%  {background-image: url('/splash2.png');}
+      50%  {background-image: url('/splash3.png');}
+      100% {background-image: url('/splash4.png');}
+   }
+
    .hit{
-      background-image: url('/hit.png');
+      background-image: url('/explosion4.png');
+      animation-name: explosionAnim;
+      animation-duration: 0.5s;
       background-size: contain;
+   }
+   @keyframes explosionAnim {
+      0%   {background-image: url('/explosion1.png');}
+      25%  {background-image: url('/explosion2.png');}
+      50%  {background-image: url('/explosion3.png');}
+      100% {background-image: url('/explosion4.png');}
    }
    .btn-primary{
-      width: 300px; 
-      margin-right:auto; 
+      width: 300px;
+      margin-right:auto;
       margin-left: auto;
    }
 </style>
 
 <div class="tables">
-   <div id="addShips" style="visibility: hidden;">
-      <p>Insert the values in this order, <b>Letter(Y) Number(X) Orientation('V'or 'H')</b></p>
-      <p>Example: <b>A1V</b></p>
-      <p style="color:red" id="addError"></p>
-      <ul>
-         <li>
-            <label> Carrier (size: 5)</label><br>
-            <input type="text" v-model = "newShips.Carrier" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
+   <div>
+      <div id="addShips" style="visibility: hidden;">
+         <p>Insert the values in this order, <b>Letter(Y) Number(X) Orientation('V'or 'H')</b></p>
+         <p>Example: <b>A1V</b></p>
+         <p style="color:red" id="addError"></p>
+         <ul>
+            <li>
+               <label> Carrier (size: 5)</label><br>
+               <input type="text" v-model = "newShips.Carrier" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Battleship (size: 4)</label><br>
+               <input type="text" v-model = "newShips.Battleship" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Cruiser (size: 3)</label><br>
+               <input type="text" v-model = "newShips.Cruiser" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Submarine (size: 3)</label><br>
+               <input type="text" v-model = "newShips.Submarine" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Destroyer(size: 2)</label><br>
+               <input type="text" v-model = "newShips.Destroyer" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+         </ul>
          <br>
-         <li>   
-            <label> Battleship (size: 4)</label><br>
-            <input type="text" v-model = "newShips.Battleship" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
          <br>
-         <li>
-            <label> Cruiser (size: 3)</label><br>
-            <input type="text" v-model = "newShips.Cruiser" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
-         <br>
-         <li>
-            <label> Submarine (size: 3)</label><br>
-            <input type="text" v-model = "newShips.Submarine" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">    
-         </li>
-         <br>
-         <li>
-            <label> Destroyer(size: 2)</label><br>
-            <input type="text" v-model = "newShips.Destroyer" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
-      </ul>
-      <br>
-      <br>
-      <button v-on:click="verifyShips()">StartGame</button>
-            
-   </div>
-   <div id ="opponent">
-      <h1>Opponent Board</h1>
-      <div id = "opponentTable">
+         <button v-on:click="verifyShips()">StartGame</button>
+
+      </div>
+      <div id ="opponent">
+         <h1>Opponent Board</h1>
+         <div id = "opponentTable">
+         </div>
       </div>
    </div>
    <div id ="user">
       <h1>User Board</h1>
       <div id="userTable"></div>
    </div>
-   
+
 </div>
