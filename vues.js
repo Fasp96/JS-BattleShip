@@ -497,13 +497,13 @@ var vue_object = new Vue({
                     {game_id:game_id, user_id:user_id , user_name:sess.name});
             }
             else{
-                element.parentNode.insertBefore(opponent_table, element.nextSibling);
-                this.addBoard("#opponent", "Opponent Board");
+                //element.parentNode.insertBefore(opponent_table, element.nextSibling);
+                //this.addBoard("#opponent", "Opponent Board");
 
                 //removes add ships form
                 element.parentNode.removeChild(element);
                 //sets the visibility of opponent board unset 
-                //document.getElementById("opponent").style.visibility = "unset";
+                document.getElementById("opponent").style.visibility = "unset";
                 //loads the ships for the user
                 this.loadShips();
                 //loads the shots of user
@@ -683,7 +683,7 @@ var vue_object = new Vue({
             //shows the menu to add ships
             document.getElementById("addShips").style.visibility = "unset";
             //hides the opponent board
-            //document.getElementById("opponent").style.visibility = "hidden";
+            document.getElementById("opponent").style.visibility = "hidden";
         }
         //else start the game to continue
         else{
