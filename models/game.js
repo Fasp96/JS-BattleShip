@@ -55,6 +55,52 @@ function updateGame(game_id,user_id,callback){
     });
 }
 
+function updateShoots(shoot_positions,game_id,user_id,callback){
+    var db = mongoConfig.getDB();
+
+    const query = {_id: game_id,users:[user_id]}
+    db.collection("games").findOne(query, function(err, result) {
+        if (err) throw err;
+        if(result){
+            //se encontrar significa que a jogada é do P2
+            const query1={_id:game_id};
+            console.log("query1: "+JSON.stringify(query1));
+            const query2={$push:{"shoots.2":+shoot_positions}};
+            console.log("query: "+query1,query2);
+            db.collection("games").updateOne({_id:game_id},{$push:{"shoots.2":+(shoot_positions)}},function(err,result) {
+                if (err) throw err;
+                if(result){
+                    callback(result);
+                }else{
+                    callback("Error getting game");
+                }
+            });
+
+
+        }else{
+            //Se não encontrar significa que a jogada é do P1
+            const query3={_id:game_id};
+            console.log("query3: "+JSON.stringify(query3));
+            const query4={$push:{"shoots.1":+shoot_positions}};
+            console.log("query: "+query3,query4);
+            db.collection("games").updateOne({_id:game_id},{$push:{"shoots.1":+(shoot_positions)}},function(err,result) {
+                if (err) throw err;
+                if(result){
+                    callback(result);
+                }else{
+                    callback("Error getting game");
+                }
+            });
+        }
+    });
+
+    
+    
+
+
+
+}
+
 function getGameId(game_id,callback){
     var db = mongoConfig.getDB();
     //var line = {email: { $exists: true }, password: { $exists: true }};
@@ -71,5 +117,6 @@ module.exports = {
     updateGame,
     insertGame,
     getAllGames,
-    getGameId
+    getGameId,
+    updateShoots
 };

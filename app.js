@@ -71,6 +71,7 @@ io.sockets.on('connection',(socket) => {
    //When player leaves a 1v1 game
    socket.on('left onePlayer game', function(data) {
       var game_id = data.game_id;
+      console.log(data);
       onePlayer_games[game_id] -= 1;
       if(onePlayer_games[game_id]<=0){
          delete onePlayer_games[game_id];
@@ -114,12 +115,21 @@ io.sockets.on('connection',(socket) => {
    });
 
    //Shot response
-   socket.on('shoot hitted', function(data) {
+   socket.on('shot hitted', function(data) {
+      gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
+
+      //deverá guardar na base de dados
+
+
       io.sockets.emit('hit',
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
-   socket.on('shoot missed', function(data) {
+   socket.on('shot missed', function(data) {
+      gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
+
+      //deverá guardar na base de dados
       io.sockets.emit('miss',
+
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
@@ -176,7 +186,7 @@ app.get("/game=:item_id", (req, res) => {
             //fazer o update
             //res.render('board', req.params);
          }
-      }); 
+      });
    } else{
       res.render('index');
    }
@@ -330,7 +340,7 @@ app.get('/continueGame',(req, res) => {
          }else{
             res.redirect('/');
          }
-      }); 
+      });
    }else{
       res.redirect('/');
    }
@@ -354,7 +364,7 @@ app.get('/join', (req, res) => {
       //gamesController.getAllGames(sess.user._id,function(result){
          console.log("join_games: "+JSON.stringify(onePlayer_games));
          res.render('gameJoin1',{games: onePlayer_games ,sess: sess});
-      //}); 
+      //});
    }else{
       res.redirect('/');
    }
