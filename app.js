@@ -112,43 +112,41 @@ app.get('/board', (req, res) => {
 });
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
    sess = req.session;
-   //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
-   //if(sess.user._id == req.params.user_id){
+   if(sess.user._id == req.params.user_id){
       var data = req.params;
       data.sess = sess.user;
       console.log("data: "+JSON.stringify(data));
       res.render('board', data);
-   //}else{
-   //  res.redirect('/');
-   //}
+   }else{
+     res.redirect('/');
+   }
 });
 
 app.get("/game=:item_id", (req, res) => {
-      if(sess) {
-         //Deve procurar o jogo com o id do url
-         var game_id = "ObjectId('"+req.params.item_id+"')";
-         var game_i1 = req.params.item_id;
-         //var game_i
-         console.log(game_id);
+   sess = req.session;
+   if(sess) {
+      //Deve procurar o jogo com o id do url
+      var game_id = "ObjectId('"+req.params.item_id+"')";
+      var game_i1 = req.params.item_id;
+      //var game_i
+      console.log(game_id);
 
-         gamesController.updateGame(game_id,sess.user._id,function(result){
-            if(result!="Error getting game"){
-            console.log(result.length);
-            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
+      gamesController.updateGame(game_id,sess.user._id,function(result){
+         if(result!="Error getting game"){
+         console.log(result.length);
+         res.redirect('/game='+game_i1+'&&user='+sess.user._id);
 
-            }else{
-            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
-            //fazer o update
-            //res.render('board', req.params);
-            
-            }
-        }); 
-   
+         }else{
+         res.redirect('/game='+game_i1+'&&user='+sess.user._id);
+         //fazer o update
+         //res.render('board', req.params);
          
-         } else{
-            res.render('index');
          }
-      });
+      }); 
+   } else{
+      res.render('index');
+   }
+   });
 
 
 
@@ -230,13 +228,11 @@ app.get('/logout',(req,res) => {
 app.get('/gameOptions1', (req, res) => {
    sess = req.session;
    if(sess.user) {
-
-         res.render('gameOptions1', {sess: sess.user})
-
-      } else{
-         res.render('index');
-      }
-   });
+      res.render('gameOptions1', {sess: sess.user})
+   } else{
+      res.render('index');
+   }
+});
 
 app.get('/gameOptions2', (req, res) => {
    sess = req.session;
@@ -250,7 +246,6 @@ app.get('/gameOptions2', (req, res) => {
 
 
 //new Game Route
-
 app.get('/newGame', (req, res) => {
    sess = req.session;
    if(sess.user) {
@@ -258,93 +253,81 @@ app.get('/newGame', (req, res) => {
          console.log("result: "+result);
          if(result!="Error inserting game"){
             userGamesController.insertUsersGames(sess.user._id, result._id,function(result2){
-
                console.log("result: "+result2);
                if(result!="Error inserting game_users"){
                   sess.game = result;
-
                   res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
-               
                }else{
-
                   location.href = "/gameOptions1";
-                  }
+               }
             })
             //res.render('gameOptions1', {sess: sess})
          }else{
-
             location.href = "/gameOptions1";
-            }
-      });
-      } else{
-         res.render('index');
-      }
-   });
-
-
-   app.get('/newGame2', (req, res) => {
-      sess = req.session;
-      if(sess.user) {
-         gamesController.insertGame(sess.user._id,function(result){
-            console.log("result: "+result);
-            if(result!="Error inserting game"){
-               sess.game = result;
-   
-               res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
-   
-               //res.render('gameOptions1', {sess: sess.user})
-   
-            }else{
-   
-            location.href = "/gameOptions2";
-            }
-         });
-         } else{
-            res.render('index');
          }
       });
-//continue Game Route
+   } else{
+      res.render('index');
+   }
+});
 
+
+app.get('/newGame2', (req, res) => {
+   sess = req.session;
+   if(sess.user) {
+      gamesController.insertGame(sess.user._id,function(result){
+         console.log("result: "+result);
+         if(result!="Error inserting game"){
+            sess.game = result;
+            res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+            //res.render('gameOptions1', {sess: sess.user})
+         }else{
+            location.href = "/gameOptions2";
+         }
+      });
+   }else{
+      res.render('index');
+   }
+});
+
+//continue Game Route
 app.get('/continueGame', (req, res) => {
+   sess = req.session;
    if(sess) {
       userGamesController. getAllUsersGames(sess.user._id,function(result){
          console.log(result.length);
          res.render('gameContinue1',{games:result ,sess: sess.user});
      }); 
-
-      
-      } else{
-         res.render('index');
-      }
-   });
+   }else{
+      res.render('index');
+   }
+});
 
 
 
-   app.get('/continueGame2', (req, res) => {
-      sess = req.session;
-      if(sess.user) {
-         gamesController.getAllGames(sess.user._id,function(result){
-            console.log(result.length);
-            res.render('gameContinue2',{games:result ,sess: sess.user});
-        });
-
-      } else{
-         res.render('index');
-      }
-   });
-//Join Route
-   app.get('/join', (req, res) => {
-      if(sess) {
-         gamesController.getAllGames(sess.user._id,function(result){
-            console.log(result.length);
-            res.render('gameJoin1',{games:result ,sess: sess});
-        }); 
-   
-         
-         } else{
-            res.render('index');
-         }
+app.get('/continueGame2', (req, res) => {
+   sess = req.session;
+   if(sess.user) {
+      gamesController.getAllGames(sess.user._id,function(result){
+         console.log(result.length);
+         res.render('gameContinue2',{games:result ,sess: sess.user});
       });
+   }else{
+      res.render('index');
+   }
+});
+//Join Route
+app.get('/join', (req, res) => {
+   sess = req.session;
+   if(sess) {
+      gamesController.getAllGames(sess.user._id,function(result){
+         console.log(result.length);
+         res.render('gameJoin1',{games:result ,sess: sess});
+      }); 
+   } else{
+      res.render('index');
+   }
+});
 
 
 //----------------Images Routes---------------------------------------
