@@ -77,6 +77,11 @@ io.sockets.on('connection',(socket) => {
       }
       console.log("onePlayer_games123: "+JSON.stringify(onePlayer_games));
    });
+   //When player is ready
+   socket.on('I am ready', function(data) {
+      io.sockets.emit('opponent is ready',
+         {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+   });
    //When player joins a 2v2 game
    socket.on('entered twoPlayers game', function(data) {
       var game_id = data.game_id;
