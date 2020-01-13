@@ -75,7 +75,14 @@ socket.on('recieve shot', function(data){
         this.turn_to_shoot = true;
     }
 });
-
+//Not the one that created the game room
+socket.on('not your turn', function(data){
+    //Verify that the message is from this game and for you
+    if(game_id==data.game_id && user_id==data.user_id){
+        this.turn_to_shoot = false;
+    }
+    console.log(data.user_name+" turn to play: "+this.turn_to_shoot);
+});
 //P1 shot hitted
 socket.on('hit', function(data){
     //Verify that the message is from this game
@@ -643,7 +650,7 @@ new Vue({
         //creates the opponent board
         this.addBoard("#opponent", "Opponent Board");
         //send join message to server
-        socket.emit('entered onePlayer game', {game_id: game_id, user_name: sess.name});
+        socket.emit('entered onePlayer game', {game_id: game_id, user_id: user_id, user_name: sess.name});
         
         
         //if already has ships positions

@@ -62,6 +62,8 @@ io.sockets.on('connection',(socket) => {
       }else{
          onePlayer_games[game_id] += 1;
          console.log("onePlayer_games12: "+JSON.stringify(onePlayer_games));
+         io.sockets.emit('not your turn',
+            {game_id: game_id, user_id: data.user_id, user_name: data.user_name});
       }
       io.sockets.emit('new player message',
          {game_id: game_id, user_name: data.user_name});
