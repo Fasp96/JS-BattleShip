@@ -1,35 +1,35 @@
 data = {
     p1:{
         ships: [
-            {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"}, 
-            {x:"", y:"", orientation:"", type:"Battleship", size:"4", hits:"0"}, 
+            {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"},
+            {x:"", y:"", orientation:"", type:"Battleship", size:"4", hits:"0"},
             {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"},
-            /*{x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"}, 
-            {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"}, 
+            /*{x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"},
+            {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"},
             {x:"5", y:"G", orientation:"V", type:"Cruiser", size:"3", hits:"0"},
             {x:"5", y:"E", orientation:"H", type:"Submarine", size:"3", hits:"0"},
             {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},*/
         ],
         shots:[
-            /*{x:"1", y:"A"}, 
-            {x:"1", y:"B"}, 
+            /*{x:"1", y:"A"},
+            {x:"1", y:"B"},
             {x:"1", y:"C"},*/
         ]
     },
     p2:{
         ships:[
-            {x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"}, 
-            {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"}, 
+            {x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"},
+            {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"},
             {x:"5", y:"G", orientation:"V", type:"Cruiser", size:"3", hits:"0"},
             {x:"5", y:"E", orientation:"H", type:"Submarine", size:"3", hits:"0"},
             {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},
         ],
         shots:[
             /*
-            {x:"1", y:"A"}, 
-            {x:"1", y:"B"}, 
+            {x:"1", y:"A"},
+            {x:"1", y:"B"},
             {x:"1", y:"C"},*/
         ]
     },
@@ -74,8 +74,8 @@ socket.on('recieve shot', function(data){
     //Verify that the message is from this game
     if(game_id==data.game_id && user_id!=data.user_id){
         //addShotP2(data.shot_y, data.shot_x, data.user_name); <---user_name tambem vai para caso que o barco seja destruido
-        
-        
+
+
         //P1 can now shoot
         vue_object.turn_to_shoot = true;
         console.log("recieve_turn_to_shoot: "+vue_object.turn_to_shoot);
@@ -133,7 +133,7 @@ var vue_object = new Vue({
                 for(var iy= 0; iy<=y; iy++){
                     arrX = new Array();
                     for(var ix= 0; ix<=x; ix++){
-                    
+
                         if(ix == 0 && iy == 0){ //if to add the empty space on (0,0)
                             arrX[ix]='<div class="cell outside number letter">'+ letter[iy] +'</div>';
                         }
@@ -150,7 +150,7 @@ var vue_object = new Vue({
                             else{ // if is the user table will not have the v-on:click
                                 arrX[ix]='<div class="cell inside explosion" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
                             }
-                        }   
+                        }
                     }
                     arrY[iy]='<div class="row">'+arrX.join("\r\n")+'</div>';
                 }
@@ -162,7 +162,7 @@ var vue_object = new Vue({
         //function to load ships if it's to continue a game (only load user ships)
         loadShips(){
             var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
-            
+
             this.p1.ships.forEach(ship => { //for each ship of user
                 var shipX = ship.x;
                 var shipY = ship.y;
@@ -196,7 +196,7 @@ var vue_object = new Vue({
             this.p1.shots.forEach(shot => { // for each shot of user
                 hit = false;
 
-                this.p2.ships.forEach(ship =>{ //for each ship of opponent 
+                this.p2.ships.forEach(ship =>{ //for each ship of opponent
                     var shipX = ship.x;
                     var shipY = ship.y;
 
@@ -209,7 +209,7 @@ var vue_object = new Vue({
                                 //change variable to true
                                 hit = true;
                             }
-                            shipX++;        
+                            shipX++;
                         }
                     }
                     if(ship.orientation == 'V'){  // if the ship is vertical
@@ -226,10 +226,10 @@ var vue_object = new Vue({
                     }
                 });
 
-                if(hit == false){ // if the shot didn't hit any of the apponent ships 
+                if(hit == false){ // if the shot didn't hit any of the apponent ships
                     //adds class miss to the position
                     $("#p2"+ shot.y + shot.x).addClass("miss");
-                } 
+                }
             });
             //show in console the status of apponents ships
             this.checkShips("opponent");
@@ -254,7 +254,7 @@ var vue_object = new Vue({
                                 //change variable to true
                                 hit = true;
                             }
-                            shipX++;        
+                            shipX++;
                         }
                     }
                     if(ship.orientation == 'V'){ // if the ship is vertical
@@ -270,10 +270,10 @@ var vue_object = new Vue({
                         }
                     }
                 });
-                if(hit == false){ // if the shot didn't hit any of the user ships 
+                if(hit == false){ // if the shot didn't hit any of the user ships
                     //adds class miss to the position
                     $("#p1"+ shot.y + shot.x).addClass("miss");
-                } 
+                }
             });
             //show in console the status of users ships
             this.checkShips("user");
@@ -325,7 +325,7 @@ var vue_object = new Vue({
             //clears the p for error messages
             $('#addError').text("");
             var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
-            
+
             //saves the original values of the ship
             var shipOriginalx = ship.x;
             var shipOriginaly = ship.y;
@@ -347,7 +347,7 @@ var vue_object = new Vue({
                     iy++;
                 }
             }
-            
+
             //verify colision and spaces
             //variable to know if the boat hits any other boat or doesn't fit on the board
             var colision = false;
@@ -364,12 +364,12 @@ var vue_object = new Vue({
 
             if(orientation == 'H'){ //if the new orientation is horizontal
                 for(var i = 0; i < ship.size; i++){ //for ship length
-                    
-                    if(colisionX > 10){ //if requires a position higher than 10 
+
+                    if(colisionX > 10){ //if requires a position higher than 10
                         $('#addError').text("***Can't insert "+ ship.type +" is out of the board");
                         colision = true;
                     }
-                    
+
                     spacesOccupyed.forEach(space =>{ // for each space occupyed
                         if(space.x == colisionX && space.y == colisionY ){ // if is aready occupyed
                             $('#addError').text("***Can't insert "+ ship.type +" it hits another ship");
@@ -384,7 +384,7 @@ var vue_object = new Vue({
                 var iy = letter.indexOf(colisionY);
                 for(var i = 0; i < ship.size; i++){ //for ship length
                     colisionY = letter[iy];
-                    
+
                     if(iy > 10){ // if requires a position higher than J
                         $('#addError').text("***Can't insert "+ ship.type +" is out of the board");
                         colision = true;
@@ -395,7 +395,7 @@ var vue_object = new Vue({
                             $('#addError').text("***Can't insert "+ ship.type +" it hits another ship");
                             colision = true;
                         }
-                        
+
                     });
                     iy++;
                 }
@@ -442,7 +442,7 @@ var vue_object = new Vue({
                         $("#p1" + shipY + shipX ).addClass(ship.type + (i+1) + "H");
                         //adds coordinates in usedSpaces
                         this.usedSpaces.push({'y': shipY, 'x': shipX});
-                        shipX++;    
+                        shipX++;
                     }
                 }
 
@@ -465,7 +465,7 @@ var vue_object = new Vue({
             //clears the p fpr error messages
             $('#addError').text("");
             var isOk = true;
-            
+
             this.p1.ships.forEach(ship =>{ // for each boat
                 if(ship.x == '' | ship.y ==''){ //if any of the coordinates is empty
                     //change to false
@@ -497,12 +497,12 @@ var vue_object = new Vue({
                     {game_id:game_id, user_id:user_id , user_name:sess.name});
             }
             else{
-                element.parentNode.insertBefore(opponent_table, element.nextSibling);
+                //element.parentNode.insertBefore(opponent_table, element.nextSibling);
                 //this.addBoard("#opponent", "Opponent Board");
 
                 //removes add ships form
                 element.parentNode.removeChild(element);
-                //sets the visibility of opponent board unset 
+                //sets the visibility of opponent board unset
                 document.getElementById("opponent").style.visibility = "unset";
                 //loads the ships for the user
                 this.loadShips();
@@ -546,7 +546,7 @@ var vue_object = new Vue({
                             //adds to ships hits
                             hit = true;
                         }
-                        shipX++;        
+                        shipX++;
                     }
                 }
                 if(ship.orientation == 'V'){ //if ship is vertical
@@ -566,7 +566,7 @@ var vue_object = new Vue({
 
             });
             if(hit == false){ //if doesn't hit any ship
-                //show miss 
+                //show miss
                 $("#p2"+ y + x).addClass("miss");
             }
             //show opponent and user status
@@ -600,7 +600,7 @@ var vue_object = new Vue({
                 var shipY = ship.y;
 
                 if(ship.orientation == 'H'){ //if ship is horizontal
-                    for(var i = 0; i < ship.size; i++){ 
+                    for(var i = 0; i < ship.size; i++){
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
                             $("#p1" + y + x).addClass("explosion");
@@ -608,7 +608,7 @@ var vue_object = new Vue({
                             ship.hits++;
                             hit = true;
                         }
-                        shipX++;        
+                        shipX++;
                     }
                 }
                 if(ship.orientation == 'V'){ //if ship is vertical
@@ -628,7 +628,7 @@ var vue_object = new Vue({
 
             });
             if(hit == false){ //if doesn't hit any ship
-                //show miss 
+                //show miss
                 $("#p1"+ y + x).addClass("miss");
             }
             //show opponent and user status
@@ -671,13 +671,13 @@ var vue_object = new Vue({
     created(){
         console.log("Starting created section!");
         //creates the user board
-        this.addBoard("#user", "Your Board");   
+        this.addBoard("#user", "Your Board");
         //creates the opponent board
         this.addBoard("#opponent", "Opponent Board");
         //send join message to server
         socket.emit('entered onePlayer game', {game_id: game_id, user_id: user_id, user_name: sess.name});
-        
-        
+
+
         //if already has ships positions
         if(this.p1.ships[0].x == ""){
             //shows the menu to add ships
