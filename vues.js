@@ -74,7 +74,7 @@ socket.on('recieve shot', function(data){
     //Verify that the message is from this game
     if(game_id==data.game_id && user_id!=data.user_id){
         //addShotP2(data.shot_y, data.shot_x, data.user_name); <---user_name tambem vai para caso que o barco seja destruido
-        
+        //deverá guardar os tiros
         
         //P1 can now shoot
         vue_object.turn_to_shoot = true;
