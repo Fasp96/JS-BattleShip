@@ -1,7 +1,7 @@
 var express = require('express');
 const app = express();
 
-const session = require('express-session');
+var session = require('express-session');
 var passport = require('passport');
 var path = require('path');
 const bodyParser = require('body-parser');
@@ -25,12 +25,11 @@ app.set("views", __dirname + '/views');
 
 //####################################################################################################################
 //app.use(require('serve-static')(__dirname + '/../../public'));
-app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+app.use(session({secret: 'total secret', saveUninitialized: true}));
 app.use(bodyParser.json());
 
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 //####################################################################################################################
@@ -93,14 +92,14 @@ mongoUtil.connectToServer(function(err){
 })
 
 //-----------------------Views Routes-----------------------------------------
-var sess;
 var alert;
 
 
 //Initial Route
 app.get('/', function(req,res){
-   if(sess) {
-      res.render('menu', {sess: sess});
+   sess = req.session;
+   if(sess.user) {
+      res.render('menu', {sess: sess.user});
    }else{
       res.render('index');
    }
@@ -112,10 +111,11 @@ app.get('/board', (req, res) => {
    res.render('board');
 });
 app.get('/game=:game_id&&user=:user_id', (req, res) => {
+   sess = req.session;
    //Deixar os comentarios!!! (Necessario para correr testes com varios utilizadores)
    //if(sess.user._id == req.params.user_id){
       var data = req.params;
-      data.sess=sess.user;
+      data.sess = sess.user;
       console.log("data: "+JSON.stringify(data));
       res.render('board', data);
    //}else{
@@ -154,7 +154,8 @@ app.get("/game=:item_id", (req, res) => {
 
 //Login Routes
 app.get('/login', (req, res) => {
-   if(sess) {
+   sess = req.session;
+   if(sess.user) {
       res.redirect('/');
    }else{
       res.render('login_form');
@@ -176,7 +177,8 @@ app.post('/login', function(req, res){
 
 //Register Routes
 app.get('/register', (req, res) => {
-   if(sess) {
+   sess = req.session;
+   if(sess.user) {
       res.redirect('/');
    }else{
       res.render('register_form', {alert: alert});
@@ -217,17 +219,19 @@ app.post('/register', function(req,res){
 //Logout Route
 app.get('/logout',(req,res) => {
    req.session.destroy((err) => {
-      if(err) throw err;
-      sess = null;
+      if(err) {
+         return console.log(err);
+      }
       res.redirect('/');
    });
 });
 
 //Game Options Routes
 app.get('/gameOptions1', (req, res) => {
-   if(sess) {
+   sess = req.session;
+   if(sess.user) {
 
-         res.render('gameOptions1', {sess: sess})
+         res.render('gameOptions1', {sess: sess.user})
 
       } else{
          res.render('index');
@@ -235,8 +239,9 @@ app.get('/gameOptions1', (req, res) => {
    });
 
 app.get('/gameOptions2', (req, res) => {
-   if(sess) {
-      res.render('gameOptions2', {sess: sess})
+   sess = req.session;
+   if(sess.user) {
+      res.render('gameOptions2', {sess: sess.user})
    }else{
       res.render('index');
    }
@@ -247,7 +252,8 @@ app.get('/gameOptions2', (req, res) => {
 //new Game Route
 
 app.get('/newGame', (req, res) => {
-   if(sess) {
+   sess = req.session;
+   if(sess.user) {
       gamesController.insertGame(sess.user._id,function(result){
          console.log("result: "+result);
          if(result!="Error inserting game"){
@@ -277,7 +283,8 @@ app.get('/newGame', (req, res) => {
 
 
    app.get('/newGame2', (req, res) => {
-      if(sess) {
+      sess = req.session;
+      if(sess.user) {
          gamesController.insertGame(sess.user._id,function(result){
             console.log("result: "+result);
             if(result!="Error inserting game"){
@@ -285,7 +292,7 @@ app.get('/newGame', (req, res) => {
    
                res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
    
-               //res.render('gameOptions1', {sess: sess})
+               //res.render('gameOptions1', {sess: sess.user})
    
             }else{
    
@@ -302,7 +309,7 @@ app.get('/continueGame', (req, res) => {
    if(sess) {
       userGamesController. getAllUsersGames(sess.user._id,function(result){
          console.log(result.length);
-         res.render('gameContinue1',{games:result ,sess: sess});
+         res.render('gameContinue1',{games:result ,sess: sess.user});
      }); 
 
       
@@ -314,10 +321,11 @@ app.get('/continueGame', (req, res) => {
 
 
    app.get('/continueGame2', (req, res) => {
-      if(sess) {
+      sess = req.session;
+      if(sess.user) {
          gamesController.getAllGames(sess.user._id,function(result){
             console.log(result.length);
-            res.render('gameContinue2',{games:result ,sess: sess});
+            res.render('gameContinue2',{games:result ,sess: sess.user});
         });
 
       } else{
