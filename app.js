@@ -362,14 +362,44 @@ app.get('/join', (req, res) => {
 
 
 //----------------Images Routes---------------------------------------
-app.get('/miss.png', (req,res) =>{
-   fs.readFile('miss.png',function (e, data) {
+app.get('/splash1.png', (req,res) =>{
+   fs.readFile('splash/splash1.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/splash2.png', (req,res) =>{
+   fs.readFile('splash/splash2.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/splash3.png', (req,res) =>{
+   fs.readFile('splash/splash3.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/splash4.png', (req,res) =>{
+   fs.readFile('splash/splash4.png',function (e, data) {
       res.send(data);
    })
 });
 
-app.get('/hit.png', (req,res) =>{
-   fs.readFile('hit.png',function (e, data) {
+app.get('/explosion1.png', (req,res) =>{
+   fs.readFile('explosion/explosion1.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/explosion2.png', (req,res) =>{
+   fs.readFile('explosion/explosion2.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/explosion3.png', (req,res) =>{
+   fs.readFile('explosion/explosion3.png',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/explosion4.png', (req,res) =>{
+   fs.readFile('explosion/explosion4.png',function (e, data) {
       res.send(data);
    })
 });
