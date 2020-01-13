@@ -56,6 +56,9 @@ io.sockets.on('connection',(socket) => {
    //When player joins a 1v1 game
    socket.on('entered onePlayer game', function(data) {
       var game_id = data.game_id;
+      console.log("entered onePlayer game: "+JSON.stringify(data));
+      io.sockets.emit('new player message',
+         {game_id: game_id, user_name: data.user_name});
       if(!(game_id in onePlayer_games)){
          onePlayer_games[game_id] = 1;
          console.log("onePlayer_games: "+JSON.stringify(onePlayer_games));
@@ -65,8 +68,6 @@ io.sockets.on('connection',(socket) => {
          io.sockets.emit('not your turn',
             {game_id: game_id, user_id: data.user_id, user_name: data.user_name});
       }
-      io.sockets.emit('new player message',
-         {game_id: game_id, user_name: data.user_name});
    });
    //When player leaves a 1v1 game
    socket.on('left onePlayer game', function(data) {
@@ -290,13 +291,13 @@ app.get('/newGame', (req, res) => {
    sess = req.session;
    if(sess.user) {
       gamesController.insertGame(sess.user._id,function(result){
-         console.log("result: "+result);
+         console.log("result: "+JSON.stringify(result));
          if(result!="Error inserting game"){
             userGamesController.insertUserGame(sess.user._id, result._id,function(result2){
-               console.log("result: "+result2);
+               console.log("result2: "+JSON.stringify(result2));
                if(result2!="Error inserting game_users"){
                   sess.game = result2;
-                  res.redirect("game="+sess.game._id+">&&user="+sess.user._id);
+                  res.redirect("game="+sess.game.game_id+"&&user="+sess.user._id);
                }else{
                   res.redirect('/onePlayer');
                }
