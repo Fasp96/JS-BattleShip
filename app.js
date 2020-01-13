@@ -91,7 +91,7 @@ io.sockets.on('connection',(socket) => {
          twoPlayers_games[game_id] = 1;
          console.log("twoPlayers_games: "+JSON.stringify(twoPlayers_games));
       }else{
-         twoPlayers_games[game_id] += 1;
+      twoPlayers_games[game_id] += 1;
          console.log("twoPlayers_games12: "+JSON.stringify(twoPlayers_games));
       }
    });
@@ -118,19 +118,19 @@ io.sockets.on('connection',(socket) => {
    //Shot response
    socket.on('shot hitted', function(data) {
       gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
-      
+
       //deverá guardar na base de dados
-      
+
 
       io.sockets.emit('hit',
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
    socket.on('shot missed', function(data) {
       gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
-      
+
       //deverá guardar na base de dados
       io.sockets.emit('miss',
-      
+
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
@@ -187,7 +187,7 @@ app.get("/game=:item_id", (req, res) => {
             //fazer o update
             //res.render('board', req.params);
          }
-      }); 
+      });
    } else{
       res.render('index');
    }
@@ -341,7 +341,7 @@ app.get('/continueGame',(req, res) => {
          }else{
             res.redirect('/');
          }
-      }); 
+      });
    }else{
       res.redirect('/');
    }
@@ -365,7 +365,7 @@ app.get('/join', (req, res) => {
       //gamesController.getAllGames(sess.user._id,function(result){
          console.log("join_games: "+JSON.stringify(onePlayer_games));
          res.render('gameJoin1',{games: onePlayer_games ,sess: sess});
-      //}); 
+      //});
    }else{
       res.redirect('/');
    }
