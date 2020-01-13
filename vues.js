@@ -39,6 +39,9 @@ data = {
     ],
     usedSpaces:[],
     turn_to_shoot: true,
+    //variable to check if opponent is ready
+    opponentIsConnected: false,
+    shipsPlaced: false,
 };
 
 var opponent_table = document.createElement('div');
@@ -61,6 +64,8 @@ function returnToMain(){
 var sess = JSON.parse(document.currentScript.getAttribute('sess')); //Buscar a variavel sess???
 var game_id = document.currentScript.getAttribute('game_id');
 var user_id = document.currentScript.getAttribute('user_id');
+
+
 console.log("sess: "+JSON.stringify(sess));
 var socket = io.connect();
 
@@ -72,16 +77,31 @@ socket.on('recieve shot', function(data){
         
         
         //P1 can now shoot
-        this.turn_to_shoot = true;
+        vue_object.turn_to_shoot = true;
+        console.log("recieve_turn_to_shoot: "+vue_object.turn_to_shoot);
     }
 });
 //Not the one that created the game room
 socket.on('not your turn', function(data){
     //Verify that the message is from this game and for you
-    if(game_id==data.game_id && user_id==data.user_id){
-        this.turn_to_shoot = false;
+    if(game_id==data.game_id){
+        if(user_id==data.user_id){
+            vue_object.turn_to_shoot = false;
+        }else{
+            vue_object.turn_to_shoot = true;
+        }
     }
-    console.log(data.user_name+" turn to play: "+this.turn_to_shoot);
+});
+//Message from server when the other player is ready to play
+socket.on('opponent is ready', function(data){
+    //Verify that the message is from this game
+    if(game_id==data.game_id && user_id!=data.user_id){
+        vue_object.opponentIsConnected = true;
+
+        if(vue_object.turn_to_shoot && vue_object.shipsPlaced){
+            vue_object.startGame();
+        }
+    }
 });
 //P1 shot hitted
 socket.on('hit', function(data){
@@ -98,7 +118,7 @@ socket.on('miss', function(data){
     }
 });
 
-new Vue({
+var vue_object = new Vue({
     el:".tables",
     data: data,
     methods:{
@@ -462,21 +482,24 @@ new Vue({
 
         //function to start the game
         startGame(){
-            //variable to check if opponent is ready
-            var opponentIsConnected = true;
+            console.log("opponentIsConnected: "+this.opponentIsConnected);
+            console.log("startgame_turn_to_shoot: "+vue_object.turn_to_shoot);
+
             //gets id for the add ship form
             var element = document.getElementById("addShips");
-
-            //user_table_html.insertAfter(element);
-            element.parentNode.insertBefore(opponent_table, element.nextSibling);
-            this.addBoard("#opponent", "Opponent Board");
-
             //waits for apponent do connect
-            if(opponentIsConnected == false){ //if opponent isn't ready
+            if(this.opponentIsConnected == false || this.turn_to_shoot == false){ //if opponent isn't ready
                 //sets the visibilty add ship hidden
                 element.innerHTML = "<h1>Waiting for apponent...</h1>";
+                //message to send when ready, all boats are placed and opponenet still isn't ready
+                this.shipsPlaced = true;
+                socket.emit('I am ready',
+                    {game_id:game_id, user_id:user_id , user_name:sess.name});
             }
             else{
+                element.parentNode.insertBefore(opponent_table, element.nextSibling);
+                this.addBoard("#opponent", "Opponent Board");
+
                 //removes add ships form
                 element.parentNode.removeChild(element);
                 //sets the visibility of opponent board unset 
@@ -492,7 +515,8 @@ new Vue({
 
         //function to add the new shots from user
         addShotP1(iy, ix){
-            if(this.turn_to_shoot){ //if is turn to shoot
+            console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
+            if(vue_object.turn_to_shoot){ //if is turn to shoot
                 var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
                 //adds shot to user shots
                 this.p1.shots.push({'y': letter[iy], 'x': ix});
@@ -501,7 +525,7 @@ new Vue({
                 socket.emit('shoot player',
                     {shot_y: iy, shot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name});
                 //End turn to shoot
-                this.turn_to_shoot = false;
+                vue_object.turn_to_shoot = false;
             }
         },
 
@@ -645,6 +669,7 @@ new Vue({
     },
 
     created(){
+        console.log("Starting created section!");
         //creates the user board
         this.addBoard("#user", "Your Board");   
         //creates the opponent board
