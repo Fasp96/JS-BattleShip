@@ -205,23 +205,29 @@
    }
 
    .miss{
-      background-image: url('/miss.png');
+      background-image: url('/splash4.png');
+      animation-name: splashAnim;
+      animation-duration: 0.6s;
       background-size: contain;
+   }
+   @keyframes splashAnim {
+      0%   {background-image: url('/splash1.png');}
+      25%  {background-image: url('/splash2.png');}
+      50%  {background-image: url('/splash3.png');}
+      100% {background-image: url('/splash4.png');}
    }
 
-   .explosion{
+   .hit{
       background-image: url('/explosion4.png');
       animation-name: explosionAnim;
+      animation-duration: 0.5s;
+      background-size: contain;
    }
    @keyframes explosionAnim {
-      0%   {background-image: '/explosion1.png';}
-      25%  {background-image: '/explosion2.png';}
-      50%  {background-image: '/explosion3.png';}
-      100% {background-image: '/explosion4.png';}
-   }
-   .hit{
-      background-image: url('/hit.png');
-      background-size: contain;
+      0%   {background-image: url('/explosion1.png');}
+      25%  {background-image: url('/explosion2.png');}
+      50%  {background-image: url('/explosion3.png');}
+      100% {background-image: url('/explosion4.png');}
    }
    .btn-primary{
       width: 300px;
@@ -231,44 +237,46 @@
 </style>
 
 <div class="tables">
-   <div id="addShips" style="visibility: hidden;">
-      <p>Insert the values in this order, <b>Letter(Y) Number(X) Orientation('V'or 'H')</b></p>
-      <p>Example: <b>A1V</b></p>
-      <p style="color:red" id="addError"></p>
-      <ul>
-         <li>
-            <label> Carrier (size: 5)</label><br>
-            <input type="text" v-model = "newShips.Carrier" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
+   <div>
+      <div id="addShips" style="visibility: hidden;">
+         <p>Insert the values in this order, <b>Letter(Y) Number(X) Orientation('V'or 'H')</b></p>
+         <p>Example: <b>A1V</b></p>
+         <p style="color:red" id="addError"></p>
+         <ul>
+            <li>
+               <label> Carrier (size: 5)</label><br>
+               <input type="text" v-model = "newShips.Carrier" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Battleship (size: 4)</label><br>
+               <input type="text" v-model = "newShips.Battleship" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Cruiser (size: 3)</label><br>
+               <input type="text" v-model = "newShips.Cruiser" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Submarine (size: 3)</label><br>
+               <input type="text" v-model = "newShips.Submarine" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+            <br>
+            <li>
+               <label> Destroyer(size: 2)</label><br>
+               <input type="text" v-model = "newShips.Destroyer" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+            </li>
+         </ul>
          <br>
-         <li>
-            <label> Battleship (size: 4)</label><br>
-            <input type="text" v-model = "newShips.Battleship" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
          <br>
-         <li>
-            <label> Cruiser (size: 3)</label><br>
-            <input type="text" v-model = "newShips.Cruiser" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
-         <br>
-         <li>
-            <label> Submarine (size: 3)</label><br>
-            <input type="text" v-model = "newShips.Submarine" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
-         <br>
-         <li>
-            <label> Destroyer(size: 2)</label><br>
-            <input type="text" v-model = "newShips.Destroyer" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
-         </li>
-      </ul>
-      <br>
-      <br>
-      <button v-on:click="verifyShips()">StartGame</button>
+         <button v-on:click="verifyShips()">StartGame</button>
 
-   </div>
-   <div id ="opponent">
-      <h1>Opponent Board</h1>
-      <div id = "opponentTable">
+      </div>
+      <div id ="opponent">
+         <h1>Opponent Board</h1>
+         <div id = "opponentTable">
+         </div>
       </div>
    </div>
    <div id ="user">

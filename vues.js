@@ -148,7 +148,7 @@ var vue_object = new Vue({
                                 arrX[ix]='<div class="cell inside" id=p2' + letter[(iy)] + (ix-1) + ' v-on:click="addShotP1('+ iy +',' +  (ix-1)  +')">&nbsp;</div>';
                             }
                             else{ // if is the user table will not have the v-on:click
-                                arrX[ix]='<div class="cell inside explosion" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
+                                arrX[ix]='<div class="cell inside miss" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
                             }
                         }
                     }
@@ -204,7 +204,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){ //for the length of the ship
                             if(shot.x == shipX && shot.y == shipY){ //if is in the same position
                                 //adds the class hit
-                                $("#p2" + shot.y + shot.x).addClass("explosion");
+                                $("#p2" + shot.y + shot.x).addClass("hit");
                                 ship.hits++;
                                 //change variable to true
                                 hit = true;
@@ -217,7 +217,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){
                             shipY = letter[iy];
                             if(shot.x == shipX && shot.y == shipY){
-                                $("#p2" +shot.y + shot.x).addClass("explosion");
+                                $("#p2" +shot.y + shot.x).addClass("hit");
                                 ship.hits++;
                                 hit = true;
                             }
@@ -249,7 +249,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){ //for the length of the ship
                             if(shot.x == shipX && shot.y == shipY){ //if is in the same position
                                 //adds the class hit
-                                $("#p1" + shot.y + shot.x).addClass("explosion");
+                                $("#p1" + shot.y + shot.x).addClass("hit");
                                 ship.hits++;
                                 //change variable to true
                                 hit = true;
@@ -262,7 +262,7 @@ var vue_object = new Vue({
                         for(var i = 0; i < ship.size; i++){
                             shipY = letter[iy];
                             if(shot.x == shipX && shot.y == shipY){
-                                $("#p1" +shot.y + shot.x).addClass("explosion");
+                                $("#p1" +shot.y + shot.x).addClass("hit");
                                 ship.hits++;
                                 hit = true;
                             }
@@ -541,7 +541,7 @@ var vue_object = new Vue({
                     for(var i = 0; i < ship.size; i++){
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p2" + y + x).addClass("explosion");
+                            $("#p2" + y + x).addClass("hit");
                             ship.hits++;
                             //adds to ships hits
                             hit = true;
@@ -555,7 +555,7 @@ var vue_object = new Vue({
                         shipY = letter[iy];
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p2"+ y + x).addClass("explosion");
+                            $("#p2"+ y + x).addClass("hit");
                             //adds to ships hits
                             ship.hits++;
                             hit = true;
@@ -603,7 +603,7 @@ var vue_object = new Vue({
                     for(var i = 0; i < ship.size; i++){
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p1" + y + x).addClass("explosion");
+                            $("#p1" + y + x).addClass("hit");
                             //adds to ships hits
                             ship.hits++;
                             hit = true;
@@ -617,7 +617,7 @@ var vue_object = new Vue({
                         shipY = letter[iy];
                         if(x == shipX && y == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            $("#p1"+ y + x).addClass("explosion");
+                            $("#p1"+ y + x).addClass("hit");
                             //adds to ships hits
                             ship.hits++;
                             hit = true;
