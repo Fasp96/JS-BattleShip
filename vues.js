@@ -148,7 +148,7 @@ var vue_object = new Vue({
                                 arrX[ix]='<div class="cell inside" id=p2' + letter[(iy)] + (ix-1) + ' v-on:click="addShotP1('+ iy +',' +  (ix-1)  +')">&nbsp;</div>';
                             }
                             else{ // if is the user table will not have the v-on:click
-                                arrX[ix]='<div class="cell inside miss" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
+                                arrX[ix]='<div class="cell inside" id=p1'+ letter[(iy)] + (ix-1) + '>&nbsp;</div>';
                             }
                         }
                     }
