@@ -48,8 +48,7 @@
       var chatArea = jQuery('#chatArea');
       var game_id = "<%=game_id%>";
       var user_id = "<%=user_id%>";
-      //var user_name = <=sess.name%>; -> Nao apagar!! 
-      var user_name = "blaaaa";
+      var user_name = "<%=sess.name%>";
 
       const messages = document.getElementById('chatArea');
 
@@ -73,7 +72,17 @@
          scrollToBottom();
       });
       */
-      //Retrive message from server
+      //Retrieve message from server
+      socket.on('new player message', function(data){
+         //Verify that the message is from this game
+         if(game_id==data.game_id){
+            //Chat message that new user joined the room
+            var message ="<div class='well message opponent_message'>"+data.user_name+" just joined the room!</div>";
+            chatArea.append(message);
+            scrollToBottom();
+         }
+      });
+      //Retrieve message from server
       socket.on('new game message', function(data){
          //Verify that the message is from this game
          if(game_id==data.game_id){
@@ -87,7 +96,7 @@
                message+='opponent_message"';
             }
             //Finish building the chat message
-            message+=">"+data.user_id+":\n"+data.message+'</div>';
+            message+=">"+data.user_name+":\n"+data.message+'</div>';
             chatArea.append(message);
             scrollToBottom();
          }

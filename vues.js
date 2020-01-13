@@ -41,6 +41,23 @@ data = {
     turn_to_shoot: true,
 };
 
+var opponent_table = document.createElement('div');
+opponent_table.id = "opponent";
+opponent_table.innerHTML = `<h1>Opponent Board</h1><div id = "opponentTable"></div>`
+
+//Html of user table to add later
+user_table_html = `<div id ="user">
+                        <h1>User Board</h1>
+                        <div id = "userTable"></div>
+                    </div>`
+
+//return to the main page
+function returnToMain(){
+    //send leave message to server
+    socket.emit('left onePlayer game', {game_id: game_id});
+    location.href = "/";
+}
+
 var sess = JSON.parse(document.currentScript.getAttribute('sess')); //Buscar a variavel sess???
 var game_id = document.currentScript.getAttribute('game_id');
 var user_id = document.currentScript.getAttribute('user_id');
@@ -58,7 +75,14 @@ socket.on('recieve shot', function(data){
         this.turn_to_shoot = true;
     }
 });
-
+//Not the one that created the game room
+socket.on('not your turn', function(data){
+    //Verify that the message is from this game and for you
+    if(game_id==data.game_id && user_id==data.user_id){
+        this.turn_to_shoot = false;
+    }
+    console.log(data.user_name+" turn to play: "+this.turn_to_shoot);
+});
 //P1 shot hitted
 socket.on('hit', function(data){
     //Verify that the message is from this game
@@ -442,6 +466,11 @@ new Vue({
             var opponentIsConnected = true;
             //gets id for the add ship form
             var element = document.getElementById("addShips");
+
+            //user_table_html.insertAfter(element);
+            element.parentNode.insertBefore(opponent_table, element.nextSibling);
+            this.addBoard("#opponent", "Opponent Board");
+
             //waits for apponent do connect
             if(opponentIsConnected == false){ //if opponent isn't ready
                 //sets the visibilty add ship hidden
@@ -451,7 +480,7 @@ new Vue({
                 //removes add ships form
                 element.parentNode.removeChild(element);
                 //sets the visibility of opponent board unset 
-                document.getElementById("opponent").style.visibility = "unset";
+                //document.getElementById("opponent").style.visibility = "unset";
                 //loads the ships for the user
                 this.loadShips();
                 //loads the shots of user
@@ -470,7 +499,7 @@ new Vue({
                 this.showShotsP1(letter[iy], ix);
                 //Send shot message with the information to the server
                 socket.emit('shoot player',
-                    {shot_y: iy, shot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.user_name});
+                    {shot_y: iy, shot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name});
                 //End turn to shoot
                 this.turn_to_shoot = false;
             }
@@ -620,13 +649,16 @@ new Vue({
         this.addBoard("#user", "Your Board");   
         //creates the opponent board
         this.addBoard("#opponent", "Opponent Board");
+        //send join message to server
+        socket.emit('entered onePlayer game', {game_id: game_id, user_id: user_id, user_name: sess.name});
         
-        //if aleady has ships postions
+        
+        //if already has ships positions
         if(this.p1.ships[0].x == ""){
             //shows the menu to add ships
             document.getElementById("addShips").style.visibility = "unset";
-            //hiddes the opponent board
-            document.getElementById("opponent").style.visibility = "hidden";
+            //hides the opponent board
+            //document.getElementById("opponent").style.visibility = "hidden";
         }
         //else start the game to continue
         else{

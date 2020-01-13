@@ -4,7 +4,7 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <title>BatlerShip Game</title>
+   <title>BattleShip Game</title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
@@ -16,23 +16,18 @@
    <div id="board">
       <div class="container">
          <h1 class="jumbotron">
-            <a href = / >BattleShip Game</a> - One Player - Continue
-            <p align="right"> <%= sess.email %>  </p>
-            
+            <a href = / >BattleShip Game</a> - 1vs1 - Continue
+            <p align="right"> </p>
          </h1>
-
          
-        <div class="panel panel-default">
-        <div class="panel-heading">Game List</div>
-        <div class="panel-body">
-                <% games.forEach(function(item){ %>
-                    <li><a href="/game=<%= item._id %>&&user=<%=sess._id%>"><%= item._id %></a></li>
-                    
-                <% }) %>
-            
+         <div class="panel panel-default">
+            <div class="panel-heading">Game List</div>
+            <div class="panel-body">
+               <% games.forEach(function(item){ %>
+                  <li><a href="/game=<%= item.game_id %>&&user=<%=sess._id%>"><%= item.game_id %></a></li>
+               <% }); %>
             </div>
-        </div>
-         
+         </div>
       </div>
    </div>
 </body>
