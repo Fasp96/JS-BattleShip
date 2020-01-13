@@ -89,7 +89,7 @@ io.sockets.on('connection',(socket) => {
          twoPlayers_games[game_id] = 1;
          console.log("twoPlayers_games: "+JSON.stringify(twoPlayers_games));
       }else{
-         twoPlayers_games[game_id] += 1;
+      twoPlayers_games[game_id] += 1;
          console.log("twoPlayers_games12: "+JSON.stringify(twoPlayers_games));
       }
    });
@@ -114,11 +114,11 @@ io.sockets.on('connection',(socket) => {
    });
 
    //Shot response
-   socket.on('shot hitted', function(data) {
+   socket.on('shoot hitted', function(data) {
       io.sockets.emit('hit',
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
-   socket.on('shot missed', function(data) {
+   socket.on('shoot missed', function(data) {
       io.sockets.emit('miss',
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
