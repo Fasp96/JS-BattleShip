@@ -99,7 +99,7 @@ socket.on('recieve shot', function(data){
 
         //P1 can now shoot
         vue_object.turn_to_shoot = true;
-        
+
         document.getElementById("opponent").style.visibility = "unset";
         console.log("recieve_turn_to_shoot: "+ vue_object.turn_to_shoot);
     }
@@ -117,6 +117,7 @@ socket.on('hit', function(data){
 socket.on('miss', function(data){
     //Verify that the message is from this game
     if(game_id==data.game_id && user_id!=data.user_id){
+        console.log('showShotsP1', data.shoot_y, data.shoot_x);
         vue_object.showShotsP1(data.shoot_y, data.shoot_x, false);
     }
 });
@@ -515,17 +516,25 @@ var vue_object = new Vue({
 
         //function to add the new shots from user
         addShotP1(iy, ix){
-            console.log(iy,ix);
-            console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
-            if(vue_object.turn_to_shoot){ //if is turn to shoot
+            var hasShotCoord = false;
 
-                var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
+            var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
+            this.p1.shots.forEach(shot =>{
+                if(letter[iy] == shot.y && ix == shot.x){
+                    hasShotCoord = true;
+                }
+            });
+            
+            if(vue_object.turn_to_shoot && !hasShotCoord){ //if is turn to shoot
+               
+                console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
                 //adds shot to user shots
                 this.p1.shots.push({'y': letter[iy], 'x': ix});
-
+                document.getElementById("p2" + letter[iy] + ix).removeAttribute("v-on:click");
                 //Send shot message with the information to the server
                 socket.emit('shoot player',
                     {shoot_y: iy, shoot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name});
+                
                 //End turn to shoot
                 vue_object.turn_to_shoot = false;
                 console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
@@ -602,8 +611,7 @@ var vue_object = new Vue({
                     {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
             }
             //show opponent and user status
-            //this.checkShips("opponent");
-            //this.checkShips("user");
+            this.checkShips("user");
         },
 
         //function to check the status of the ships
