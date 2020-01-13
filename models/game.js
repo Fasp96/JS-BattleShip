@@ -3,7 +3,17 @@ var mongoConfig = require('../mongoConfig');
 
 function insertGame(user_id,callback){
     var db = mongoConfig.getDB();
-    var line = {users:[user_id,0], ships:[5,5], shoots:[0,0], vencedor_id:0};
+    var line = {users:[user_id], type: "1v1",
+        ships:[
+        [{x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"}, 
+        {x:"", y:"", orientation:"", type:"Battleship", size:"4", hits:"0"}, 
+        {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"0"},
+        {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"0"},
+        {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"}
+    ]], 
+        shoots:[[]], 
+        user_turn_id: user_id,
+        winner_id: ""};
     db.collection("games").insertOne(line,function(err, res){
         if(err)
             callback("Error inserting game");
@@ -19,7 +29,7 @@ function getAllGames(user_id,callback){
     //console.log(db);
     
     query = {"users.0": {"$ne": user_id},"users.1":0};
-    var cursor = db.collection('games').find(query).toArray(function(err,result){
+    db.collection('games').find(query).toArray(function(err,result){
         if(!err)
             callback(result);
     });
@@ -37,7 +47,7 @@ function updateGame(game_id,user_id,callback){
     //const query = ({_id:game_id,$set:{"users.1:"user_id}});
     console.log("query: "+query1,query2);
     console.log("query: "+JSON.stringify(query));
-    const user = db.collection("games").updateOne({_id:game_id},{$set:{"users.1":+user_id}}, function(err, result) {
+    db.collection("games").updateOne({_id:game_id},{$set:{"users.1":+user_id}}, function(err, result) {
         if (err) throw err;
         if(result){
             callback(result);
@@ -53,7 +63,7 @@ function getGameId(game_id,callback){
     const query = {id: game_id};
     console.log("query: "+query);
     console.log("query: "+JSON.stringify(query));
-    var cursor = db.collection('games').find(query).toArray(function(err,result){
+    db.collection('games').find(query).toArray(function(err,result){
         if(!err)
             callback(result);
     });
