@@ -590,6 +590,17 @@ app.get('/submarine3v.png', (req,res) =>{
       res.send(data);
    })
 });
+//----------------Images Routes---------------------------------------
+app.get('/hit.mp3', (req,res) =>{
+   fs.readFile('sounds/hit.mp3',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/miss.mp3', (req,res) =>{
+   fs.readFile('sounds/miss.mp3',function (e, data) {
+      res.send(data);
+   })
+});
 //------------------JS Routes-----------------------------------------
 app.get('/vues.js', (req,res) =>{
    fs.readFile('vues.js',function (e, data) {

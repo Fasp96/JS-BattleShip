@@ -548,9 +548,11 @@ var vue_object = new Vue({
             
             if(isHit){
                 $("#p2" + letter[y] + x).addClass("hit");
+                document.getElementById("hit").play();
             }
             else{
                 $("#p2" + letter[y] + x).addClass("miss");
+                document.getElementById("miss").play();
             }
         },
 
@@ -577,6 +579,7 @@ var vue_object = new Vue({
                             //show hit
                             console.log("hit");
                             $("#p1" + letter[y] + x).addClass("hit");
+                            document.getElementById("hit").play();
                             socket.emit('shoot hitted',
                                 {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
                             //adds to ships hits
@@ -593,6 +596,7 @@ var vue_object = new Vue({
                         if(x == shipX && letter[y] == shipY){ //if shot matches a ship coordinate
                             //show hit
                             $("#p1"+ letter[y] + x).addClass("hit");
+                            document.getElementById("hit").play();
                             socket.emit('shoot hitted',
                                 {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
                             //adds to ships hits
@@ -607,6 +611,7 @@ var vue_object = new Vue({
             if(hit == false){ //if doesn't hit any ship
                 //show miss
                 $("#p1"+ letter[y] + x).addClass("miss");
+                document.getElementById("miss").play();
                 socket.emit('shoot missed',
                     {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
             }
