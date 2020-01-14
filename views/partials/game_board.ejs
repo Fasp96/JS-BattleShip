@@ -236,6 +236,13 @@
    }
 </style>
 
+<audio id="hit">
+   <source src="hit.mp3" type="audio/mpeg">
+ </audio>
+ <audio id="miss">
+   <source src="/miss.mp3" type="audio/mpeg">
+ </audio>
+
 <div class="tables">
       <div id="addShips" style="visibility: hidden;">
          <p>Insert the values in this order, <b>Letter(Y) Number(X) Orientation('V'or 'H')</b></p>
@@ -244,27 +251,27 @@
          <ul>
             <li>
                <label> Carrier (size: 5)</label><br>
-               <input type="text" v-model = "newShips.Carrier" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+               <input type="text" v-model = "newShips.Carrier" maxlength="3" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
             </li>
             <br>
             <li>
                <label> Battleship (size: 4)</label><br>
-               <input type="text" v-model = "newShips.Battleship" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+               <input type="text" v-model = "newShips.Battleship" maxlength="3" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
             </li>
             <br>
             <li>
                <label> Cruiser (size: 3)</label><br>
-               <input type="text" v-model = "newShips.Cruiser" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+               <input type="text" v-model = "newShips.Cruiser" maxlength="3" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
             </li>
             <br>
             <li>
                <label> Submarine (size: 3)</label><br>
-               <input type="text" v-model = "newShips.Submarine" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+               <input type="text" v-model = "newShips.Submarine" maxlength="3" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
             </li>
             <br>
             <li>
                <label> Destroyer(size: 2)</label><br>
-               <input type="text" v-model = "newShips.Destroyer" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
+               <input type="text" v-model = "newShips.Destroyer" maxlength="3" pattern="^([A-J]{1}[0-9]{1}[V|H]{1})$" required @change="addShips()">
             </li>
          </ul>
          <br>

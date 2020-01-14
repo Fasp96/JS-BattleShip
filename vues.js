@@ -100,8 +100,14 @@ socket.on('recieve shot', function(data){
         //P1 can now shoot
         vue_object.turn_to_shoot = true;
 
+        if(document.getElementById("addShips") !== null){
+            var element = document.getElementById("addShips");
+            element.parentNode.removeChild(element);
+            firstShot = false;
+        }
         document.getElementById("opponent").style.visibility = "unset";
         console.log("recieve_turn_to_shoot: "+ vue_object.turn_to_shoot);
+        document.getElementById("boardTitle").innerHTML="Opponent Board";
     }
 });
 
@@ -285,7 +291,7 @@ var vue_object = new Vue({
 
         //function to add ships in the begging of a game (if is a new game)
         addShips(){
-            if(typeof(this.newShips.Carrier) != "undefined" && this.newShips.Carrier !== null){ //is has been added an input for Carrier
+            if(typeof(this.newShips.Carrier) != "undefined" && this.newShips.Carrier.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){ //is has been added an input for Carrier
                 this.p1.ships.forEach(ship =>{
                     //gets the ship object and veifies if isn't in the same coordinates
                     if(ship.type == "Carrier" && this.newShips.Carrier != ship.y + ship.x + ship.orientation){
@@ -294,28 +300,28 @@ var vue_object = new Vue({
                     }
                 });
             }
-            if(typeof(this.newShips.Battleship) != "undefined" && this.newShips.Battleship !== null){
+            if(typeof(this.newShips.Battleship) != "undefined" && this.newShips.Battleship.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Battleship" && this.newShips.Battleship != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Battleship[1], this.newShips.Battleship[0], this.newShips.Battleship[2]);
                     }
                 });
             }
-            if(typeof(this.newShips.Cruiser) != "undefined" && this.newShips.Cruiser !== null){
+            if(typeof(this.newShips.Cruiser) != "undefined" && this.newShips.Cruiser.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Cruiser" && this.newShips.Cruiser != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Cruiser[1], this.newShips.Cruiser[0], this.newShips.Cruiser[2]);
                     }
                 });
             }
-            if(typeof(this.newShips.Submarine) != "undefined" && this.newShips.Submarine !== null){
+            if(typeof(this.newShips.Submarine) != "undefined" && this.newShips.Submarine.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Submarine" && this.newShips.Submarine != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Submarine[1], this.newShips.Submarine[0], this.newShips.Submarine[2]);
                     }
                 });
             }
-            if(typeof(this.newShips.Destroyer) != "undefined" && this.newShips.Destroyer !== null){
+            if(typeof(this.newShips.Destroyer) != "undefined" && this.newShips.Destroyer.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Destroyer" && this.newShips.Destroyer != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Destroyer[1], this.newShips.Destroyer[0], this.newShips.Destroyer[2]);
@@ -537,6 +543,7 @@ var vue_object = new Vue({
                 
                 //End turn to shoot
                 vue_object.turn_to_shoot = false;
+                document.getElementById("boardTitle").innerHTML="Opponent Board - <b> Wait for apponent to play</b>";
                 console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
             }
         },
@@ -548,9 +555,11 @@ var vue_object = new Vue({
             
             if(isHit){
                 $("#p2" + letter[y] + x).addClass("hit");
+                document.getElementById("hit").play();
             }
             else{
                 $("#p2" + letter[y] + x).addClass("miss");
+                document.getElementById("miss").play();
             }
         },
 
@@ -577,6 +586,7 @@ var vue_object = new Vue({
                             //show hit
                             console.log("hit");
                             $("#p1" + letter[y] + x).addClass("hit");
+                            document.getElementById("hit").play();
                             socket.emit('shoot hitted',
                                 {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
                             //adds to ships hits
@@ -593,6 +603,7 @@ var vue_object = new Vue({
                         if(x == shipX && letter[y] == shipY){ //if shot matches a ship coordinate
                             //show hit
                             $("#p1"+ letter[y] + x).addClass("hit");
+                            document.getElementById("hit").play();
                             socket.emit('shoot hitted',
                                 {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
                             //adds to ships hits
@@ -607,6 +618,7 @@ var vue_object = new Vue({
             if(hit == false){ //if doesn't hit any ship
                 //show miss
                 $("#p1"+ letter[y] + x).addClass("miss");
+                document.getElementById("miss").play();
                 socket.emit('shoot missed',
                     {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
             }
