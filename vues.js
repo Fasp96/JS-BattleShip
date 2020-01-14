@@ -81,6 +81,7 @@ socket.on('opponent is ready', function(data){
 
 //Not the one that created the game room
 socket.on('not your turn', function(data){
+    console.log("aaa");
     //Verify that the message is from this game and for you
     if(game_id==data.game_id){
         if(user_id==data.user_id){
@@ -100,8 +101,14 @@ socket.on('recieve shot', function(data){
         //P1 can now shoot
         vue_object.turn_to_shoot = true;
 
+        if(document.getElementById("addShips") !== null){
+            var element = document.getElementById("addShips");
+            element.parentNode.removeChild(element);
+            firstShot = false;
+        }
         document.getElementById("opponent").style.visibility = "unset";
         console.log("recieve_turn_to_shoot: "+ vue_object.turn_to_shoot);
+        document.getElementById("boardTitle").innerHTML="Opponent Board";
     }
 });
 
@@ -537,6 +544,7 @@ var vue_object = new Vue({
                 
                 //End turn to shoot
                 vue_object.turn_to_shoot = false;
+                document.getElementById("boardTitle").innerHTML="Opponent Board - <b> Wait for apponent to play</b>";
                 console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
             }
         },
