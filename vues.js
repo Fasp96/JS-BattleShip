@@ -1,4 +1,5 @@
 data = {
+    //user variables
     p1:{
         ships: [
             {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"},
@@ -6,18 +7,23 @@ data = {
             {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"},
-            /*{x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"},
+            /*
+            {x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"3"},
             {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"},
             {x:"5", y:"G", orientation:"V", type:"Cruiser", size:"3", hits:"0"},
             {x:"5", y:"E", orientation:"H", type:"Submarine", size:"3", hits:"0"},
-            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},*/
+            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},
+            */
         ],
         shots:[
-            /*{x:"1", y:"A"},
+            /*
+            {x:"1", y:"A"},
             {x:"1", y:"B"},
-            {x:"1", y:"C"},*/
+            {x:"1", y:"C"},
+            */
         ]
     },
+    //opponent variables
     p2:{
         ships:[
             {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"},
@@ -25,17 +31,20 @@ data = {
             {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"},
-            /*{x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"},
+            /*
+            {x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"3"},
             {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"},
             {x:"5", y:"G", orientation:"V", type:"Cruiser", size:"3", hits:"0"},
             {x:"5", y:"E", orientation:"H", type:"Submarine", size:"3", hits:"0"},
-            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},*/
+            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},
+            */
         ],
         shots:[
             /*
             {x:"1", y:"A"},
             {x:"1", y:"B"},
-            {x:"1", y:"C"},*/
+            {x:"1", y:"C"},
+            */
         ]
     },
     
@@ -518,7 +527,7 @@ var vue_object = new Vue({
             //gets id for the add ship form
             var element = document.getElementById("addShips");
             //waits for apponent do connect
-            if(this.opponentIsConnected == false /*|| this.turn_to_shoot == false*/){ //if opponent isn't ready
+            if(this.opponentIsConnected == false && this.turn_to_shoot == false){ //if opponent isn't ready
                 //sets the visibilty add ship hidden
                 element.innerHTML = "<h1>Waiting for apponent...</h1>";
                 //message to send when ready, all boats are placed and opponenent still isn't ready
@@ -537,6 +546,8 @@ var vue_object = new Vue({
                 this.loadShotsP1();
                 //load the shots of opponent
                 this.loadShotsP2();
+                socket.emit('I am ready',
+                    {game_id:game_id, user_id:user_id , user_name:sess.name});
             }
         },
 //---------------------------------------------
@@ -590,7 +601,7 @@ var vue_object = new Vue({
         },
 
 //---------------------------------------------
-// * * *  ON APPONENT TURN  * * *
+// * * *  ON OPPONENT TURN  * * *
 //---------------------------------------------
 
         //function to add the new shot from opponent
