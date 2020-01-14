@@ -82,7 +82,6 @@ var socket = io.connect();
 //message from server when the other player is ready to play
 socket.on('opponent is ready', function(data){
     //verify that the message is from this game
-    console.log("aaaa");
     if(game_id==data.game_id && user_id!=data.user_id){
         vue_object.opponentIsConnected = true;
 
@@ -527,7 +526,7 @@ var vue_object = new Vue({
             //gets id for the add ship form
             var element = document.getElementById("addShips");
             //waits for apponent do connect
-            if(this.opponentIsConnected == false && this.turn_to_shoot == false){ //if opponent isn't ready
+            if(this.opponentIsConnected == false || this.turn_to_shoot == false){ //if opponent isn't ready
                 //sets the visibilty add ship hidden
                 element.innerHTML = "<h1>Waiting for apponent...</h1>";
                 //message to send when ready, all boats are placed and opponenent still isn't ready
