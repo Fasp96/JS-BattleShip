@@ -64,9 +64,19 @@ io.sockets.on('connection',(socket) => {
          console.log("onePlayer_games: "+JSON.stringify(onePlayer_games));
       }else{
          onePlayer_games[game_id] += 1;
-         console.log("onePlayer_games12: "+JSON.stringify(onePlayer_games));
-         io.sockets.emit('not your turn',
-            {game_id: game_id, user_id: data.user_id, user_name: data.user_name});
+         if(!(userGamesController.getUserGame(data.user_id, game_id))){
+            userGamesController.insertUserGame(data.user_id, game_id,function(result2){
+               console.log("result2: "+JSON.stringify(result2));
+               if(result2!="Error inserting game_users"){
+                  console.log("Sucessfull in inserting game_users");
+                  console.log("onePlayer_games12: "+JSON.stringify(onePlayer_games));
+                  io.sockets.emit('not your turn',
+                     {game_id: game_id, user_id: data.user_id, user_name: data.user_name});
+               }else{
+                  console.log("Error inserting game_users");
+               }
+            });
+         }
       }
    });
    //When player leaves a 1v1 game
@@ -164,29 +174,6 @@ app.get('/game=:game_id&&user=:user_id', (req, res) => {
       res.render('board', data);
    }else{
      res.redirect('/');
-   }
-});
-
-app.get("/game=:item_id", (req, res) => {
-   sess = req.session;
-   if(sess.user) {
-      //Deve procurar o jogo com o id do url
-      var game_id = "ObjectId('"+req.params.item_id+"')";
-      var game_i1 = req.params.item_id;
-      console.log(game_id);
-
-      gamesController.updateGame(game_id,sess.user._id,function(result){
-         if(result!="Error getting game"){
-            console.log("updategae: "+result.length);
-            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
-         }else{
-            res.redirect('/game='+game_i1+'&&user='+sess.user._id);
-            //fazer o update
-            //res.render('board', req.params);
-         }
-      });
-   } else{
-      res.render('index');
    }
 });
 
@@ -361,6 +348,10 @@ app.get('/join', (req, res) => {
    if(sess.user) {
       //gamesController.getAllGames(sess.user._id,function(result){
          console.log("join_games: "+JSON.stringify(onePlayer_games));
+         var games_to_join = [];
+         onePlayer_games.forEach(game => {
+            games_to_join.push(gamesController.getGameId(game._id));
+         });
          res.render('gameJoin1',{games: onePlayer_games ,sess: sess});
       //});
    }else{

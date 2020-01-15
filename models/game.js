@@ -75,8 +75,6 @@ function updateShoots(shoot_positions,game_id,user_id,callback){
                     callback("Error getting game");
                 }
             });
-
-
         }else{
             //Se não encontrar significa que a jogada é do P1
             const query3={_id:game_id};
@@ -93,12 +91,6 @@ function updateShoots(shoot_positions,game_id,user_id,callback){
             });
         }
     });
-
-    
-    
-
-
-
 }
 
 function getGameId(game_id,callback){

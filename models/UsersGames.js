@@ -38,7 +38,20 @@ function getAllUserGames(user_id,callback){
     });
 }
 
+function getUserGame(user_id,game_id,callback){
+    var db = mongoConfig.getDB();
+    var line = {user_id: user_id, game_id: game_id};
+    db.collection("users_games").insertOne(line,function(err, res){
+        if(err)
+            return false;
+        else{
+            return true;
+        }
+    });
+}
+
 module.exports = {
     insertUserGame,
-    getAllUserGames
+    getAllUserGames,
+    getUserGame
 };
