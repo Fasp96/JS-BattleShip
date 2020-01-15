@@ -184,12 +184,12 @@ socket.on('ship destroyed', function(data) {
       //get game information
       gamesController.getGameId(data.game_id,function(result){
          if(result){
-            var shots_to_update = result.shoots[0];
+            var shots_to_update = data.shoots[0];
             var user_turn_to_update = result.users[1];
             //save/update game information
             console.log("shoot player: "+JSON.stringify(result.shoots));
             if(data.user_id!=result.users[0]){
-               shots_to_update = result.shoots[1];
+               shots_to_update = data.shoots[1];
                user_turn_to_update = result.users[0];
             }
             console.log("shoot player: "+shots_to_update+"######"+user_turn_to_update);
