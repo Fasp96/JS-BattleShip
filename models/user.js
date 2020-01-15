@@ -38,6 +38,7 @@ function addGame(user_id ,callback){
             const query2 = {name: result.name, email: result.email, password: result.password, 
                                 num_games: (result.num_games+1), num_victories: result.num_victories};
             db.collection('users').update(query1, query2, function(err, result) {
+                console.log("addGame_result: "+JSON.stringify(result));
                 if (err) throw err;
                 if(result){
                     callback(result);

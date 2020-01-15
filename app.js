@@ -129,7 +129,7 @@ socket.on('ship destroyed', function(data) {
 
    //Add 1 to the number of games and victories
    userController.addGame(data.user_id);
-   userController.addGame(data.user_id);
+   userController.addVictory(data.user_id);
 
    //get game information
    gamesController.getGameId(data.game_id,function(result){
@@ -184,14 +184,23 @@ socket.on('ship destroyed', function(data) {
       //get game information
       gamesController.getGameId(data.game_id,function(result){
          if(result){
-            var shots_to_update = result.users[0];
+            var shots_to_update = result.shoots[0];
             var user_turn_to_update = result.users[1];
             //save/update game information
+            console.log("shoot player: "+JSON.stringify(result.shoots));
             if(data.user_id!=result.users[0]){
-               shots_to_update = result.users[1];
+               shots_to_update = result.shoots[1];
                user_turn_to_update = result.users[0];
             }
-            Object.assign(shots_to_update,{x: data.shoot_x, y: data.shoot_y});
+            console.log("shoot player: "+shots_to_update+"######"+user_turn_to_update);
+            console.log("shoot player: "+JSON.stringify(shots_to_update));
+
+            if(shots_to_update != null){
+               Object.assign(shots_to_update,{x: data.shoot_x, y: data.shoot_y});
+            }else{
+               shots_to_update = {x: data.shoot_x, y: data.shoot_y};
+            }
+
             gamesController.saveGame(data.game_id, data.user_id, "", shots_to_update, 
                                        user_turn_to_update, "", function(result){
                console.log("saved: "+JSON.stringify(result));
