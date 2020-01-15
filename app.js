@@ -90,6 +90,15 @@ io.sockets.on('connection',(socket) => {
       {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
 });
 
+//when ships is destroyed
+socket.on('ship destroyed', function(data) {
+   
+   var name = data.user_name;
+   console.log("A Ship of: "+name+" has been destroyed");
+
+   io.sockets.emit('your_ship_destroyed',
+   {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+});
   //When player Win a game
 
   socket.on('you win', function(data) {
