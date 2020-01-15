@@ -11,10 +11,6 @@ var mongoUtil = require('./mongoConfig');
 var ejs = require('ejs');
 var fs = require('fs');
 
-//import express from 'express';
-//import path from 'path';
-//import bodyParser from 'body-parser';
-
 app.use(urlParser);
 app.set('view engine','ejs');
 app.set("views", __dirname + '/views');
