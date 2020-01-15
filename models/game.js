@@ -117,18 +117,26 @@ function saveGame(game_id, user_id, ships, shoots, user_turn_id, winner_id, call
             console.log("saveGame_users: "+result.users[0]+"---"+user_id);
             if(result.users[0] == user_id){
                 var users_to_update = result.users;
-                result.ships[0] = ships;
+                if(ships!="")
+                    result.ships[0] = ships;
                 var ships_to_update = result.ships;
-                result.shoots[0] = shoots;
+                if(shoots!="")
+                    result.shoots[0] = shoots;
                 var shoots_to_update = result.shoots;
+                var user_turn_to_update = result.user_turn_id;
+                if(user_turn_id!="")
+                    user_turn_to_update = user_turn_id;
+                var winner_id_to_update = result.winner_id;
+                if(winner_id!="")
+                    winner_id_to_update = winner_id;
                 const query1 = {_id: ObjectId(game_id)}
                 console.log("query1: "+JSON.stringify(query1));
                 const query2 = {users: users_to_update,
                                     type: "1v1",
                                     ships: ships_to_update,
                                     shoots: shoots_to_update, 
-                                    user_turn_id: user_turn_id,
-                                    winner_id: winner_id};
+                                    user_turn_id: user_turn_to_update,
+                                    winner_id: winner_id_to_update};
                 console.log("query2: "+JSON.stringify(query2));
                 db.collection('games').update(query1, query2, function(err, result) {
                     if (err) throw err;
@@ -141,18 +149,26 @@ function saveGame(game_id, user_id, ships, shoots, user_turn_id, winner_id, call
             }else{
                 result.users[1] = user_id;
                 var users_to_update = result.users;
-                result.ships[1] = ships;
+                if(ships!="")
+                    result.ships[1] = ships;
                 var ships_to_update = result.ships;
-                result.shoots[1] = shoots;
+                if(shoots!="")
+                    result.shoots[1] = shoots;
                 var shoots_to_update = result.shoots;
+                var user_turn_to_update = result.user_turn_id;
+                if(user_turn_id!="")
+                    user_turn_to_update = user_turn_id;
+                var winner_id_to_update = result.winner_id;
+                if(winner_id!="")
+                    winner_id_to_update = winner_id;
                 const query1 = {_id: ObjectId(game_id)}
                 console.log("query1: "+JSON.stringify(query1));
                 const query2 = {users: users_to_update,
                                     type: "1v1",
                                     ships: ships_to_update,
                                     shoots: shoots_to_update, 
-                                    user_turn_id: user_turn_id,
-                                    winner_id: winner_id};
+                                    user_turn_id: user_turn_to_update,
+                                    winner_id: winner_id_to_update};
                 console.log("query2: "+JSON.stringify(query2));
                 db.collection('games').update(query1, query2, function(err, result) {
                     if (err) throw err;

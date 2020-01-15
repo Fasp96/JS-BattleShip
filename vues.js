@@ -578,7 +578,7 @@ var vue_object = new Vue({
                 
                 //send shot message with the information to the server
                 socket.emit('shoot player',
-                    {shoot_y: iy, shoot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name});
+                    {shoot_y: iy, shoot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name, shoots: this.p1.shots});
                 
                 //end turn to shoot
                 this.turn_to_shoot = false;
@@ -767,7 +767,8 @@ var vue_object = new Vue({
         //creates the opponent board
         this.addBoard("#opponent", "Opponent Board");
         //send join message to server
-        socket.emit('entered onePlayer game', {game_id: game_id, user_id: user_id, user_name: sess.name});
+        socket.emit('entered onePlayer game', {game_id: game_id, user_id: user_id, user_name: sess.name,
+            ships: this.p1.ships, shoots: this.p1.shots});
 
 
         //if already has ships positions

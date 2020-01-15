@@ -55,10 +55,22 @@ io.sockets.on('connection',(socket) => {
       console.log("entered onePlayer game: "+JSON.stringify(data));
       io.sockets.emit('new player message',
          {game_id: game_id, user_name: data.user_name});
+      //get game information
+      gamesController.getGameId(game_id,function(result){
+         if(result){
+            //save/update game information
+            gamesController.saveGame(game_id, data.user_id, data.ships, data.shoots, 
+                                       result.user_turn_id, result.winner_id, function(result){
+               console.log("saved: "+JSON.stringify(result));
+            });
+         }
+      });
+      //If the game isn't in the games list, add him
       if(!(game_id in onePlayer_games)){
          onePlayer_games[game_id] = 1;
          console.log("onePlayer_games: "+JSON.stringify(onePlayer_games));
       }else{
+         //if the game already exists, add new user to the game
          onePlayer_games[game_id] += 1;
          if(!(userGamesController.getUserGame(data.user_id, game_id))){
             userGamesController.insertUserGame(data.user_id, game_id,function(result2){
@@ -113,6 +125,17 @@ socket.on('ship destroyed', function(data) {
    var name = data.user_name;
    console.log("WIN: "+name);
 
+   //get game information
+   gamesController.getGameId(data.game_id,function(result){
+      if(result){
+         //save/update game information
+         gamesController.saveGame(data.game_id, data.user_id, "", "", 
+                                    "", data.user_id, function(result){
+            console.log("saved: "+JSON.stringify(result));
+         });
+      }
+   });
+
    //io.sockets.emit('YOU WIN',
    //{game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
 });
@@ -151,6 +174,24 @@ socket.on('ship destroyed', function(data) {
    socket.on('shoot player', function(data) {
       io.sockets.emit('recieve shot',
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id , user_name: data.user_name});
+   
+      //get game information
+      gamesController.getGameId(data.game_id,function(result){
+         if(result){
+            var shots_to_update = result.users[0];
+            var user_turn_to_update = result.users[1];
+            //save/update game information
+            if(data.user_id!=result.users[0]){
+               shots_to_update = result.users[1];
+               user_turn_to_update = result.users[0];
+            }
+            shots_to_update.push({x: data.shoot_x, y: data.shoot_y});
+            gamesController.saveGame(data.game_id, data.user_id, "", shots_to_update, 
+                                       user_turn_to_update, "", function(result){
+               console.log("saved: "+JSON.stringify(result));
+            });
+         }
+      });
    });
 
    //Shot response
@@ -387,6 +428,7 @@ app.get('/join', (req, res) => {
    }
 });
 
+/*
 app.get('/save', (req, res) => {
    //game_id, user_id, ships, shoots, user_turn_id, winner_id, callback
    var a = "5e1cbf26e0c0d93474500c58";
@@ -397,18 +439,18 @@ app.get('/save', (req, res) => {
       {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"2"},
       {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"1"},
       {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"1"}
-  ];
-  var d = [{x:"1", y:"A"},
-      {x:"1", y:"B"},
-      {x:"1", y:"C"}];
-  var e = "5e1b4a8df5ad150858877903";
-  var f = "5e1b4a8df5ad150858877901";
-  console.log("saving: "+a+" "+b+" "+c+" "+d+" "+e+" "+f+" ");
+   ];
+   var d = [{x:"1", y:"A"},
+         {x:"1", y:"B"},
+         {x:"1", y:"C"}];
+   var e = "5e1b4a8df5ad150858877903";
+   var f = "5e1b4a8df5ad150858877901";
+   console.log("saving: "+a+" "+b+" "+c+" "+d+" "+e+" "+f+" ");
    gamesController.saveGame(a,b,c,d,e,f, function(result){
       console.log("saved: "+JSON.stringify(result));
    });
 });
-
+*/
 
 
 //----------------Images Routes---------------------------------------
