@@ -65,7 +65,7 @@ data = {
     turn_to_shoot: true,
 
     //variable to know if ship has alredy been destroyed
-    shipsDestroyed = [],
+    shipsDestroyed : [],
 };
 
 //return to the main page
