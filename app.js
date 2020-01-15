@@ -89,6 +89,17 @@ io.sockets.on('connection',(socket) => {
       io.sockets.emit('YOU WIN',
       {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
 });
+
+  //When player Win a game
+
+  socket.on('you win', function(data) {
+   
+   var name = data.user_name;
+   console.log("WIN: "+name);
+
+   //io.sockets.emit('YOU WIN',
+   //{game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+});
    
    //When player is ready
    socket.on('I am ready', function(data) {
