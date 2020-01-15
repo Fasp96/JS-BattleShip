@@ -1,4 +1,5 @@
 data = {
+    //user variables
     p1:{
         ships: [
             {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"},
@@ -6,18 +7,23 @@ data = {
             {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"},
-            /*{x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"},
+            /*
+            {x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"3"},
             {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"},
             {x:"5", y:"G", orientation:"V", type:"Cruiser", size:"3", hits:"0"},
             {x:"5", y:"E", orientation:"H", type:"Submarine", size:"3", hits:"0"},
-            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},*/
+            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},
+            */
         ],
         shots:[
-            /*{x:"1", y:"A"},
+            /*
+            {x:"1", y:"A"},
             {x:"1", y:"B"},
-            {x:"1", y:"C"},*/
+            {x:"1", y:"C"},
+            */
         ]
     },
+    //opponent variables
     p2:{
         ships:[
             {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"0"},
@@ -25,29 +31,38 @@ data = {
             {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"0"},
             {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"0"},
-            /*{x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"0"},
+            /*
+            {x:"1", y:"A", orientation:"V", type:"Carrier", size:"5", hits:"3"},
             {x:"0", y:"J", orientation:"H", type:"Battleship", size:"4", hits:"0"},
             {x:"5", y:"G", orientation:"V", type:"Cruiser", size:"3", hits:"0"},
             {x:"5", y:"E", orientation:"H", type:"Submarine", size:"3", hits:"0"},
-            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},*/
+            {x:"8", y:"A", orientation:"V", type:"Destroyer", size:"2", hits:"0"},
+            */
         ],
         shots:[
             /*
             {x:"1", y:"A"},
             {x:"1", y:"B"},
-            {x:"1", y:"C"},*/
+            {x:"1", y:"C"},
+            */
         ]
     },
-    newCoordinates:'',
+    
     newShips:[
         {Carrier: "", Battleship:"" , Cruiser:"" , Submarine:"", Destroyer:"" },
     ],
+
+    //variable to save the coordinates that have been ocupied by the ships (helps with insertion of the ships)
     usedSpaces:[],
-    //variable to know if is user turn to shoot
-    turn_to_shoot: true,
+    
+    //variable to know if all ships have been placed
+    shipsPlaced: false,
+    
     //variable to check if opponent is ready
     opponentIsConnected: false,
-    shipsPlaced: false,
+
+    //variable to know if is user turn to shoot
+    turn_to_shoot: true,
 };
 
 //return to the main page
@@ -61,27 +76,25 @@ var sess = JSON.parse(document.currentScript.getAttribute('sess')); //Buscar a v
 var game_id = document.currentScript.getAttribute('game_id');
 var user_id = document.currentScript.getAttribute('user_id');
 
-
 console.log("sess: "+JSON.stringify(sess));
 var socket = io.connect();
 
-
-//Message from server when the other player is ready to play
+//message from server when the other player is ready to play
 socket.on('opponent is ready', function(data){
-    console.log("inside");
-    //Verify that the message is from this game
+    //verify that the message is from this game
     if(game_id==data.game_id && user_id!=data.user_id){
         vue_object.opponentIsConnected = true;
 
+        //if is his turn to shoot and all boats have been placed
         if(vue_object.turn_to_shoot && vue_object.shipsPlaced){
             vue_object.startGame();
         }
     }
 });
 
-//Not the one that created the game room
+//not the one that created the game room
 socket.on('not your turn', function(data){
-    //Verify that the message is from this game and for you
+    //verify that the message is from this game and for you
     if(game_id==data.game_id){
         if(user_id==data.user_id){
             vue_object.turn_to_shoot = false;
@@ -91,14 +104,22 @@ socket.on('not your turn', function(data){
     }
 });
 
-//Recieve P2 shot
+//recieve opponent shot
 socket.on('recieve shot', function(data){
-    //Verify that the message is from this game
+    //verify that the message is from this game
     if(game_id==data.game_id && user_id!=data.user_id){
+        
+        //adds apponent shot
         vue_object.addShotP2(data.shoot_y, data.shoot_x, data.user_name);
 
-        //P1 can now shoot
+        //user can now shoot
         vue_object.turn_to_shoot = true;
+
+        if(document.getElementById("addShips") !== null){
+            var element = document.getElementById("addShips");
+            element.parentNode.removeChild(element);
+            firstShot = false;
+        }
         
         var element = document.getElementById("addShips");
         if(element){
@@ -106,20 +127,21 @@ socket.on('recieve shot', function(data){
         }
         document.getElementById("opponent").style.visibility = "unset";
         console.log("recieve_turn_to_shoot: "+ vue_object.turn_to_shoot);
+        document.getElementById("boardTitle").innerHTML="Opponent Board";
     }
 });
 
-//P1 shot hitted
+//user shot hitted
 socket.on('hit', function(data){
-    //Verify that the message is from this game
+    //verify that the message is from this game
     if(game_id==data.game_id && user_id!=data.user_id){
         vue_object.showShotsP1(data.shoot_y, data.shoot_x, true);
     }
 });
 
-//P1 shot missed
+//user shot missed
 socket.on('miss', function(data){
-    //Verify that the message is from this game
+    //verify that the message is from this game
     if(game_id==data.game_id && user_id!=data.user_id){
         vue_object.showShotsP1(data.shoot_y, data.shoot_x, false);
     }
@@ -165,7 +187,10 @@ var vue_object = new Vue({
             };
             createGrid(10,10);
         },
-
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                     * * *  IF IS TO CONTINUE A GAME  * * *
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
         //function to load ships if it's to continue a game (only load user ships)
         loadShips(){
             var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
@@ -286,9 +311,14 @@ var vue_object = new Vue({
             this.checkShips("user");
         },
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                     * * *  IF IS A NEW GAME  * * *
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
         //function to add ships in the begging of a game (if is a new game)
         addShips(){
-            if(typeof(this.newShips.Carrier) != "undefined" && this.newShips.Carrier !== null){ //is has been added an input for Carrier
+            if(typeof(this.newShips.Carrier) != "undefined" && this.newShips.Carrier.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){ //is has been added an input for Carrier
                 this.p1.ships.forEach(ship =>{
                     //gets the ship object and veifies if isn't in the same coordinates
                     if(ship.type == "Carrier" && this.newShips.Carrier != ship.y + ship.x + ship.orientation){
@@ -297,28 +327,28 @@ var vue_object = new Vue({
                     }
                 });
             }
-            if(typeof(this.newShips.Battleship) != "undefined" && this.newShips.Battleship !== null){
+            if(typeof(this.newShips.Battleship) != "undefined" && this.newShips.Battleship.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Battleship" && this.newShips.Battleship != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Battleship[1], this.newShips.Battleship[0], this.newShips.Battleship[2]);
                     }
                 });
             }
-            if(typeof(this.newShips.Cruiser) != "undefined" && this.newShips.Cruiser !== null){
+            if(typeof(this.newShips.Cruiser) != "undefined" && this.newShips.Cruiser.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Cruiser" && this.newShips.Cruiser != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Cruiser[1], this.newShips.Cruiser[0], this.newShips.Cruiser[2]);
                     }
                 });
             }
-            if(typeof(this.newShips.Submarine) != "undefined" && this.newShips.Submarine !== null){
+            if(typeof(this.newShips.Submarine) != "undefined" && this.newShips.Submarine.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Submarine" && this.newShips.Submarine != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Submarine[1], this.newShips.Submarine[0], this.newShips.Submarine[2]);
                     }
                 });
             }
-            if(typeof(this.newShips.Destroyer) != "undefined" && this.newShips.Destroyer !== null){
+            if(typeof(this.newShips.Destroyer) != "undefined" && this.newShips.Destroyer.match("^([A-J]{1}[0-9]{1}[V|H]{1})$")){
                 this.p1.ships.forEach(ship =>{
                     if(ship.type == "Destroyer" && this.newShips.Destroyer != ship.y + ship.x + ship.orientation){
                         this.addShip(ship, this.newShips.Destroyer[1], this.newShips.Destroyer[0], this.newShips.Destroyer[2]);
@@ -487,10 +517,15 @@ var vue_object = new Vue({
             }
         },
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                * * *  START GAME AND GAME FUNCTIONS  * * *
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
         //function to start the game
         startGame(){
-            console.log("opponentIsConnected: "+this.opponentIsConnected);
-            console.log("startgame_turn_to_shoot: "+vue_object.turn_to_shoot);
+            console.log("opponentIsConnected: "+ this.opponentIsConnected);
+            console.log("startgame_turn_to_shoot: "+ this.turn_to_shoot);
 
             //gets id for the add ship form
             var element = document.getElementById("addShips");
@@ -514,54 +549,76 @@ var vue_object = new Vue({
                 this.loadShotsP1();
                 //load the shots of opponent
                 this.loadShotsP2();
+                socket.emit('I am ready',
+                    {game_id:game_id, user_id:user_id , user_name:sess.name});
             }
         },
+//---------------------------------------------
+// * * *  ON USER TURN  * * *
+//---------------------------------------------
 
         //function to add the new shots from user
         addShotP1(iy, ix){
-            console.log(iy,ix);
-            console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
-            if(vue_object.turn_to_shoot){ //if is turn to shoot
-
-                var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
-                //adds shot to user shots
-                this.p1.shots.push({'y': letter[iy], 'x': ix});
-
-                //Send shot message with the information to the server
-                socket.emit('shoot player',
-                    {shoot_y: iy, shoot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name});
-                //End turn to shoot
-                vue_object.turn_to_shoot = false;
-                console.log("addShotP1_turn_to_shoot: "+vue_object.turn_to_shoot);
-            }
-        },
-
-        //function to show the new shots from user in the board
-        showShotsP1(y, x, isHit){
-            console.log('showShotsP1' + y + x + isHit);
+            //variable to know if user has shot to those coordinates
+            var hasShotCoord = false;
             var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
             
-            if(isHit){
-                $("#p2" + letter[y] + x).addClass("hit");
-            }
-            else{
-                $("#p2" + letter[y] + x).addClass("miss");
+            //checks if user has shot to those coordinates
+            this.p1.shots.forEach(shot =>{
+                if(letter[iy] == shot.y && ix == shot.x){
+                    hasShotCoord = true;
+                }
+            });
+            
+            if(this.turn_to_shoot && !hasShotCoord){ //if is turn to shoot and haven't shoot in those coordinates
+                console.log("addShotP1_turn_to_shoot: "+ this.turn_to_shoot);
+                //adds shot to user shots
+                this.p1.shots.push({'y': letter[iy], 'x': ix});
+                document.getElementById("p2" + letter[iy] + ix).removeAttribute("v-on:click");
+                
+                //send shot message with the information to the server
+                socket.emit('shoot player',
+                    {shoot_y: iy, shoot_x: ix, game_id:game_id, user_id:user_id , user_name:sess.name});
+                
+                //end turn to shoot
+                this.turn_to_shoot = false;
+                console.log("addShotP1_turn_to_shoot: "+ this.turn_to_shoot);
+                
+                document.getElementById("boardTitle").innerHTML="Opponent Board - <b> Wait to play</b>";
+            
             }
         },
 
-        //function to add the new shots from opponent
+        //function to show the new shot from user in the board
+        showShotsP1(y, x, isHit){
+            var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
+            
+            if(isHit){ // if is a hit 
+                $("#p2" + letter[y] + x).addClass("hit");
+                document.getElementById("hit").play();
+            }
+            else{ // if is a miss
+                $("#p2" + letter[y] + x).addClass("miss");
+                document.getElementById("miss").play();
+            }
+        },
+
+//---------------------------------------------
+// * * *  ON OPPONENT TURN  * * *
+//---------------------------------------------
+
+        //function to add the new shot from opponent
         addShotP2(iy, ix, user_id){
             var letter = ['&nbsp;', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
             this.p2.shots.push({'y': letter[iy], 'x': ix});
-            this.showShotsP2(iy, ix ,user_id);
+            this.showShotsP2(iy, ix);
         },
 
-        showShotsP2(y, x, user_id){
-            console.log('showShotsP2', x,y);
+        //show shot from opponent and sends message back if is a hit or a miss
+        showShotsP2(y, x){
             var letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'H', 'J', 'K'];
             var hit = false;
             
-            console.log(this.p1.ships);
             this.p1.ships.forEach(ship =>{ //for each ship of user
                 var shipX = ship.x;
                 var shipY = ship.y;
@@ -570,10 +627,13 @@ var vue_object = new Vue({
                     for(var i = 0; i < ship.size; i++){
                         if(x == shipX && letter[y] == shipY){ //if shot matches a ship coordinate
                             //show hit
-                            console.log("hit");
                             $("#p1" + letter[y] + x).addClass("hit");
+                            document.getElementById("hit").play();
+                            
+                            //sends message back to opponent saying that was a hit
                             socket.emit('shoot hitted',
                                 {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
+
                             //adds to ships hits
                             ship.hits++;
                             hit = true;
@@ -591,9 +651,13 @@ var vue_object = new Vue({
                         if(x == shipX && letter[y] == shipY){ //if shot matches a ship coordinate
                             //show hit
                             $("#p1"+ letter[y] + x).addClass("hit");
+                            document.getElementById("hit").play();
+                            
+                            //sends message back to opponent saying that was a hit
                             socket.emit('shoot hitted',
                                 {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
-                            //adds to ships hits
+                            
+                                //adds to ships hits
                             ship.hits++;
                             hit = true;
                             //Send hitted message to server
@@ -608,16 +672,50 @@ var vue_object = new Vue({
             if(hit == false){ //if doesn't hit any ship
                 //show miss
                 $("#p1"+ letter[y] + x).addClass("miss");
+                document.getElementById("miss").play();
+                
+                //sends message back saying that was a miss
                 socket.emit('shoot missed',
                     {shoot_y: y, shoot_x: x, game_id:game_id, user_id:user_id});
             }
             //show opponent and user status
-            //this.checkShips("opponent");
-            //this.checkShips("user");
+            this.checkShips();
         },
 
+
+        //function to check the status of the ship
+        checkShips(){
+            console.log("User Ships");
+            this.p1.ships.forEach(ship =>{
+
+                if(ship.hits == ship.size){
+                    console.log(ship.type + " destroyed");
+                }
+                else{
+                    console.log(ship.type + ": " + ship.hits + "/" + ship.size + " hits");
+                    
+                }
+            });
+            console.log("--------------------");
+
+            //varable to know if user lost
+            var haveLost = true;
+            // check if all boats are distroyed
+            this.p1.ships.forEach(ship =>{
+                if(ship.hits != ship.size){
+                    haveLost = false;
+                }
+            });
+
+            //if user lost send message
+            if(haveLost){
+                console.log('YOU LOST');
+            }
+        },
+        
+        
         //function to check the status of the ships
-        checkShips(player){
+        /*checkShips(player){
             if(player =="opponent"){
                 console.log("Opponent Ships");
                 this.p2.ships.forEach(ship =>{
@@ -635,18 +733,19 @@ var vue_object = new Vue({
             }
             if(player =="user"){
                 console.log("User Ships");
-                this.p2.ships.forEach(ship =>{
+                this.p1.ships.forEach(ship =>{
 
                     if(ship.hits == ship.size){
                         console.log(ship.type + " destroyed");
                     }
                     else{
                         console.log(ship.type + ": " + ship.hits + "/" + ship.size + " hits");
+                        
                     }
                 });
                 console.log("--------------------");
             }
-        },
+        },*/
     },
 
     created(){

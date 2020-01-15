@@ -116,21 +116,18 @@ io.sockets.on('connection',(socket) => {
    });
 
    //Shot response
-   socket.on('shot hitted', function(data) {
+   socket.on('shoot hitted', function(data) {
       //gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
 
       //deverá guardar na base de dados
-
-
       io.sockets.emit('hit',
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
-   socket.on('shot missed', function(data) {
+   socket.on('shoot missed', function(data) {
       //gamesController.updateShoots([data.shoot_x,data.shoot_y],data.game_id,data.user_id);
 
       //deverá guardar na base de dados
       io.sockets.emit('miss',
-
          {shoot_y: data.shoot_y, shoot_x: data.shoot_x , game_id: data.game_id, user_id: data.user_id});
    });
 });
@@ -591,6 +588,17 @@ app.get('/submarine2V.png', (req,res) =>{
 });
 app.get('/submarine3v.png', (req,res) =>{
    fs.readFile('ships/submarine(3)V.png',function (e, data) {
+      res.send(data);
+   })
+});
+//----------------Images Routes---------------------------------------
+app.get('/hit.mp3', (req,res) =>{
+   fs.readFile('sounds/hit.mp3',function (e, data) {
+      res.send(data);
+   })
+});
+app.get('/miss.mp3', (req,res) =>{
+   fs.readFile('sounds/miss.mp3',function (e, data) {
       res.send(data);
    })
 });
