@@ -700,6 +700,9 @@ var vue_object = new Vue({
             //if user lost send message
             if(haveLost){
                 console.log('YOU LOST');
+                socket.emit('YOU LOST',
+                    {game_id:game_id, user_id:user_id , user_name:sess.name});
+
             }
         },
         
