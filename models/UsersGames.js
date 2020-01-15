@@ -38,7 +38,7 @@ function getAllUserGames(user_id,callback){
     });
 }
 
-function existUserGame(user_id,game_id,callback){
+function existUserGame(user_id, game_id,callback){
     var db = mongoConfig.getDB();
     var query = {user_id: user_id, game_id: game_id};
     db.collection("users_games").find(query,function(err, res){

@@ -72,7 +72,7 @@ io.sockets.on('connection',(socket) => {
       }else{
          //if the game already exists, add new user to the game
          onePlayer_games[game_id] += 1;
-         if(!(userGamesController.getUserGame(data.user_id, game_id))){
+         if(!(userGamesController.existUserGame(data.user_id, game_id))){
             userGamesController.insertUserGame(data.user_id, game_id,function(result2){
                console.log("result2: "+JSON.stringify(result2));
                if(result2!="Error inserting game_users"){
@@ -107,6 +107,8 @@ io.sockets.on('connection',(socket) => {
 
       io.sockets.emit('YOU WIN',
       {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+      //Add 1 to the number
+      userController.addGame(data.user_id);
 });
 
 //when ships is destroyed
@@ -124,6 +126,10 @@ socket.on('ship destroyed', function(data) {
    
    var name = data.user_name;
    console.log("WIN: "+name);
+
+   //Add 1 to the number of games and victories
+   userController.addGame(data.user_id);
+   userController.addGame(data.user_id);
 
    //get game information
    gamesController.getGameId(data.game_id,function(result){
@@ -185,7 +191,7 @@ socket.on('ship destroyed', function(data) {
                shots_to_update = result.users[1];
                user_turn_to_update = result.users[0];
             }
-            shots_to_update.push({x: data.shoot_x, y: data.shoot_y});
+            Object.assign(shots_to_update,{x: data.shoot_x, y: data.shoot_y});
             gamesController.saveGame(data.game_id, data.user_id, "", shots_to_update, 
                                        user_turn_to_update, "", function(result){
                console.log("saved: "+JSON.stringify(result));
@@ -417,10 +423,6 @@ app.get('/join', (req, res) => {
    if(sess.user) {
       //gamesController.getAllGames(sess.user._id,function(result){
          console.log("join_games: "+JSON.stringify(onePlayer_games));
-         var games_to_join = [];
-         onePlayer_games.forEach(game => {
-            games_to_join.push(gamesController.getGameId(game._id));
-         });
          res.render('gameJoin1',{games: onePlayer_games ,sess: sess});
       //});
    }else{

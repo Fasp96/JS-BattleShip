@@ -19,11 +19,22 @@ function verifyEmail(email,callback){
     User.verifyEmail(email,callback);
 }
 
+function addGame(user_id,callback){
+    //tratar dados, filtrar, mais queries,...
+    User.addGame(user_id,callback);
+}
+
+function addVictory(user_id,callback){
+    //tratar dados, filtrar, mais queries,...
+    User.addVictory(user_id,callback);
+}
 
 
 module.exports = {
     getUsers,
     insertUser,
     verifyName,
-    verifyEmail
+    verifyEmail,
+    addGame,
+    addVictory
 };

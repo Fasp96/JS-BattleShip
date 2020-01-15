@@ -101,7 +101,6 @@ function getGameId(game_id,callback){
     console.log("query: "+JSON.stringify(query));
     db.collection('games').findOne(query, function(err,result){
         console.log("getGameId_result: "+JSON.stringify(result));
-        if (err) throw err;
         if(result){
             callback(result);
         }else{
