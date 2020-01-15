@@ -63,6 +63,9 @@ data = {
 
     //variable to know if is user turn to shoot
     turn_to_shoot: true,
+
+    //variable to know if ship has alredy been destroyed
+    shipsDestroyed = [],
 };
 
 //return to the main page
@@ -263,8 +266,6 @@ var vue_object = new Vue({
                     $("#p2"+ shot.y + shot.x).addClass("miss");
                 }
             });
-            //show in console the status of apponents ships
-            this.checkShips("opponent");
         },
 
          //function to load opponents shots on user board if is to continue a game
@@ -307,8 +308,6 @@ var vue_object = new Vue({
                     $("#p1"+ shot.y + shot.x).addClass("miss");
                 }
             });
-            //show in console the status of users ships
-            this.checkShips("user");
         },
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -688,7 +687,8 @@ var vue_object = new Vue({
             console.log("User Ships");
             this.p1.ships.forEach(ship =>{
 
-                if(ship.hits == ship.size){
+                if(ship.hits == ship.size && !this.checkShips.includes(ship.type)){
+                    this.shipsDestroyed.push(ship.name);
                     console.log(ship.type + " destroyed");
                     socket.emit('ship destroyed',
                             {game_id:game_id, user_id:user_id , user_name:sess.name});
@@ -722,42 +722,6 @@ var vue_object = new Vue({
 
            
         },
-        
-        
-        //function to check the status of the ships
-        /*checkShips(player){
-            if(player =="opponent"){
-                console.log("Opponent Ships");
-                this.p2.ships.forEach(ship =>{
-
-                    if(ship.hits == ship.size){
-                        console.log(ship.type + " destroyed");
-                        //enviar que o barco foi destruído
-                        socket.emit('ship destroyed',
-                            {game_id:game_id, user_id:user_id , user_name:sess.name});
-
-                    }
-                    else{
-                        console.log(ship.type + ": " + ship.hits + "/" + ship.size + " hits");
-                    }
-                });
-                console.log("--------------------");
-            }
-            if(player =="user"){
-                console.log("User Ships");
-                this.p1.ships.forEach(ship =>{
-
-                    if(ship.hits == ship.size){
-                        console.log(ship.type + " destroyed");
-                    }
-                    else{
-                        console.log(ship.type + ": " + ship.hits + "/" + ship.size + " hits");
-                        
-                    }
-                });
-                console.log("--------------------");
-            }
-        },*/
     },
 
     created(){
