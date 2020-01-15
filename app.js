@@ -74,6 +74,29 @@ io.sockets.on('connection',(socket) => {
       }
       console.log("onePlayer_games123: "+JSON.stringify(onePlayer_games));
    });
+
+   //When player Lost a game
+
+ socket.on('YOU LOST', function(data) {
+   
+      var name = data.user_name;
+      console.log("Lost: "+name);
+
+      io.sockets.emit('YOU WIN',
+      {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+});
+
+  //When player Win a game
+
+  socket.on('you win', function(data) {
+   
+   var name = data.user_name;
+   console.log("WIN: "+name);
+
+   //io.sockets.emit('YOU WIN',
+   //{game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+});
+   
    //When player is ready
    socket.on('I am ready', function(data) {
       io.sockets.emit('opponent is ready',

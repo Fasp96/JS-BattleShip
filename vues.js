@@ -690,6 +690,7 @@ var vue_object = new Vue({
 
             //varable to know if user lost
             var haveLost = true;
+            var haveWon = true;
             // check if all boats are distroyed
             this.p1.ships.forEach(ship =>{
                 if(ship.hits != ship.size){
@@ -697,10 +698,27 @@ var vue_object = new Vue({
                 }
             });
 
+            /*this.p2.ships.forEach(ship =>{
+                if(ship.hits != ship.size){
+                haveWon = false;
+                }
+            });*/
             //if user lost send message
             if(haveLost){
+                //socket.on
                 console.log('YOU LOST');
+                socket.emit('YOU LOST',
+                    {game_id:game_id, user_id:user_id , user_name:sess.name});
+
             }
+
+            /*if(haveWon){
+                //socket.on
+                console.log('you win');
+                socket.emit('you win',
+                    {game_id:game_id, user_id:user_id , user_name:sess.name});
+
+            }*/
         },
         
         
