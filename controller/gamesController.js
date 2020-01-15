@@ -20,11 +20,16 @@ function updateShoots(shoot_positions,game_id,user_id,callback){
     Game.updateShoots(shoot_positions,game_id,user_id,callback);
 }
 
+function saveGame(game_id, user_id, ships, shoots, user_turn_id, winner_id, callback){
+    Game.saveGame(game_id, user_id, ships, shoots, user_turn_id, winner_id, callback)
+}
+
 
 module.exports = {
     updateGame,
     insertGame,
     getAllGames,
     getGameId,
-    updateShoots
+    updateShoots,
+    saveGame
 };

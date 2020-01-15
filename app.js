@@ -359,6 +359,29 @@ app.get('/join', (req, res) => {
    }
 });
 
+app.get('/save', (req, res) => {
+   //game_id, user_id, ships, shoots, user_turn_id, winner_id, callback
+   var a = "5e1cbf26e0c0d93474500c58";
+   var b = "5e1b4a8df5ad150858877903";
+   var c = [
+      {x:"", y:"", orientation:"", type:"Carrier", size:"5", hits:"2"},
+      {x:"", y:"", orientation:"", type:"Battleship", size:"4", hits:"32"},
+      {x:"", y:"", orientation:"", type:"Cruiser", size:"3", hits:"2"},
+      {x:"", y:"", orientation:"", type:"Submarine", size:"3", hits:"1"},
+      {x:"", y:"", orientation:"", type:"Destroyer", size:"2", hits:"1"}
+  ];
+  var d = [{x:"1", y:"A"},
+      {x:"1", y:"B"},
+      {x:"1", y:"C"}];
+  var e = "5e1b4a8df5ad150858877903";
+  var f = "5e1b4a8df5ad150858877901";
+  console.log("saving: "+a+" "+b+" "+c+" "+d+" "+e+" "+f+" ");
+   gamesController.saveGame(a,b,c,d,e,f, function(result){
+      console.log("saved: "+JSON.stringify(result));
+   });
+});
+
+
 
 //----------------Images Routes---------------------------------------
 app.get('/splash1.png', (req,res) =>{

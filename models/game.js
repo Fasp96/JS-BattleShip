@@ -1,4 +1,5 @@
 var mongoConfig = require('../mongoConfig');
+var ObjectId = require('mongodb').ObjectID;
 
 
 function insertGame(user_id,callback){
@@ -95,13 +96,74 @@ function updateShoots(shoot_positions,game_id,user_id,callback){
 
 function getGameId(game_id,callback){
     var db = mongoConfig.getDB();
-    //var line = {email: { $exists: true }, password: { $exists: true }};
-    const query = {id: game_id};
+    const query = {_id: ObjectId(game_id)};
     console.log("query: "+query);
     console.log("query: "+JSON.stringify(query));
-    db.collection('games').find(query).toArray(function(err,result){
-        if(!err)
+    db.collection('games').findOne(query, function(err,result){
+        console.log("getGameId_result: "+JSON.stringify(result));
+        if (err) throw err;
+        if(result){
             callback(result);
+        }else{
+            callback("Error getting game");
+        }
+    });
+}
+
+function saveGame(game_id, user_id, ships, shoots, user_turn_id, winner_id, callback){
+    var db = mongoConfig.getDB();
+    getGameId(game_id,function(result){
+        if(result){
+            console.log("saveGame_users: "+result.users[0]+"---"+user_id);
+            if(result.users[0] == user_id){
+                var users_to_update = result.users;
+                result.ships[0] = ships;
+                var ships_to_update = result.ships;
+                result.shoots[0] = shoots;
+                var shoots_to_update = result.shoots;
+                const query1 = {_id: ObjectId(game_id)}
+                console.log("query1: "+JSON.stringify(query1));
+                const query2 = {users: users_to_update,
+                                    type: "1v1",
+                                    ships: ships_to_update,
+                                    shoots: shoots_to_update, 
+                                    user_turn_id: user_turn_id,
+                                    winner_id: winner_id};
+                console.log("query2: "+JSON.stringify(query2));
+                db.collection('games').update(query1, query2, function(err, result) {
+                    if (err) throw err;
+                    if(result){
+                        callback(result);
+                    }else{
+                        callback("Error updating game");
+                    }
+                });        
+            }else{
+                result.users[1] = user_id;
+                var users_to_update = result.users;
+                result.ships[1] = ships;
+                var ships_to_update = result.ships;
+                result.shoots[1] = shoots;
+                var shoots_to_update = result.shoots;
+                const query1 = {_id: ObjectId(game_id)}
+                console.log("query1: "+JSON.stringify(query1));
+                const query2 = {users: users_to_update,
+                                    type: "1v1",
+                                    ships: ships_to_update,
+                                    shoots: shoots_to_update, 
+                                    user_turn_id: user_turn_id,
+                                    winner_id: winner_id};
+                console.log("query2: "+JSON.stringify(query2));
+                db.collection('games').update(query1, query2, function(err, result) {
+                    if (err) throw err;
+                    if(result){
+                        callback(result);
+                    }else{
+                        callback("Error updating game");
+                    }
+                });   
+            }
+        }
     });
 }
 
@@ -110,5 +172,6 @@ module.exports = {
     insertGame,
     getAllGames,
     getGameId,
-    updateShoots
+    updateShoots,
+    saveGame
 };

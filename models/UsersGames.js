@@ -38,10 +38,10 @@ function getAllUserGames(user_id,callback){
     });
 }
 
-function getUserGame(user_id,game_id,callback){
+function existUserGame(user_id,game_id,callback){
     var db = mongoConfig.getDB();
-    var line = {user_id: user_id, game_id: game_id};
-    db.collection("users_games").insertOne(line,function(err, res){
+    var query = {user_id: user_id, game_id: game_id};
+    db.collection("users_games").find(query,function(err, res){
         if(err)
             return false;
         else{
@@ -53,5 +53,5 @@ function getUserGame(user_id,game_id,callback){
 module.exports = {
     insertUserGame,
     getAllUserGames,
-    getUserGame
+    existUserGame
 };
