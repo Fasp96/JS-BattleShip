@@ -96,6 +96,31 @@
             scrollToBottom();
          }
       });
+
+      //Message from server when the other player Lost
+      socket.on('YOU WIN', function(data){
+         //Verify that the message is from this game
+         if(game_id==data.game_id){
+            //Chat message that new user is ready to play
+            var message ="<div class='well message opponent_message'>"+data.user_name+" LOST THE GAME!</div>";
+            chatArea.append(message);
+         }
+            scrollToBottom();
+         
+      });
+      //Message from server when the other player Lost a Ship
+      socket.on('your_ship_destroyed', function(data){
+         //Verify that the message is from this game
+         if(game_id==data.game_id){
+            //Chat message that new user is ready to play
+            var message ="<div class='well message opponent_message'>"+data.user_name+" LOST A SHIP!</div>";
+            chatArea.append(message);
+         }
+            scrollToBottom();
+         
+      });
+
+      
       //Retrieve message from server
       socket.on('new game message', function(data){
          //Verify that the message is from this game

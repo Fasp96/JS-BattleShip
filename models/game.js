@@ -68,7 +68,7 @@ function updateShoots(shoot_positions,game_id,user_id,callback){
             console.log("query1: "+JSON.stringify(query1));
             const query2={$push:{"shoots.2":+shoot_positions}};
             console.log("query: "+query1,query2);
-            db.collection("games").updateOne({_id:game_id},{$push:{"shoots.2":+(shoot_positions)}},function(err,result) {
+            db.collection("games").updateOne({_id:game_id},{$push:{"shoots.0":+(shoot_positions)}},function(err,result) {
                 if (err) throw err;
                 if(result){
                     callback(result);
@@ -82,7 +82,7 @@ function updateShoots(shoot_positions,game_id,user_id,callback){
             console.log("query3: "+JSON.stringify(query3));
             const query4={$push:{"shoots.1":+shoot_positions}};
             console.log("query: "+query3,query4);
-            db.collection("games").updateOne({_id:game_id},{$push:{"shoots.1":+(shoot_positions)}},function(err,result) {
+            db.collection("games").updateOne({_id:game_id},{$push:{"shoots.0":+(shoot_positions)}},function(err,result) {
                 if (err) throw err;
                 if(result){
                     callback(result);

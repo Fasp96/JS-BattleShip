@@ -11,10 +11,6 @@ var mongoUtil = require('./mongoConfig');
 var ejs = require('ejs');
 var fs = require('fs');
 
-//import express from 'express';
-//import path from 'path';
-//import bodyParser from 'body-parser';
-
 app.use(urlParser);
 app.set('view engine','ejs');
 app.set("views", __dirname + '/views');
@@ -89,6 +85,38 @@ io.sockets.on('connection',(socket) => {
       }
       console.log("onePlayer_games123: "+JSON.stringify(onePlayer_games));
    });
+
+   //When player Lost a game
+
+ socket.on('YOU LOST', function(data) {
+   
+      var name = data.user_name;
+      console.log("Lost: "+name);
+
+      io.sockets.emit('YOU WIN',
+      {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+});
+
+//when ships is destroyed
+socket.on('ship destroyed', function(data) {
+   
+   var name = data.user_name;
+   console.log("A Ship of: "+name+" has been destroyed");
+
+   io.sockets.emit('your_ship_destroyed',
+   {game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+});
+  //When player Win a game
+
+  socket.on('you win', function(data) {
+   
+   var name = data.user_name;
+   console.log("WIN: "+name);
+
+   //io.sockets.emit('YOU WIN',
+   //{game_id: data.game_id, user_id: data.user_id, user_name: data.user_name});
+});
+   
    //When player is ready
    socket.on('I am ready', function(data) {
       io.sockets.emit('opponent is ready',

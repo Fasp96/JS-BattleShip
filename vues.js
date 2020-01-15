@@ -690,6 +690,8 @@ var vue_object = new Vue({
 
                 if(ship.hits == ship.size){
                     console.log(ship.type + " destroyed");
+                    socket.emit('ship destroyed',
+                            {game_id:game_id, user_id:user_id , user_name:sess.name});
                 }
                 else{
                     console.log(ship.type + ": " + ship.hits + "/" + ship.size + " hits");
@@ -700,6 +702,7 @@ var vue_object = new Vue({
 
             //varable to know if user lost
             var haveLost = true;
+            var haveWon = true;
             // check if all boats are distroyed
             this.p1.ships.forEach(ship =>{
                 if(ship.hits != ship.size){
@@ -707,10 +710,17 @@ var vue_object = new Vue({
                 }
             });
 
+           
             //if user lost send message
             if(haveLost){
+                //socket.on
                 console.log('YOU LOST');
+                socket.emit('YOU LOST',
+                    {game_id:game_id, user_id:user_id , user_name:sess.name});
+
             }
+
+           
         },
         
         
@@ -722,8 +732,10 @@ var vue_object = new Vue({
 
                     if(ship.hits == ship.size){
                         console.log(ship.type + " destroyed");
+                        //enviar que o barco foi destruído
                         socket.emit('ship destroyed',
-                                {game_id:game_id, user_id:user_id, user_name: user_name});
+                            {game_id:game_id, user_id:user_id , user_name:sess.name});
+
                     }
                     else{
                         console.log(ship.type + ": " + ship.hits + "/" + ship.size + " hits");
